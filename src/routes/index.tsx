@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { Button } from '../components/ui/Button'
 import { ArrowRight } from 'lucide-react'
 import { About } from '../components/sections/About'
@@ -14,6 +15,7 @@ export const Route = createFileRoute('/')({ component: App })
 function Hero() {
   const { scrollY } = useScroll()
   const imageY = useTransform(scrollY, [0, 500], [0, 100])
+  const { t } = useTranslation()
 
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -57,7 +59,7 @@ function Hero() {
           initial="hidden"
           animate="visible"
         >
-          {['Solve', 'with'].map((word, i) => (
+          {[t('hero.headline1'), t('hero.headline2')].map((word, i) => (
             <motion.span
               key={word}
               custom={i}
@@ -73,7 +75,7 @@ function Hero() {
             variants={textVariants}
             className="text-gradient inline-block"
           >
-            Innovation.
+            {t('hero.headline3')}.
           </motion.span>
         </motion.h1>
 
@@ -83,9 +85,8 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8 }}
         >
-          We engineer digital ecosystems that empower businesses to scale.
-          <br className="hidden md:block" /> From legacy migrations to secure
-          reliable future-proofing.
+          {t('hero.subtext')}
+          <br className="hidden md:block" /> {t('hero.subtext2')}
         </motion.p>
 
         <motion.div
@@ -99,7 +100,7 @@ function Hero() {
               size="lg"
               className="rounded-full group text-lg px-8 py-6 h-auto"
             >
-              Start Your Project
+              {t('hero.cta')}
               <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
@@ -109,7 +110,7 @@ function Hero() {
               size="lg"
               className="rounded-full text-lg px-8 py-6 h-auto"
             >
-              View Portfolio
+              {t('portfolio.viewAll')}
             </Button>
           </Link>
         </motion.div>
@@ -121,9 +122,9 @@ function Hero() {
           transition={{ delay: 0.8, duration: 1 }}
         >
           {[
-            { label: '5+ Years Exp', value: 'Since 2020' },
-            { label: '50+ Projects', value: 'Delivered' },
-            { label: '98% Retention', value: 'Client Satisfaction' },
+            { label: '5+', value: t('hero.stats.experience') },
+            { label: '50+', value: t('hero.stats.projects') },
+            { label: '98%', value: t('hero.stats.clients') },
           ].map((stat, i) => (
             <div key={i} className="flex flex-col items-center">
               <p className="text-2xl font-bold text-gray-900">{stat.label}</p>
@@ -139,6 +140,8 @@ function Hero() {
 }
 
 function App() {
+  const { t } = useTranslation()
+
   return (
     <div className="bg-white min-h-screen">
       <Hero />
@@ -149,7 +152,7 @@ function App() {
         <Portfolio />
         <Insights />
         <footer className="py-8 text-center text-gray-400 text-sm">
-          © 2024 Solvin. All rights reserved.
+          {t('footer.copyright')}
         </footer>
       </div>
     </div>

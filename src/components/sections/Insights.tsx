@@ -1,9 +1,11 @@
 import { ArrowRight, Clock } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { articles } from '../../data'
 import { Button } from '../ui/Button'
 import { Link } from '@tanstack/react-router'
 
 export function Insights() {
+  const { t } = useTranslation()
   const featured = articles[0]
   const others = articles.slice(1)
 
@@ -11,14 +13,14 @@ export function Insights() {
     <section id="insights" className="py-24 max-w-7xl mx-auto px-6">
       <div className="flex justify-between items-end mb-12">
         <div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">Insights</h2>
-          <p className="text-gray-600 max-w-xl">
-            Thoughts on technology, design, and the future of digital business.
-          </p>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            {t('insights.title')}
+          </h2>
+          <p className="text-gray-600 max-w-xl">{t('insights.subtitle')}</p>
         </div>
         <Link to="/articles">
           <Button variant="ghost" className="gap-2 group hidden md:flex">
-            View all articles
+            {t('insights.viewAll')}
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Button>
         </Link>
@@ -53,7 +55,7 @@ export function Insights() {
               {featured.summary}
             </p>
             <div className="flex items-center gap-2 text-brand-primary font-medium pt-2">
-              Read Story{' '}
+              {t('insights.readStory')}{' '}
               <ArrowRight
                 size={16}
                 className="group-hover:translate-x-1 transition-transform"
@@ -94,7 +96,7 @@ export function Insights() {
 
       <div className="md:hidden mt-8">
         <Button variant="outline" className="w-full justify-center">
-          View All Articles
+          {t('insights.viewAll')}
         </Button>
       </div>
     </section>

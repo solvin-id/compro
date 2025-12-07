@@ -1,60 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Github, Linkedin } from 'lucide-react'
-
-// Team Data with positions on the group photo
-const TEAM_MEMBERS = [
-  {
-    id: 'ceo',
-    name: 'Alexandra Chen',
-    role: 'Chief Executive Officer',
-    bio: 'Visionary leader with 15+ years in digital transformation. Built 3 successful startups before founding Solvin.',
-    github: 'https://github.com',
-    linkedin: 'https://linkedin.com',
-    position: { top: '30%', left: '10%' },
-    hotspotArea: { width: '12%', height: '50%' },
-  },
-  {
-    id: 'cto',
-    name: 'Marcus Rivera',
-    role: 'Chief Technology Officer',
-    bio: 'Ex-Google engineer. Architect of enterprise systems serving millions. Obsessed with clean code and scalable infrastructure.',
-    github: 'https://github.com',
-    linkedin: 'https://linkedin.com',
-    position: { top: '25%', left: '28%' },
-    hotspotArea: { width: '12%', height: '55%' },
-  },
-  {
-    id: 'lead-dev',
-    name: 'Sarah Kim',
-    role: 'Lead Developer',
-    bio: 'Full-stack wizard. React, Node, and everything in between. Open source contributor and tech community speaker.',
-    github: 'https://github.com',
-    linkedin: 'https://linkedin.com',
-    position: { top: '20%', left: '44%' },
-    hotspotArea: { width: '12%', height: '60%' },
-  },
-  {
-    id: 'designer',
-    name: 'James Okonkwo',
-    role: 'Head of Design',
-    bio: 'Award-winning UI/UX designer. Believes in the power of design systems to create consistent, delightful experiences.',
-    github: 'https://github.com',
-    linkedin: 'https://linkedin.com',
-    position: { top: '25%', left: '60%' },
-    hotspotArea: { width: '12%', height: '55%' },
-  },
-  {
-    id: 'pm',
-    name: 'Elena Volkov',
-    role: 'Project Manager',
-    bio: 'PMP certified. Master of Agile methodologies. Ensures every project ships on time and exceeds expectations.',
-    github: 'https://github.com',
-    linkedin: 'https://linkedin.com',
-    position: { top: '30%', left: '78%' },
-    hotspotArea: { width: '12%', height: '50%' },
-  },
-]
+import { useTranslation } from 'react-i18next'
+import { useTeamData } from '../../hooks/useTranslatedData'
 
 const LINE_COLOR = '#FFA629'
 const CORNER_RADIUS = 20
@@ -82,7 +30,10 @@ function generateVerticalPath(
 }
 
 export function TeamSchematic() {
-  const [activeId, setActiveId] = useState(TEAM_MEMBERS[0].id)
+  const { t } = useTranslation()
+  const TEAM_MEMBERS = useTeamData()
+
+  const [activeId, setActiveId] = useState(TEAM_MEMBERS[0]?.id || 'ceo')
   const [isHovering, setIsHovering] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
   const imageContainerRef = useRef<HTMLDivElement>(null)
@@ -106,7 +57,7 @@ export function TeamSchematic() {
     }, AUTO_ROTATE_DURATION)
 
     return () => clearInterval(interval)
-  }, [isHovering])
+  }, [isHovering, TEAM_MEMBERS])
 
   const updateDimensions = useCallback(() => {
     if (imageContainerRef.current && sectionRef.current) {
@@ -142,12 +93,15 @@ export function TeamSchematic() {
   }
 
   // SVG path coordinates - Start from top center of hotspot (same as visual indicator)
-  const startPos = getPixelPosition(activeMember.position)
-  const startX =
-    startPos.x +
-    ((parseFloat(activeMember.hotspotArea.width) / 100) *
-      imageDimensions.width) /
-      2
+  const startPos = activeMember
+    ? getPixelPosition(activeMember.position)
+    : { x: 0, y: 0 }
+  const startX = activeMember
+    ? startPos.x +
+      ((parseFloat(activeMember.hotspotArea.width) / 100) *
+        imageDimensions.width) /
+        2
+    : 0
   const startY = startPos.y + 10 // Small offset below the indicator dot
 
   const pathD = generateVerticalPath(startX, startY, cardAnchor.x, cardAnchor.y)
@@ -161,11 +115,10 @@ export function TeamSchematic() {
       <div className="max-w-7xl mx-auto px-6 w-full flex-1 flex flex-col">
         {/* Header */}
         <div className="mb-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">The Team</h2>
-          <p className="text-gray-500 max-w-xl">
-            Meet the minds behind the machine. Hover over the team to learn
-            more.
-          </p>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            {t('team.title')}
+          </h2>
+          <p className="text-gray-500 max-w-xl">{t('team.subtitle')}</p>
         </div>
 
         {/* Desktop Layout: Vertical Stack (Image on top, Card below) */}
@@ -173,10 +126,10 @@ export function TeamSchematic() {
           {/* Group Photo Container */}
           <div
             ref={imageContainerRef}
-            className="relative w-full aspect-[21/9] bg-gray-200 rounded-2xl overflow-visible"
+            className="relative w-full aspect-21/9 bg-gray-200 rounded-2xl overflow-visible"
           >
             {/* Placeholder Group Photo Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center rounded-2xl">
+            <div className="absolute inset-0 bg-linear-to-br from-gray-300 to-gray-400 flex items-center justify-center rounded-2xl">
               <span className="text-gray-500 text-xl font-medium">
                 [Group Photo Placeholder]
               </span>

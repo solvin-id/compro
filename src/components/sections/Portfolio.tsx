@@ -10,6 +10,7 @@ import {
   wrap,
 } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { portfolio, PortfolioItem } from '../../data'
 import { Button } from '../ui/Button'
 import { Link } from '@tanstack/react-router'
@@ -65,6 +66,8 @@ function ParallaxText({ children, baseVelocity = 100 }: ParallaxProps) {
 }
 
 export function Portfolio() {
+  const { t } = useTranslation()
+
   return (
     <section
       id="portfolio"
@@ -72,9 +75,11 @@ export function Portfolio() {
     >
       <div className="max-w-7xl mx-auto px-6 mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
-          <h2 className="text-4xl font-bold text-white mb-4">Selected Works</h2>
+          <h2 className="text-4xl font-bold text-white mb-4">
+            {t('portfolio.title')}
+          </h2>
           <p className="text-gray-400 max-w-xl flex items-center gap-2">
-            Accelerate your scroll to see more.
+            {t('portfolio.scrollHint')}
           </p>
         </div>
         <Link to="/portfolio">
@@ -82,7 +87,7 @@ export function Portfolio() {
             variant="outline"
             className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white"
           >
-            View All Projects
+            {t('portfolio.viewAll')}
           </Button>
         </Link>
       </div>

@@ -1,10 +1,13 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { Home, ArrowLeft, Search } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Button } from './ui/Button'
 import { BackgroundLayer } from './ui/BackgroundLayer'
 
 export function NotFound() {
+  const { t } = useTranslation()
+
   return (
     <div className="min-h-screen relative flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -46,7 +49,7 @@ export function NotFound() {
               }}
               className="inline-block w-28 md:w-56 h-28 md:h-56 relative"
             >
-              <Search className="w-32 md:w-64 h-32 absolute md:h-64 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2  text-brand-primary inline" />
+              <Search className="w-32 md:w-64 h-32 absolute md:h-64 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-brand-primary inline" />
             </motion.span>
             <motion.span
               animate={{
@@ -71,11 +74,10 @@ export function NotFound() {
           transition={{ delay: 0.3, duration: 0.5 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Oops! Page not found
+            {t('notFound.title')}
           </h2>
           <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
-            The page you're looking for seems to have wandered off into the
-            digital void. Let's get you back on track.
+            {t('notFound.description')}
           </p>
         </motion.div>
 
@@ -89,7 +91,7 @@ export function NotFound() {
           <Link to="/">
             <Button size="lg" className="rounded-full group">
               <Home className="w-5 h-5 mr-2" />
-              Back to Home
+              {t('notFound.backHome')}
             </Button>
           </Link>
           <Button
@@ -99,7 +101,7 @@ export function NotFound() {
             onClick={() => window.history.back()}
           >
             <ArrowLeft className="w-5 h-5 mr-2 transition-transform group-hover:-translate-x-1" />
-            Go Back
+            {t('notFound.goBack')}
           </Button>
         </motion.div>
 
@@ -110,9 +112,9 @@ export function NotFound() {
           transition={{ delay: 0.8, duration: 0.5 }}
           className="mt-12 text-sm text-gray-400"
         >
-          Error code: 404 • Maybe try the{' '}
+          Error code: 404 • {t('notFound.hint')}{' '}
           <Link to="/" className="text-brand-primary hover:underline">
-            homepage
+            {t('notFound.homepage')}
           </Link>
           ?
         </motion.p>

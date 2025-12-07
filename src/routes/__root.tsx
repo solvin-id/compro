@@ -7,6 +7,9 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { Navbar } from '../components/layout/Navbar'
 import { NotFound } from '../components/NotFound'
+import { Suspense } from 'react'
+import { I18nextProvider } from 'react-i18next'
+import i18n from '../i18n'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
@@ -68,11 +71,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <SmoothScroll />
-        {/* <IntelligentCursor /> */}
-        <ScrollToTop />
-        <Navbar />
-        <main className="pt-16">{children}</main>
+        <I18nextProvider i18n={i18n}>
+          <Suspense fallback={<div className="min-h-screen bg-white" />}>
+            <SmoothScroll />
+            <ScrollToTop />
+            <Navbar />
+            <main className="pt-16">{children}</main>
+          </Suspense>
+        </I18nextProvider>
         <TanStackDevtools
           config={{
             position: 'bottom-left',

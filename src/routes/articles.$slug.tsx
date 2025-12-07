@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Clock, Calendar, Tag } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { articles } from '../data'
 import { InteractiveBackground } from '../components/ui/InteractiveBackground'
 import { Button } from '../components/ui/Button'
@@ -14,15 +15,19 @@ export const Route = createFileRoute('/articles/$slug')({
     }
     return { article }
   },
-  notFoundComponent: () => (
-    <div className="min-h-screen flex items-center justify-center">
-      Article Not Found
-    </div>
-  ),
+  notFoundComponent: () => {
+    const { t } = useTranslation()
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        {t('insights.articleNotFound')}
+      </div>
+    )
+  },
 })
 
 function ArticleComponent() {
   const { article } = Route.useLoaderData()
+  const { t } = useTranslation()
 
   return (
     <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">
@@ -40,16 +45,16 @@ function ArticleComponent() {
         {/* Navigation */}
         <Link
           to="/"
-          className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-[var(--color-brand-primary)] mb-12 transition-colors"
+          className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-brand-primary mb-12 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Insights
+          {t('common.backToInsights')}
         </Link>
 
         {/* Header */}
         <header className="mb-12 space-y-6">
           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100/50 border border-gray-200 text-[var(--color-brand-secondary)] font-medium">
+            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100/50 border border-gray-200 text-brand-secondary font-medium">
               <Tag className="w-3.5 h-3.5" />
               {article.category}
             </span>
@@ -63,7 +68,7 @@ function ArticleComponent() {
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-[var(--color-dark-text)] leading-tight">
+          <h1 className="text-4xl md:text-6xl font-bold text-dark-text leading-tight">
             {article.title}
           </h1>
         </header>
@@ -80,8 +85,8 @@ function ArticleComponent() {
             aliquip ex ea commodo consequat.
           </p>
 
-          <h2 className="text-2xl font-bold text-[var(--color-dark-text)] pt-4">
-            The Challenge
+          <h2 className="text-2xl font-bold text-dark-text pt-4">
+            {t('insights.theChallenge')}
           </h2>
           <p>
             Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -90,14 +95,14 @@ function ArticleComponent() {
             anim id est laborum.
           </p>
 
-          <blockquote className="border-l-4 border-[var(--color-brand-primary)] pl-6 italic my-8 text-gray-800 bg-gray-50 py-4 rounded-r-lg">
+          <blockquote className="border-l-4 border-brand-primary pl-6 italic my-8 text-gray-800 bg-gray-50 py-4 rounded-r-lg">
             "Innovation distinguishes between a leader and a follower. Adopting
             these technologies is no longer an option but a specific survival
             trait."
           </blockquote>
 
-          <h2 className="text-2xl font-bold text-[var(--color-dark-text)] pt-4">
-            Implementing the Solution
+          <h2 className="text-2xl font-bold text-dark-text pt-4">
+            {t('insights.implementingSolution')}
           </h2>
           <p>
             Sed ut perspiciatis unde omnis iste natus error sit voluptatem
@@ -107,9 +112,9 @@ function ArticleComponent() {
             aspernatur aut odit aut fugit.
           </p>
 
-          <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-2xl border border-gray-200 not-prose my-8">
+          <div className="bg-linear-to-br from-gray-50 to-gray-100 p-8 rounded-2xl border border-gray-200 not-prose my-8">
             <h3 className="font-bold text-lg text-gray-900 mb-2">
-              Key Takeaway
+              {t('insights.keyTakeaway')}
             </h3>
             <p className="text-gray-600 m-0">
               Focus on incremental adoption rather than "big bang" rewrites.
@@ -122,10 +127,10 @@ function ArticleComponent() {
         {/* CTA Footer */}
         <div className="mt-20 pt-10 border-t border-gray-100 text-center">
           <p className="text-gray-500 mb-6 font-medium">
-            Enjoyed this perspective?
+            {t('insights.enjoyedPerspective')}
           </p>
           <Button size="lg" className="rounded-full">
-            Let's Discuss Your Strategy
+            {t('insights.discussStrategy')}
           </Button>
         </div>
       </motion.article>

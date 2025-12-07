@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Clock, ArrowUpRight } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { articles } from '../data'
 import { InteractiveBackground } from '../components/ui/InteractiveBackground'
 
@@ -9,6 +10,8 @@ export const Route = createFileRoute('/articles/')({
 })
 
 function ArticlesPage() {
+  const { t } = useTranslation()
+
   return (
     <div className="min-h-screen pt-24 pb-20 relative overflow-hidden bg-white">
       {/* Background with reduced opacity for performance/readability */}
@@ -19,19 +22,23 @@ function ArticlesPage() {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <Link
           to="/"
-          className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-[var(--color-brand-primary)] mb-8 transition-colors"
+          className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-brand-primary mb-8 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Home
+          {t('common.backToHome')}
         </Link>
 
         <header className="mb-20 max-w-3xl">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-bold tracking-tight text-[var(--color-dark-text)] mb-6"
+            className="text-5xl md:text-7xl font-bold tracking-tight text-dark-text mb-6"
           >
-            Latest <span className="text-gradient">Insights</span>.
+            {t('insights.pageTitle')}{' '}
+            <span className="text-gradient">
+              {t('insights.pageTitleGradient')}
+            </span>
+            .
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -39,7 +46,7 @@ function ArticlesPage() {
             transition={{ delay: 0.1 }}
             className="text-xl text-gray-600"
           >
-            Deep dives into engineering, design, and digital transformation.
+            {t('insights.pageSubtitle')}
           </motion.p>
         </header>
 
@@ -60,7 +67,7 @@ function ArticlesPage() {
               >
                 {/* Image Placeholder */}
                 <div className="h-48 bg-gray-100 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-gray-200 to-gray-50 group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-linear-to-tr from-gray-200 to-gray-50 group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute inset-0 flex items-center justify-center text-gray-300 font-mono text-xs">
                     [ARTICLE_IMAGE]
                   </div>
@@ -68,13 +75,13 @@ function ArticlesPage() {
 
                 <div className="p-8 flex flex-col flex-grow">
                   <div className="flex items-center gap-3 text-xs font-medium text-gray-500 mb-4">
-                    <span className="text-[var(--color-brand-primary)] bg-blue-50 px-2 py-1 rounded-md">
+                    <span className="text-brand-primary bg-blue-50 px-2 py-1 rounded-md">
                       {article.category}
                     </span>
                     <span>{article.date}</span>
                   </div>
 
-                  <h2 className="text-xl font-bold text-[var(--color-dark-text)] mb-3 group-hover:text-[var(--color-brand-primary)] transition-colors leading-tight">
+                  <h2 className="text-xl font-bold text-dark-text mb-3 group-hover:text-brand-primary transition-colors leading-tight">
                     {article.title}
                   </h2>
 
@@ -86,8 +93,8 @@ function ArticlesPage() {
                     <span className="text-xs text-gray-400 flex items-center gap-1">
                       <Clock size={12} /> {article.readTime}
                     </span>
-                    <span className="flex items-center gap-1 text-sm font-semibold text-[var(--color-dark-text)] group-hover:translate-x-1 transition-transform">
-                      Read Article <ArrowUpRight size={14} />
+                    <span className="flex items-center gap-1 text-sm font-semibold text-dark-text group-hover:translate-x-1 transition-transform">
+                      {t('insights.readArticle')} <ArrowUpRight size={14} />
                     </span>
                   </div>
                 </div>

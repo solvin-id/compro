@@ -2,19 +2,22 @@ import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { cn } from '../../lib/utils'
 import { Button } from '../ui/Button'
+import { LanguageToggle } from '../ui/LanguageToggle'
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const { t } = useTranslation()
 
   const links = [
-    { to: '/', label: 'Home' },
-    { to: '/', label: 'About', hash: 'about' },
-    { to: '/', label: 'Services', hash: 'services' },
-    { to: '/', label: 'Team', hash: 'team' },
-    { to: '/', label: 'Portfolio', hash: 'portfolio' },
-    { to: '/', label: 'Insights', hash: 'insights' },
+    { to: '/', labelKey: 'nav.home' },
+    { to: '/', labelKey: 'nav.about', hash: 'about' },
+    { to: '/', labelKey: 'nav.services', hash: 'services' },
+    { to: '/', labelKey: 'nav.team', hash: 'team' },
+    { to: '/', labelKey: 'nav.portfolio', hash: 'portfolio' },
+    { to: '/', labelKey: 'nav.insights', hash: 'insights' },
   ]
 
   const handleScroll = (id: string) => {
@@ -56,43 +59,44 @@ export function Navbar() {
           onClick={scrollToTop}
           className="text-xl font-bold tracking-tight flex items-center gap-2 cursor-pointer"
         >
-          <span className="text-[var(--color-dark-text)]">Solvin</span>
-          <div className="w-1.5 h-1.5 rounded-full bg-[var(--color-brand-primary)]" />
+          <span className="text-dark-text">Solvin</span>
+          <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
         </button>
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
           {links.map((link) =>
-            link.label === 'Home' ? (
+            link.labelKey === 'nav.home' ? (
               <button
-                key={link.label}
+                key={link.labelKey}
                 onClick={scrollToTop}
-                className="text-sm font-medium text-gray-600 hover:text-[var(--color-brand-primary)] transition-colors cursor-pointer"
+                className="text-sm font-medium text-gray-600 hover:text-brand-primary transition-colors cursor-pointer"
               >
-                {link.label}
+                {t(link.labelKey)}
               </button>
             ) : link.hash ? (
               <button
-                key={link.label}
+                key={link.labelKey}
                 onClick={() => handleScroll(link.hash!)}
-                className="text-sm font-medium text-gray-600 hover:text-[var(--color-brand-primary)] transition-colors cursor-pointer"
+                className="text-sm font-medium text-gray-600 hover:text-brand-primary transition-colors cursor-pointer"
               >
-                {link.label}
+                {t(link.labelKey)}
               </button>
             ) : (
               <Link
-                key={link.label}
+                key={link.labelKey}
                 to={link.to}
-                className="text-sm font-medium text-gray-600 hover:text-[var(--color-brand-primary)] transition-colors"
+                className="text-sm font-medium text-gray-600 hover:text-brand-primary transition-colors"
               >
-                {link.label}
+                {t(link.labelKey)}
               </Link>
             ),
           )}
         </div>
 
-        {/* CTA */}
-        <div className="hidden md:block">
+        {/* Right side: Language Toggle + CTA */}
+        <div className="hidden md:flex items-center gap-4">
+          <LanguageToggle />
           <Button
             asMotion
             onClick={() => window.open('https://wa.me/6281234567890', '_blank')}
@@ -114,7 +118,7 @@ export function Navbar() {
               },
             }}
           >
-            Let's Talk
+            {t('nav.cta')}
           </Button>
         </div>
 
@@ -139,31 +143,33 @@ export function Navbar() {
             {links.map((link) =>
               link.hash ? (
                 <button
-                  key={link.label}
+                  key={link.labelKey}
                   onClick={() => handleScroll(link.hash!)}
-                  className="text-base font-medium text-gray-600 hover:text-[var(--color-brand-primary)] text-left"
+                  className="text-base font-medium text-gray-600 hover:text-brand-primary text-left"
                 >
-                  {link.label}
+                  {t(link.labelKey)}
                 </button>
               ) : (
                 <Link
-                  key={link.label}
+                  key={link.labelKey}
                   to={link.to}
-                  className="text-base font-medium text-gray-600 hover:text-[var(--color-brand-primary)]"
+                  className="text-base font-medium text-gray-600 hover:text-brand-primary"
                   onClick={() => setIsOpen(false)}
                 >
-                  {link.label}
+                  {t(link.labelKey)}
                 </Link>
               ),
             )}
-            <Button
-              className="w-full justify-center"
-              onClick={() =>
-                window.open('https://wa.me/6281234567890', '_blank')
-              }
-            >
-              Let's Talk
-            </Button>
+            <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+              <LanguageToggle />
+              <Button
+                onClick={() =>
+                  window.open('https://wa.me/6281234567890', '_blank')
+                }
+              >
+                {t('nav.cta')}
+              </Button>
+            </div>
           </div>
         </motion.div>
       )}

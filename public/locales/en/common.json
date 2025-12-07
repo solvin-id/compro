@@ -1,0 +1,163 @@
+{
+  "meta": {
+    "title": "Solvin | Solve with Innovation",
+    "description": "We engineer digital ecosystems that empower businesses to scale."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "team": "Team",
+    "portfolio": "Portfolio",
+    "insights": "Insights",
+    "cta": "Let's Talk"
+  },
+  "hero": {
+    "headline1": "Solve",
+    "headline2": "with",
+    "headline3": "Innovation",
+    "subtext": "We engineer digital ecosystems that empower businesses to scale.",
+    "subtext2": "From legacy migrations to secure reliable future-proofing.",
+    "cta": "Start a Project",
+    "stats": {
+      "experience": "Years Experience",
+      "projects": "Projects Delivered",
+      "clients": "Happy Clients"
+    }
+  },
+  "about": {
+    "heading": "We don't just write code;",
+    "headingGradient": "we solve problems.",
+    "intro": "In a digital landscape cluttered with buzzwords, we provide clarity. Our team acts as your technical partner, translating complex business requirements into elegant, scalable software.",
+    "legacyTitle": "From Legacy to Leading Edge",
+    "legacyText": "Whether you're struggling with technical debt in a monolithic system or looking to secure reliable future-proofing system, we bridge the gap. We specialize in modernization strategies that minimize downtime and maximize value.",
+    "quote": "Solvin transformed our 10-year-old platform into a modern cloud-native marvel in just 6 months.",
+    "innovationTitle": "Innovation is a Process, Not a Spark",
+    "innovationText": "We believe in rigorous engineering disciplines paired with creative problem solving. Our sprint-based agile methodology ensures transparency and rapid iteration, keeping you in the driver's seat."
+  },
+  "services": {
+    "title": "Our Expertise",
+    "subtitle": "Full-stack solutions engineered for scale.",
+    "learnMore": "Learn more",
+    "unsure": "Unsure?",
+    "unsureText": "Chat with our engineers directly. No sales fluff.",
+    "items": {
+      "web": {
+        "title": "Web Development",
+        "description": "High-performance, scalable web applications built with modern frameworks.",
+        "details": "We build PWAs, SPAs, and complex web portals using the latest React ecosystem. Our focus is on Core Web Vitals, accessibility, and SEO."
+      },
+      "backend": {
+        "title": "Backend Systems",
+        "description": "Robust server-side architectures designed for reliability and speed.",
+        "details": "Microservices or Monolith? We help you decide and build API-first architectures that scale with your business."
+      },
+      "mobile": {
+        "title": "Mobile Apps",
+        "description": "Native-quality cross-platform mobile experiences.",
+        "details": "One codebase, two platforms. We deliver smooth, mobile experiences for iOS and Android with offline-first capabilities."
+      },
+      "odoo": {
+        "title": "Odoo ERP Solutions",
+        "description": "Gold Partner standard implementation and customization.",
+        "details": "Streamline your operations with Odoo. We specialize in custom module development, migration, and local accounting compliance."
+      },
+      "cms": {
+        "title": "Headless CMS",
+        "description": "Decoupled content management for flexibility and performance.",
+        "details": "Content infrastructure that feeds your website, app, and watch. We implement structured content modeling for true omnichannel delivery."
+      },
+      "seo": {
+        "title": "Technical SEO & Growth",
+        "description": "Data-driven strategies to dominate search rankings and drive organic traffic.",
+        "details": "We don't just guess; we engineer visibility. From technical audits and Core Web Vitals optimization to structured data implementation, we ensure your digital ecosystem is found by the right audience."
+      }
+    },
+    "techStack": "Tech Stack"
+  },
+  "team": {
+    "title": "The Team",
+    "subtitle": "Meet the minds behind the machine. Hover over the team to learn more.",
+    "members": {
+      "ceo": {
+        "name": "Alexandra Chen",
+        "role": "Chief Executive Officer",
+        "bio": "Visionary leader with 15+ years in digital transformation. Built 3 successful startups before founding Solvin."
+      },
+      "cto": {
+        "name": "Marcus Rivera",
+        "role": "Chief Technology Officer",
+        "bio": "Ex-Google engineer. Architect of enterprise systems serving millions. Obsessed with clean code and scalable infrastructure."
+      },
+      "lead-dev": {
+        "name": "Sarah Kim",
+        "role": "Lead Developer",
+        "bio": "Full-stack wizard. React, Node, and everything in between. Open source contributor and tech community speaker."
+      },
+      "designer": {
+        "name": "James Okonkwo",
+        "role": "Head of Design",
+        "bio": "Award-winning UI/UX designer. Believes in the power of design systems to create consistent, delightful experiences."
+      },
+      "pm": {
+        "name": "Elena Volkov",
+        "role": "Project Manager",
+        "bio": "PMP certified. Master of Agile methodologies. Ensures every project ships on time and exceeds expectations."
+      }
+    }
+  },
+  "portfolio": {
+    "title": "Selected Works",
+    "subtitle": "A glimpse into our recent projects.",
+    "viewAll": "View All Projects",
+    "scrollHint": "Accelerate your scroll to see more.",
+    "pageTitle": "Proof of",
+    "pageTitleGradient": "Competence",
+    "pageSubtitle": "We don't just claim expertise. We ship production-grade systems for ambitious companies. Here are a few selected case studies.",
+    "theClient": "The Client",
+    "theProblem": "The Problem",
+    "theSolution": "The Solvin Solution",
+    "impact": "Impact",
+    "confidentialClient": "Confidential Enterprise Client",
+    "defaultProblem": "Legacy systems impacting operational efficiency and scalability.",
+    "defaultSolution": "Custom architecture designed for high availability.",
+    "defaultOutcome": "Operational efficiency increased by significant margin.",
+    "ctaTitle": "Ready to be our next success story?",
+    "ctaSubtitle": "Let's build something that makes your competitors jealous.",
+    "startProject": "Start Your Project"
+  },
+  "insights": {
+    "title": "Insights",
+    "subtitle": "Thoughts on technology, design, and the future of digital business.",
+    "viewAll": "View all articles",
+    "readStory": "Read Story",
+    "readArticle": "Read Article",
+    "pageTitle": "Latest",
+    "pageTitleGradient": "Insights",
+    "pageSubtitle": "Deep dives into engineering, design, and digital transformation.",
+    "theChallenge": "The Challenge",
+    "implementingSolution": "Implementing the Solution",
+    "keyTakeaway": "Key Takeaway",
+    "enjoyedPerspective": "Enjoyed this perspective?",
+    "discussStrategy": "Let's Discuss Your Strategy",
+    "articleNotFound": "Article Not Found"
+  },
+  "footer": {
+    "copyright": "© 2024 Solvin. All rights reserved."
+  },
+  "notFound": {
+    "title": "Oops! Page not found",
+    "description": "The page you're looking for seems to have wandered off into the digital void. Let's get you back on track.",
+    "backHome": "Back to Home",
+    "goBack": "Go Back",
+    "hint": "Maybe try the",
+    "homepage": "homepage"
+  },
+  "common": {
+    "backToHome": "Back to Home",
+    "backToInsights": "Back to Insights",
+    "learnMore": "Learn More",
+    "close": "Close",
+    "loading": "Loading..."
+  }
+}

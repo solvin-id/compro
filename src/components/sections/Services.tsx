@@ -8,8 +8,11 @@ import {
   Database,
   Cloud,
   X,
+  LineChart,
 } from 'lucide-react'
-import { services, Service } from '../../data'
+import { useTranslation } from 'react-i18next'
+import { useServicesData } from '../../hooks/useTranslatedData'
+import { Service } from '../../data'
 import { cn } from '../../lib/utils'
 
 const icons: Record<string, any> = {
@@ -18,22 +21,22 @@ const icons: Record<string, any> = {
   Smartphone,
   Database,
   Cloud,
+  LineChart,
 }
 
 export function Services() {
   const [selectedService, setSelectedService] = useState<Service | null>(null)
+  const { t } = useTranslation()
+  const services = useServicesData()
 
   return (
     <section id="services" className="py-24 bg-gray-50/50">
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-16">
-          <h2 className="text-4xl font-bold text-[var(--color-dark-text)] mb-4">
-            Our Expertise
+          <h2 className="text-4xl font-bold text-dark-text mb-4">
+            {t('services.title')}
           </h2>
-          <p className="text-gray-500 max-w-xl">
-            We don't just write code. We build the infrastructure that powers
-            your business logic.
-          </p>
+          <p className="text-gray-500 max-w-xl">{t('services.subtitle')}</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 auto-rows-[300px] gap-6">
@@ -81,9 +84,9 @@ export function Services() {
                 </div>
                 <button
                   onClick={() => setSelectedService(service)}
-                  className="flex items-center gap-2 text-sm font-semibold text-gray-400 group-hover:text-[var(--color-dark-text)] transition-colors cursor-pointer"
+                  className="flex items-center gap-2 text-sm font-semibold text-gray-400 group-hover:text-dark-text transition-colors cursor-pointer"
                 >
-                  Learn more <ArrowUpRight className="w-4 h-4" />
+                  {t('services.learnMore')} <ArrowUpRight className="w-4 h-4" />
                 </button>
               </div>
             </motion.div>
@@ -97,10 +100,12 @@ export function Services() {
             className="rounded-3xl bg-[var(--color-dark-text)] p-8 flex flex-col justify-center items-center text-center text-white relative overflow-hidden group cursor-pointer hover:scale-[1.02] transition-transform"
             onClick={() => window.open('https://wa.me/6281234567890', '_blank')}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-600 opacity-20 group-hover:opacity-30 transition-opacity" />
-            <h3 className="text-2xl font-bold mb-4 relative z-10">Unsure?</h3>
+            <div className="absolute inset-0 bg-linear-to-br from-blue-600 to-purple-600 opacity-20 group-hover:opacity-30 transition-opacity" />
+            <h3 className="text-2xl font-bold mb-4 relative z-10">
+              {t('services.unsure')}
+            </h3>
             <p className="text-gray-300 mb-6 relative z-10">
-              Chat with our engineers directly. No sales fluff.
+              {t('services.unsureText')}
             </p>
             <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm relative z-10 group-hover:bg-white/20 transition-colors">
               <ArrowUpRight className="text-white" />
