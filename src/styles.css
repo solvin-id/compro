@@ -1,15 +1,33 @@
 @import "tailwindcss";
 
-body {
-  @apply m-0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@theme {
+  --color-brand-primary: #FFA629;
+  --color-brand-primary-hover: #FF5729;
+  --color-brand-secondary: #FF5729;
+  --color-brand-accent: #FF5729;
+  --color-royal-blue: #4F46E5;
+  --color-dark-text: #111827;
+  
+  --font-sans: "Inter", "Geist", system-ui, sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+/* Custom Utilities if needed that aren't coverd by Tailwind v4 on-the-fly */
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-[var(--color-brand-primary)] via-[var(--color-brand-secondary)] to-[var(--color-brand-accent)] bg-clip-text text-transparent;
+  }
+}
+
+body {
+  @apply m-0 bg-white text-[var(--color-dark-text)] antialiased selection:bg-[var(--color-brand-primary)] selection:text-white;
+  font-family: var(--font-sans);
+}
+
+/* Scrollbar hiding for horizontal scroll areas */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

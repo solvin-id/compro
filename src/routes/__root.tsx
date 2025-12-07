@@ -1,15 +1,16 @@
+import { TanStackDevtools } from '@tanstack/react-devtools'
 import {
   HeadContent,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
-
-import Header from '../components/Header'
+import { Navbar } from '../components/layout/Navbar'
+import { NotFound } from '../components/NotFound'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
+// @ts-ignore
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
@@ -29,7 +30,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Solvin | Solve with Innovation',
       },
     ],
     links: [
@@ -37,11 +38,28 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         rel: 'stylesheet',
         href: appCss,
       },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+      {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossOrigin: 'true' as any,
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
+      },
     ],
   }),
 
+  notFoundComponent: NotFound,
   shellComponent: RootDocument,
 })
+
+import { ScrollToTop } from '../components/ui/ScrollToTop'
+import { SmoothScroll } from '../components/ui/SmoothScroll'
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -50,11 +68,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <Header />
-        {children}
+        <SmoothScroll />
+        {/* <IntelligentCursor /> */}
+        <ScrollToTop />
+        <Navbar />
+        <main className="pt-16">{children}</main>
         <TanStackDevtools
           config={{
-            position: 'bottom-right',
+            position: 'bottom-left',
           }}
           plugins={[
             {

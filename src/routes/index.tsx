@@ -1,118 +1,157 @@
-import { createFileRoute } from '@tanstack/react-router'
-import {
-  Zap,
-  Server,
-  Route as RouteIcon,
-  Shield,
-  Waves,
-  Sparkles,
-} from 'lucide-react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { Button } from '../components/ui/Button'
+import { ArrowRight } from 'lucide-react'
+import { About } from '../components/sections/About'
+import { Services } from '../components/sections/Services'
+import { Portfolio } from '../components/sections/Portfolio'
+import { Insights } from '../components/sections/Insights'
+import { BackgroundLayer } from '../components/ui/BackgroundLayer'
+import { TeamSchematic } from '../components/sections/TeamSchematic'
 
 export const Route = createFileRoute('/')({ component: App })
 
-function App() {
-  const features = [
-    {
-      icon: <Zap className="w-12 h-12 text-cyan-400" />,
-      title: 'Powerful Server Functions',
-      description:
-        'Write server-side code that seamlessly integrates with your client components. Type-safe, secure, and simple.',
-    },
-    {
-      icon: <Server className="w-12 h-12 text-cyan-400" />,
-      title: 'Flexible Server Side Rendering',
-      description:
-        'Full-document SSR, streaming, and progressive enhancement out of the box. Control exactly what renders where.',
-    },
-    {
-      icon: <RouteIcon className="w-12 h-12 text-cyan-400" />,
-      title: 'API Routes',
-      description:
-        'Build type-safe API endpoints alongside your application. No separate backend needed.',
-    },
-    {
-      icon: <Shield className="w-12 h-12 text-cyan-400" />,
-      title: 'Strongly Typed Everything',
-      description:
-        'End-to-end type safety from server to client. Catch errors before they reach production.',
-    },
-    {
-      icon: <Waves className="w-12 h-12 text-cyan-400" />,
-      title: 'Full Streaming Support',
-      description:
-        'Stream data from server to client progressively. Perfect for AI applications and real-time updates.',
-    },
-    {
-      icon: <Sparkles className="w-12 h-12 text-cyan-400" />,
-      title: 'Next Generation Ready',
-      description:
-        'Built from the ground up for modern web applications. Deploy anywhere JavaScript runs.',
-    },
-  ]
+function Hero() {
+  const { scrollY } = useScroll()
+  const imageY = useTransform(scrollY, [0, 500], [0, 100])
+
+  const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.8,
+        ease: [0.2, 0.65, 0.3, 0.9] as any,
+      },
+    }),
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
-      <section className="relative py-20 px-6 text-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10"></div>
-        <div className="relative max-w-5xl mx-auto">
-          <div className="flex items-center justify-center gap-6 mb-6">
-            <img
-              src="/tanstack-circle-logo.png"
-              alt="TanStack Logo"
-              className="w-24 h-24 md:w-32 md:h-32"
-            />
-            <h1 className="text-6xl md:text-7xl font-black text-white [letter-spacing:-0.08em]">
-              <span className="text-gray-300">TANSTACK</span>{' '}
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-                START
-              </span>
-            </h1>
-          </div>
-          <p className="text-2xl md:text-3xl text-gray-300 mb-4 font-light">
-            The framework for next generation AI applications
-          </p>
-          <p className="text-lg text-gray-400 max-w-3xl mx-auto mb-8">
-            Full-stack framework powered by TanStack Router for React and Solid.
-            Build modern applications with server functions, streaming, and type
-            safety.
-          </p>
-          <div className="flex flex-col items-center gap-4">
-            <a
-              href="https://tanstack.com/start"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-8 py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg transition-colors shadow-lg shadow-cyan-500/50"
-            >
-              Documentation
-            </a>
-            <p className="text-gray-400 text-sm mt-2">
-              Begin your TanStack Start journey by editing{' '}
-              <code className="px-2 py-1 bg-slate-700 rounded text-cyan-400">
-                /src/routes/index.tsx
-              </code>
-            </p>
-          </div>
-        </div>
-      </section>
+    <section className="min-h-[85vh] flex items-center justify-center overflow-hidden relative pt-20">
+      {/* Background Elements */}
+      <div className="absolute inset-0 z-0">
+        <BackgroundLayer />
+      </div>
 
-      <section className="py-16 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6 hover:border-cyan-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10"
+      {/* Side Vignettes/Glows */}
+      <div className="absolute inset-y-0 left-0 w-1/4 bg-linear-to-r from-white via-white/50 to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-1/4 bg-linear-to-l from-white via-white/50 to-transparent z-10 pointer-events-none" />
+
+      {/* Parallax Hero Visual (Lightweight Wireframe Circles) */}
+      <motion.div
+        style={{ y: imageY }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] opacity-30 pointer-events-none z-10"
+      >
+        <div className="absolute inset-0 border border-indigo-100/50 rounded-full" />
+        <div className="absolute inset-[15%] border border-indigo-100/40 rounded-full" />
+        <div className="absolute inset-[30%] border border-indigo-100/30 rounded-full" />
+        <div className="absolute inset-0 bg-linear-to-tr from-indigo-50/20 to-transparent rounded-full blur-2xl" />
+      </motion.div>
+
+      {/* Main Content */}
+      <div className="max-w-5xl mx-auto px-6 relative z-20 w-full flex flex-col items-center text-center space-y-10">
+        <motion.h1
+          className="text-6xl md:text-8xl font-bold tracking-tight text-dark-text leading-[1.1]"
+          initial="hidden"
+          animate="visible"
+        >
+          {['Solve', 'with'].map((word, i) => (
+            <motion.span
+              key={word}
+              custom={i}
+              variants={textVariants}
+              className="inline-block mx-3"
             >
-              <div className="mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-semibold text-white mb-3">
-                {feature.title}
-              </h3>
-              <p className="text-gray-400 leading-relaxed">
-                {feature.description}
+              {word}
+            </motion.span>
+          ))}
+          <br className="hidden md:block" />
+          <motion.span
+            custom={2}
+            variants={textVariants}
+            className="text-gradient inline-block"
+          >
+            Innovation.
+          </motion.span>
+        </motion.h1>
+
+        <motion.p
+          className="text-xl md:text-2xl text-gray-600 max-w-4xl leading-relaxed mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.8 }}
+        >
+          We engineer digital ecosystems that empower businesses to scale.
+          <br className="hidden md:block" /> From legacy migrations to secure
+          reliable future-proofing.
+        </motion.p>
+
+        <motion.div
+          className="flex flex-wrap justify-center gap-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+        >
+          <Link to="/start">
+            <Button
+              size="lg"
+              className="rounded-full group text-lg px-8 py-6 h-auto"
+            >
+              Start Your Project
+              <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </Link>
+          <Link to="/portfolio">
+            <Button
+              variant="outline"
+              size="lg"
+              className="rounded-full text-lg px-8 py-6 h-auto"
+            >
+              View Portfolio
+            </Button>
+          </Link>
+        </motion.div>
+
+        <motion.div
+          className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 pt-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8, duration: 1 }}
+        >
+          {[
+            { label: '5+ Years Exp', value: 'Since 2020' },
+            { label: '50+ Projects', value: 'Delivered' },
+            { label: '98% Retention', value: 'Client Satisfaction' },
+          ].map((stat, i) => (
+            <div key={i} className="flex flex-col items-center">
+              <p className="text-2xl font-bold text-gray-900">{stat.label}</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">
+                {stat.value}
               </p>
             </div>
           ))}
-        </div>
-      </section>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+function App() {
+  return (
+    <div className="bg-white min-h-screen">
+      <Hero />
+      <div className="relative">
+        <About />
+        <Services />
+        <TeamSchematic />
+        <Portfolio />
+        <Insights />
+        <footer className="py-8 text-center text-gray-400 text-sm">
+          © 2024 Solvin. All rights reserved.
+        </footer>
+      </div>
     </div>
   )
 }
