@@ -38,8 +38,20 @@ function Hero() {
       </div>
 
       {/* Side Vignettes/Glows */}
-      <div className="absolute inset-y-0 left-0 w-1/4 bg-linear-to-r from-white via-white/50 to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-1/4 bg-linear-to-l from-white via-white/50 to-transparent z-10 pointer-events-none" />
+      <div
+        className="absolute inset-y-0 left-0 w-1/4 z-10 pointer-events-none"
+        style={{
+          background:
+            'linear-gradient(to right, hsl(var(--background)), hsl(var(--background) / 0.5), transparent)',
+        }}
+      />
+      <div
+        className="absolute inset-y-0 right-0 w-1/4 z-10 pointer-events-none"
+        style={{
+          background:
+            'linear-gradient(to left, hsl(var(--background)), hsl(var(--background) / 0.5), transparent)',
+        }}
+      />
 
       {/* Parallax Hero Visual (Lightweight Wireframe Circles) */}
       <motion.div
@@ -55,7 +67,7 @@ function Hero() {
       {/* Main Content */}
       <div className="max-w-5xl mx-auto px-6 relative z-20 w-full flex flex-col items-center text-center space-y-10">
         <motion.h1
-          className="text-6xl md:text-8xl font-bold tracking-tight text-dark-text leading-[1.1]"
+          className="text-6xl md:text-8xl font-bold tracking-tight text-foreground leading-[1.1]"
           initial="hidden"
           animate="visible"
         >
@@ -127,8 +139,8 @@ function Hero() {
             { label: '98%', value: t('hero.stats.clients') },
           ].map((stat, i) => (
             <div key={i} className="flex flex-col items-center">
-              <p className="text-2xl font-bold text-gray-900">{stat.label}</p>
-              <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold">
+              <p className="text-2xl font-bold text-foreground">{stat.label}</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">
                 {stat.value}
               </p>
             </div>
@@ -143,7 +155,7 @@ function App() {
   const { t } = useTranslation()
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-background min-h-screen">
       <Hero />
       <div className="relative">
         <About />

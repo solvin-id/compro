@@ -110,15 +110,15 @@ export function TeamSchematic() {
     <section
       ref={sectionRef}
       id="team"
-      className="min-h-screen bg-gray-50 py-16 flex flex-col"
+      className="min-h-screen bg-transparent py-16 flex flex-col"
     >
       <div className="max-w-7xl mx-auto px-6 w-full flex-1 flex flex-col">
         {/* Header */}
         <div className="mb-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl font-bold text-foreground mb-4">
             {t('team.title')}
           </h2>
-          <p className="text-gray-500 max-w-xl">{t('team.subtitle')}</p>
+          <p className="text-muted-foreground max-w-xl">{t('team.subtitle')}</p>
         </div>
 
         {/* Desktop Layout: Vertical Stack (Image on top, Card below) */}

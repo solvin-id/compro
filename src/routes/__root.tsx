@@ -10,6 +10,7 @@ import { NotFound } from '../components/NotFound'
 import { Suspense } from 'react'
 import { I18nextProvider } from 'react-i18next'
 import i18n from '../i18n'
+import { ThemeProvider } from '../components/ThemeProvider'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
@@ -66,19 +67,28 @@ import { SmoothScroll } from '../components/ui/SmoothScroll'
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        <I18nextProvider i18n={i18n}>
-          <Suspense fallback={<div className="min-h-screen bg-white" />}>
-            <SmoothScroll />
-            <ScrollToTop />
-            <Navbar />
-            <main className="pt-16">{children}</main>
-          </Suspense>
-        </I18nextProvider>
+        <ThemeProvider>
+          <I18nextProvider i18n={i18n}>
+            <Suspense
+              fallback={
+                <div
+                  className="min-h-screen"
+                  style={{ backgroundColor: 'hsl(var(--background))' }}
+                />
+              }
+            >
+              <SmoothScroll />
+              <ScrollToTop />
+              <Navbar />
+              <main className="pt-16">{children}</main>
+            </Suspense>
+          </I18nextProvider>
+        </ThemeProvider>
         <TanStackDevtools
           config={{
             position: 'bottom-left',

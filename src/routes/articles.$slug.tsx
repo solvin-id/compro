@@ -45,7 +45,7 @@ function ArticleComponent() {
         {/* Navigation */}
         <Link
           to="/"
-          className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-brand-primary mb-12 transition-colors"
+          className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-brand-primary mb-12 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           {t('common.backToInsights')}
@@ -53,8 +53,8 @@ function ArticleComponent() {
 
         {/* Header */}
         <header className="mb-12 space-y-6">
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100/50 border border-gray-200 text-brand-secondary font-medium">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-muted/50 border border-border text-brand-secondary font-medium">
               <Tag className="w-3.5 h-3.5" />
               {article.category}
             </span>
@@ -68,14 +68,14 @@ function ArticleComponent() {
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-dark-text leading-tight">
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
             {article.title}
           </h1>
         </header>
 
         {/* Content Placeholder */}
-        <div className="prose prose-lg prose-gray max-w-none text-gray-600 leading-relaxed space-y-8">
-          <p className="text-xl leading-relaxed font-medium text-gray-800">
+        <div className="prose prose-lg dark:prose-invert max-w-none text-muted-foreground leading-relaxed space-y-8">
+          <p className="text-xl leading-relaxed font-medium text-foreground">
             {article.summary}
           </p>
           <p>
@@ -85,7 +85,7 @@ function ArticleComponent() {
             aliquip ex ea commodo consequat.
           </p>
 
-          <h2 className="text-2xl font-bold text-dark-text pt-4">
+          <h2 className="text-2xl font-bold text-foreground pt-4">
             {t('insights.theChallenge')}
           </h2>
           <p>
@@ -95,13 +95,13 @@ function ArticleComponent() {
             anim id est laborum.
           </p>
 
-          <blockquote className="border-l-4 border-brand-primary pl-6 italic my-8 text-gray-800 bg-gray-50 py-4 rounded-r-lg">
+          <blockquote className="border-l-4 border-brand-primary pl-6 italic my-8 text-foreground bg-muted/50 py-4 rounded-r-lg">
             "Innovation distinguishes between a leader and a follower. Adopting
             these technologies is no longer an option but a specific survival
             trait."
           </blockquote>
 
-          <h2 className="text-2xl font-bold text-dark-text pt-4">
+          <h2 className="text-2xl font-bold text-foreground pt-4">
             {t('insights.implementingSolution')}
           </h2>
           <p>
@@ -112,11 +112,11 @@ function ArticleComponent() {
             aspernatur aut odit aut fugit.
           </p>
 
-          <div className="bg-linear-to-br from-gray-50 to-gray-100 p-8 rounded-2xl border border-gray-200 not-prose my-8">
-            <h3 className="font-bold text-lg text-gray-900 mb-2">
+          <div className="bg-muted/50 p-8 rounded-2xl border border-border not-prose my-8">
+            <h3 className="font-bold text-lg text-foreground mb-2">
               {t('insights.keyTakeaway')}
             </h3>
-            <p className="text-gray-600 m-0">
+            <p className="text-muted-foreground m-0">
               Focus on incremental adoption rather than "big bang" rewrites.
               This approach mitigates risk while delivering continuous value to
               stakeholders.
@@ -125,8 +125,8 @@ function ArticleComponent() {
         </div>
 
         {/* CTA Footer */}
-        <div className="mt-20 pt-10 border-t border-gray-100 text-center">
-          <p className="text-gray-500 mb-6 font-medium">
+        <div className="mt-20 pt-10 border-t border-border text-center">
+          <p className="text-muted-foreground mb-6 font-medium">
             {t('insights.enjoyedPerspective')}
           </p>
           <Button size="lg" className="rounded-full">

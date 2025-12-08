@@ -17,30 +17,38 @@ export function BackgroundLayer() {
       */}
       <motion.div style={{ y: gridY }} className="absolute inset-0 -z-20">
         <div
-          className="absolute inset-0 h-full w-full bg-white"
+          className="absolute inset-0 h-full w-full bg-background"
           style={{
-            backgroundImage: 'radial-gradient(#bec6d4 1px, transparent 1px)',
+            backgroundImage:
+              'radial-gradient(hsl(var(--border)) 1px, transparent 1px)',
             backgroundSize: '32px 32px',
           }}
         >
           {/* Faded edges mask */}
           <div
-            className="absolute inset-0 bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)]"
+            className="absolute inset-0 bg-background"
             style={{
               WebkitMaskImage:
                 'radial-gradient(ellipse at center, transparent 20%, white)',
             }}
           ></div>
           {/* Center visible mask */}
-          <div className="absolute inset-0 bg-white/0 mask-[radial-gradient(ellipse_at_center,black_40%,transparent_100%)]"></div>
+          <div className="absolute inset-0 bg-background/0 mask-[radial-gradient(ellipse_at_center,black_40%,transparent_100%)]"></div>
         </div>
 
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,white_100%)] opacity-90"></div>
+        <div
+          className="absolute inset-0 opacity-90"
+          style={{
+            background:
+              'radial-gradient(circle at center, transparent 0%, hsl(var(--background)) 100%)',
+          }}
+        ></div>
       </motion.div>
 
       {/* 
         Layer 2: The Aurora Orbs (Atmosphere)
         Z-Index: -1
+        Uses CSS variable --aurora-opacity for light/dark mode
       */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         {/* Orb A: Innovation (Primary Orange) - Top Right */}
@@ -56,8 +64,11 @@ export function BackgroundLayer() {
               repeat: Infinity,
               ease: 'easeInOut',
             }}
-            className="absolute -top-[10%] -right-[10%] w-[600px] h-[600px] rounded-full blur-[100px] opacity-15 will-change-transform"
-            style={{ background: 'var(--color-brand-primary)' }}
+            className="absolute -top-[10%] -right-[10%] w-[600px] h-[600px] rounded-full blur-[100px] will-change-transform"
+            style={{
+              background: 'var(--color-brand-primary)',
+              opacity: 'var(--aurora-opacity)',
+            }}
           />
         </motion.div>
 
@@ -75,8 +86,11 @@ export function BackgroundLayer() {
               ease: 'easeInOut',
               delay: 2,
             }}
-            className="absolute -bottom-[10%] -left-[10%] w-[500px] h-[500px] rounded-full blur-[80px] opacity-10 will-change-transform"
-            style={{ background: 'var(--color-brand-secondary)' }}
+            className="absolute -bottom-[10%] -left-[10%] w-[500px] h-[500px] rounded-full blur-[80px] will-change-transform"
+            style={{
+              background: 'var(--color-brand-secondary)',
+              opacity: 'calc(var(--aurora-opacity) * 0.7)',
+            }}
           />
         </motion.div>
 
@@ -94,8 +108,11 @@ export function BackgroundLayer() {
               ease: 'easeInOut',
               delay: 5,
             }}
-            className="absolute top-[40%] -left-[10%] w-[600px] h-[400px] rounded-[100%] blur-[90px] opacity-12 will-change-transform"
-            style={{ background: 'var(--color-royal-blue)' }}
+            className="absolute top-[40%] -left-[10%] w-[600px] h-[400px] rounded-[100%] blur-[90px] will-change-transform"
+            style={{
+              background: 'var(--color-royal-blue)',
+              opacity: 'calc(var(--aurora-opacity) * 0.8)',
+            }}
           />
         </motion.div>
 
@@ -110,7 +127,8 @@ export function BackgroundLayer() {
             repeat: Infinity,
             ease: 'easeInOut',
           }}
-          className="absolute top-[20%] left-[30%] w-[300px] h-[300px] rounded-full blur-[60px] opacity-5 bg-indigo-100 will-change-transform"
+          className="absolute top-[20%] left-[30%] w-[300px] h-[300px] rounded-full blur-[60px] bg-indigo-100 dark:bg-indigo-900 will-change-transform"
+          style={{ opacity: 'calc(var(--aurora-opacity) * 0.35)' }}
         />
       </div>
     </div>

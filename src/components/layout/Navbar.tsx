@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '../../lib/utils'
 import { Button } from '../ui/Button'
 import { LanguageToggle } from '../ui/LanguageToggle'
+import { ThemeToggle } from '../ui/ThemeToggle'
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -50,7 +51,7 @@ export function Navbar() {
       transition={{ duration: 0.5, ease: 'easeOut' }}
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        'bg-white/70 backdrop-blur-md border-b border-gray-100',
+        'bg-background/70 backdrop-blur-md border-b border-border',
       )}
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -59,7 +60,7 @@ export function Navbar() {
           onClick={scrollToTop}
           className="text-xl font-bold tracking-tight flex items-center gap-2 cursor-pointer"
         >
-          <span className="text-dark-text">Solvin</span>
+          <span className="text-foreground">Solvin</span>
           <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
         </button>
 
@@ -70,7 +71,7 @@ export function Navbar() {
               <button
                 key={link.labelKey}
                 onClick={scrollToTop}
-                className="text-sm font-medium text-gray-600 hover:text-brand-primary transition-colors cursor-pointer"
+                className="text-sm font-medium text-muted-foreground hover:text-brand-primary transition-colors cursor-pointer"
               >
                 {t(link.labelKey)}
               </button>
@@ -78,7 +79,7 @@ export function Navbar() {
               <button
                 key={link.labelKey}
                 onClick={() => handleScroll(link.hash!)}
-                className="text-sm font-medium text-gray-600 hover:text-brand-primary transition-colors cursor-pointer"
+                className="text-sm font-medium text-muted-foreground hover:text-brand-primary transition-colors cursor-pointer"
               >
                 {t(link.labelKey)}
               </button>
@@ -94,8 +95,9 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Right side: Language Toggle + CTA */}
+        {/* Right side: Theme + Language Toggle + CTA */}
         <div className="hidden md:flex items-center gap-4">
+          <ThemeToggle />
           <LanguageToggle />
           <Button
             asMotion

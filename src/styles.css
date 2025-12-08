@@ -5,22 +5,69 @@
   --color-brand-primary-hover: #FF5729;
   --color-brand-secondary: #FF5729;
   --color-brand-accent: #FF5729;
+  --color-brand-purple: #4F46E5;
   --color-royal-blue: #4F46E5;
   --color-dark-text: #111827;
+  
+  /* Semantic Colors - mapped from CSS variables */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-border: hsl(var(--border));
   
   --font-sans: "Inter", "Geist", system-ui, sans-serif;
 }
 
-/* Custom Utilities if needed that aren't coverd by Tailwind v4 on-the-fly */
+/* Light/Dark Mode Semantic Variables */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    
+    /* Aurora opacity for light mode */
+    --aurora-opacity: 0.15;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 5.9%;
+    --card-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    color-scheme: dark;
+    
+    /* Aurora opacity for dark mode - reduced */
+    --aurora-opacity: 0.08;
+  }
+}
+
+/* Custom Utilities */
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-[var(--color-brand-primary)] via-[var(--color-brand-secondary)] to-[var(--color-brand-accent)] bg-clip-text text-transparent;
+    @apply bg-linear-to-r from-brand-primary via-brand-secondary to-brand-accent bg-clip-text text-transparent;
   }
 }
 
 body {
-  @apply m-0 bg-white text-[var(--color-dark-text)] antialiased selection:bg-[var(--color-brand-primary)] selection:text-white;
+  @apply m-0 antialiased selection:bg-brand-primary selection:text-white;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
   font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Scrollbar hiding for horizontal scroll areas */
@@ -31,3 +78,20 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Dark mode scrollbar styling */
+.dark ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.dark ::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 5px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+

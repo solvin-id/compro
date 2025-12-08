@@ -59,11 +59,11 @@ I'd like to start a project:
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 relative overflow-hidden py-12">
+    <div className="min-h-screen flex items-center justify-center bg-transparent relative overflow-hidden py-12">
       {/* Progress Bar */}
-      <div className="absolute top-0 left-0 right-0 h-2 bg-gray-200">
+      <div className="absolute top-0 left-0 right-0 h-2 bg-muted">
         <motion.div
-          className="h-full bg-[var(--color-brand-primary)]"
+          className="h-full bg-brand-primary"
           initial={{ width: 0 }}
           animate={{ width: `${(step / 4) * 100}%` }}
         />
@@ -80,10 +80,10 @@ I'd like to start a project:
               className="space-y-8"
             >
               <div className="text-center space-y-4">
-                <span className="text-sm font-bold uppercase text-[var(--color-brand-primary)] tracking-widest">
+                <span className="text-sm font-bold uppercase text-brand-primary tracking-widest">
                   Step 1 of 4
                 </span>
-                <h1 className="text-4xl font-bold text-[var(--color-dark-text)]">
+                <h1 className="text-4xl font-bold text-foreground">
                   What are we building today?
                 </h1>
               </div>
@@ -96,12 +96,12 @@ I'd like to start a project:
                       updateData('service', s.label)
                       nextStep()
                     }}
-                    className="group p-6 rounded-2xl bg-white border border-gray-200 hover:border-[var(--color-brand-primary)] hover:ring-2 hover:ring-[var(--color-brand-primary)]/20 transition-all text-left shadow-sm hover:shadow-lg"
+                    className="group p-6 rounded-2xl bg-card border border-border hover:border-brand-primary hover:ring-2 hover:ring-brand-primary/20 transition-all text-left shadow-sm hover:shadow-lg"
                   >
                     <span className="text-4xl mb-4 block group-hover:scale-110 transition-transform">
                       {s.icon}
                     </span>
-                    <span className="font-bold text-gray-900 block">
+                    <span className="font-bold text-foreground block">
                       {s.label}
                     </span>
                   </button>
@@ -119,13 +119,13 @@ I'd like to start a project:
               className="space-y-8 text-center"
             >
               <div className="space-y-4">
-                <span className="text-sm font-bold uppercase text-[var(--color-brand-primary)] tracking-widest">
+                <span className="text-sm font-bold uppercase text-brand-primary tracking-widest">
                   Step 2 of 4
                 </span>
-                <h1 className="text-4xl font-bold text-[var(--color-dark-text)]">
+                <h1 className="text-4xl font-bold text-foreground">
                   Do you have a design ready?
                 </h1>
-                <p className="text-gray-500">
+                <p className="text-muted-foreground">
                   Do you have Figma files or do we need to craft the UI/UX?
                 </p>
               </div>
@@ -136,12 +136,12 @@ I'd like to start a project:
                     updateData('hasDesign', true)
                     nextStep()
                   }}
-                  className="p-8 rounded-2xl bg-white border border-gray-200 hover:border-green-500 hover:ring-2 hover:ring-green-500/20 transition-all"
+                  className="p-8 rounded-2xl bg-card border border-border hover:border-green-500 hover:ring-2 hover:ring-green-500/20 transition-all"
                 >
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                  <div className="w-16 h-16 bg-green-100 dark:bg-green-950/50 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
                     🎨
                   </div>
-                  <span className="font-bold text-lg block">
+                  <span className="font-bold text-lg block text-foreground">
                     Yes, I have designs
                   </span>
                 </button>
@@ -150,12 +150,12 @@ I'd like to start a project:
                     updateData('hasDesign', false)
                     nextStep()
                   }}
-                  className="p-8 rounded-2xl bg-white border border-gray-200 hover:border-blue-500 hover:ring-2 hover:ring-blue-500/20 transition-all"
+                  className="p-8 rounded-2xl bg-card border border-border hover:border-blue-500 hover:ring-2 hover:ring-blue-500/20 transition-all"
                 >
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                  <div className="w-16 h-16 bg-blue-100 dark:bg-blue-950/50 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
                     🏗️
                   </div>
-                  <span className="font-bold text-lg block">
+                  <span className="font-bold text-lg block text-foreground">
                     No, I need magic
                   </span>
                 </button>
@@ -172,13 +172,13 @@ I'd like to start a project:
               className="space-y-8 text-center"
             >
               <div className="space-y-4">
-                <span className="text-sm font-bold uppercase text-[var(--color-brand-primary)] tracking-widest">
+                <span className="text-sm font-bold uppercase text-brand-primary tracking-widest">
                   Step 3 of 4
                 </span>
-                <h1 className="text-4xl font-bold text-[var(--color-dark-text)]">
+                <h1 className="text-4xl font-bold text-foreground">
                   What is your estimated budget?
                 </h1>
-                <p className="text-gray-500">
+                <p className="text-muted-foreground">
                   This helps us recommend the right tech stack.
                 </p>
               </div>
@@ -191,7 +191,7 @@ I'd like to start a project:
                       updateData('budget', b.label)
                       nextStep()
                     }}
-                    className="w-full p-6 text-left rounded-xl bg-white border border-gray-200 hover:border-[var(--color-brand-primary)] hover:bg-[var(--color-brand-primary)] hover:text-white transition-all flex items-center justify-between group"
+                    className="w-full p-6 text-left rounded-xl bg-card border border-border hover:border-brand-primary hover:bg-brand-primary hover:text-white transition-all flex items-center justify-between group"
                   >
                     <span className="font-bold text-lg">{b.label}</span>
                     <ArrowRight className="opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -210,22 +210,22 @@ I'd like to start a project:
               className="space-y-8"
             >
               <div className="text-center space-y-4">
-                <span className="text-sm font-bold uppercase text-[var(--color-brand-primary)] tracking-widest">
+                <span className="text-sm font-bold uppercase text-brand-primary tracking-widest">
                   Final Step
                 </span>
-                <h1 className="text-4xl font-bold text-[var(--color-dark-text)]">
+                <h1 className="text-4xl font-bold text-foreground">
                   Where should we create magic?
                 </h1>
               </div>
 
-              <div className="bg-white p-8 rounded-3xl border border-gray-200 bg-white/50 backdrop-blur-sm shadow-xl space-y-6">
+              <div className="bg-card p-8 rounded-3xl border border-border backdrop-blur-sm shadow-xl space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Your Name
                   </label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[var(--color-brand-primary)] focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
                     placeholder="John Doe"
                     value={formData.contact.name}
                     onChange={(e) =>
@@ -237,12 +237,12 @@ I'd like to start a project:
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Email Address
                   </label>
                   <input
                     type="email"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[var(--color-brand-primary)] focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
                     placeholder="john@company.com"
                     value={formData.contact.email}
                     onChange={(e) =>
@@ -254,11 +254,11 @@ I'd like to start a project:
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Additional Details (Optional)
                   </label>
                   <textarea
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[var(--color-brand-primary)] focus:border-transparent outline-none transition-all min-h-[100px]"
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all min-h-[100px]"
                     placeholder="Tell us more about your vision..."
                     value={formData.contact.details}
                     onChange={(e) =>
@@ -282,11 +282,11 @@ I'd like to start a project:
           )}
         </AnimatePresence>
 
-        <div className="mt-12 flex justify-between items-center text-sm text-gray-400">
+        <div className="mt-12 flex justify-between items-center text-sm text-muted-foreground">
           {step > 1 && (
             <button
               onClick={prevStep}
-              className="flex items-center hover:text-gray-600 transition-colors"
+              className="flex items-center hover:text-foreground transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-2" /> Back
             </button>
