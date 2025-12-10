@@ -1,8 +1,10 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { cn } from '@/lib/utils'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Github, Linkedin } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTeamData } from '../../hooks/useTranslatedData'
+import { useMountedTheme } from '@/hooks/useMountedTheme'
 
 const LINE_COLOR = '#FFA629'
 const CORNER_RADIUS = 20
@@ -30,6 +32,7 @@ function generateVerticalPath(
 }
 
 export function TeamSchematic() {
+  const { theme } = useMountedTheme()
   const { t } = useTranslation()
   const TEAM_MEMBERS = useTeamData()
 
@@ -126,18 +129,48 @@ export function TeamSchematic() {
           {/* Group Photo Container */}
           <div
             ref={imageContainerRef}
-            className="relative w-full aspect-21/9 bg-gray-200 rounded-2xl overflow-visible"
+            className="relative w-full aspect-21/9 rounded-2xl overflow-visible"
           >
             {/* Placeholder Group Photo Background */}
-            <div className="absolute inset-0 bg-linear-to-br from-gray-300 to-gray-400 flex items-center justify-center rounded-2xl">
-              <span className="text-gray-500 text-xl font-medium">
-                [Group Photo Placeholder]
-              </span>
+            <div
+              className={cn(
+                'absolute inset-0  flex items-center justify-center rounded-2xl overflow-hidden',
+                theme !== 'light' &&
+                  'bg-linear-to-br from-gray-800/15 to-gray-950/30 backdrop-blur-lg border border-border/40',
+                theme === 'light' &&
+                  'bg-linear-to-br from-gray-300 to-gray-400',
+              )}
+            >
+              <img
+                src="/image/dafa.webp"
+                alt="dafa"
+                className="absolute -bottom-1 left-1/2 scale-108 -translate-x-1/2 h-full z-10"
+              />
+              <img
+                src="/image/rino.webp"
+                alt="rino"
+                className="absolute -bottom-3 right-1/5 h-full z-5"
+              />
+              <img
+                src="/image/akbar.webp"
+                alt="akbar"
+                className="absolute -bottom-2 left-1/4 h-full z-5"
+              />
+              <img
+                src="/image/aisy.webp"
+                alt="aisy"
+                className="absolute -bottom-2 scale-95 right-1/12 h-full z-1"
+              />
+              <img
+                src="/image/teguh.webp"
+                alt="teguh"
+                className="absolute -bottom-8 scale-95 left-1/15 h-full z-1"
+              />
             </div>
 
             {/* Hotspots Layer */}
             {TEAM_MEMBERS.map((member) => (
-              <div
+              <button
                 key={member.id}
                 onMouseEnter={() => {
                   setIsHovering(true)
@@ -175,7 +208,7 @@ export function TeamSchematic() {
                         : '0 2px 8px rgba(0,0,0,0.2)',
                   }}
                 />
-              </div>
+              </button>
             ))}
           </div>
 
@@ -250,25 +283,29 @@ export function TeamSchematic() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: 0.3, duration: 0.3 }}
-                className="bg-white rounded-2xl p-8 border border-gray-100 shadow-lg max-w-2xl w-full"
+                className={cn(
+                  'rounded-2xl p-8 border shadow-lg max-w-2xl w-full',
+                  theme === 'light'
+                    ? 'bg-background border-border'
+                    : 'bg-background/30 gradient-to-b from-background/30 to-background/50 backdrop-blur-sm border-border/40',
+                )}
               >
                 <div className="flex items-start gap-6">
                   <div className="w-20 h-20 rounded-full bg-gray-200 shrink-0 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-gray-500">
-                      {activeMember.name
-                        .split(' ')
-                        .map((n) => n[0])
-                        .join('')}
-                    </span>
+                    <img
+                      src={activeMember.profileImage}
+                      alt={activeMember.name}
+                      className="aspect-square w-20 h-20 rounded-full object-cover object-top"
+                    />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-1">
+                    <h3 className="text-2xl font-bold text-foreground mb-1">
                       {activeMember.name}
                     </h3>
                     <p className="text-brand-primary font-semibold mb-3">
                       {activeMember.role}
                     </p>
-                    <p className="text-gray-600 leading-relaxed mb-4">
+                    <p className="text-muted-foreground leading-relaxed mb-4">
                       {activeMember.bio}
                     </p>
                     <div className="flex gap-3">
@@ -276,17 +313,39 @@ export function TeamSchematic() {
                         href={activeMember.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
+                        className={cn(
+                          'w-10 h-10 rounded-full flex items-center justify-center transition-colors',
+                          theme !== 'light' &&
+                            'bg-gray-900 hover:bg-gray-900/50',
+                          theme === 'light' && 'bg-gray-100 hover:bg-gray-200',
+                        )}
                       >
-                        <Github size={18} className="text-gray-700" />
+                        <Github
+                          size={18}
+                          className={cn(
+                            theme !== 'light' && 'text-gray-700',
+                            theme === 'light' && 'text-gray-700',
+                          )}
+                        />
                       </a>
                       <a
                         href={activeMember.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
+                        className={cn(
+                          'w-10 h-10 rounded-full flex items-center justify-center transition-colors',
+                          theme !== 'light' &&
+                            'bg-gray-900 hover:bg-gray-900/50',
+                          theme === 'light' && 'bg-gray-100 hover:bg-gray-200',
+                        )}
                       >
-                        <Linkedin size={18} className="text-gray-700" />
+                        <Linkedin
+                          size={18}
+                          className={cn(
+                            theme !== 'light' && 'text-gray-700',
+                            theme === 'light' && 'text-gray-700',
+                          )}
+                        />
                       </a>
                     </div>
                   </div>
@@ -299,8 +358,15 @@ export function TeamSchematic() {
         {/* Mobile Layout: Simple Vertical Stack */}
         <div className="md:hidden space-y-6 flex-1">
           {/* Group Photo */}
-          <div className="aspect-video bg-gray-200 rounded-xl flex items-center justify-center">
-            <span className="text-gray-500">[Group Photo]</span>
+          <div
+            className={cn(
+              'w-full rounded-xl overflow-hidden flex items-center justify-center',
+              theme !== 'light' &&
+                'bg-linear-to-br from-gray-800/15 to-gray-950/30 backdrop-blur-lg',
+              theme === 'light' && 'bg-linear-to-br from-gray-300 to-gray-400',
+            )}
+          >
+            <img src="/image/team-fg.webp" alt="Solvin Group Team" />
           </div>
 
           {/* Team Cards */}
@@ -308,23 +374,22 @@ export function TeamSchematic() {
             {TEAM_MEMBERS.map((member) => (
               <div
                 key={member.id}
-                className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm"
+                className="bg-background/40 backdrop-blur-lg rounded-xl p-5 border border-border/50 shadow-sm"
               >
                 <div className="flex items-center gap-4 mb-3">
                   <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-sm font-bold text-gray-500">
-                      {member.name
-                        .split(' ')
-                        .map((n) => n[0])
-                        .join('')}
-                    </span>
+                    <img
+                      src={member.profileImage}
+                      alt={member.name}
+                      className="aspect-square w-12 h-12 rounded-full object-cover object-top"
+                    />
                   </div>
                   <div>
                     <h3 className="font-bold">{member.name}</h3>
                     <p className="text-brand-primary text-sm">{member.role}</p>
                   </div>
                 </div>
-                <p className="text-gray-600 text-sm">{member.bio}</p>
+                <p className="text-muted-foreground text-sm">{member.bio}</p>
               </div>
             ))}
           </div>

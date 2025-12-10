@@ -1,30 +1,33 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import HttpBackend from 'i18next-http-backend'
 
-i18n
-  .use(HttpBackend)
-  .use(initReactI18next)
-  .init({
-    fallbackLng: 'en',
-    supportedLngs: ['en', 'id'],
-    defaultNS: 'common',
-    ns: ['common'],
+// Import translations directly to avoid hydration mismatch
+// HTTP backend loads async which causes SSR to render keys, client to render translations
+import enCommon from './locales/en/common.json'
+import idCommon from './locales/id/common.json'
 
-    backend: {
-      loadPath: '/locales/{{lng}}/{{ns}}.json',
-    },
+const resources = {
+  en: { common: enCommon },
+  id: { common: idCommon },
+}
 
-    interpolation: {
-      escapeValue: false, // React already escapes
-    },
+i18n.use(initReactI18next).init({
+  resources,
+  fallbackLng: 'en',
+  supportedLngs: ['en', 'id'],
+  defaultNS: 'common',
+  ns: ['common'],
 
-    react: {
-      useSuspense: true,
-    },
+  interpolation: {
+    escapeValue: false, // React already escapes
+  },
 
-    // Debug mode in development
-    debug: process.env.NODE_ENV === 'development',
-  })
+  react: {
+    useSuspense: false, // Disable suspense since translations are bundled
+  },
+
+  // Debug mode in development
+  debug: process.env.NODE_ENV === 'development',
+})
 
 export default i18n

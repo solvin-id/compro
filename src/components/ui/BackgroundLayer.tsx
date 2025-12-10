@@ -10,7 +10,7 @@ export function BackgroundLayer() {
   const redOrbY = useTransform(scrollY, [0, 1000], [0, 100])
 
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 overflow-hidden pointer-events-none top-0">
       {/* 
         Layer 1: The Grid (Deepest)
         Z-Index: -2

@@ -14,6 +14,8 @@ import { useTranslation } from 'react-i18next'
 import { portfolio, PortfolioItem } from '../../data'
 import { Button } from '../ui/Button'
 import { Link } from '@tanstack/react-router'
+import { cn } from '@/lib/utils'
+import { useMountedTheme } from '@/hooks/useMountedTheme'
 
 interface ParallaxProps {
   children: React.ReactNode
@@ -67,11 +69,17 @@ function ParallaxText({ children, baseVelocity = 100 }: ParallaxProps) {
 
 export function Portfolio() {
   const { t } = useTranslation()
+  const { theme } = useMountedTheme()
 
   return (
     <section
       id="portfolio"
-      className="py-24 overflow-hidden bg-gray-900 border-t border-gray-800"
+      className={cn(
+        'py-24 overflow-hidden border-t',
+        theme !== 'light' &&
+          'bg-gray-900/20 border-gray-800/50 backdrop-blur-md',
+        theme === 'light' && 'bg-gray-900 border-gray-200',
+      )}
     >
       <div className="max-w-7xl mx-auto px-6 mb-12 flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
@@ -110,13 +118,14 @@ export function Portfolio() {
 }
 
 function PortfolioCard({ item }: { item: PortfolioItem }) {
+  const { theme } = useMountedTheme()
   return (
-    <Link to="/portfolio" className="block outline-none flex-shrink-0">
-      <div className="group relative h-[450px] w-[350px] md:w-[500px] bg-gray-800 rounded-3xl border border-gray-700 overflow-hidden hover:border-[var(--color-brand-primary)] transition-colors duration-500">
+    <Link to="/portfolio" className="block outline-none shrink-0">
+      <div className="group relative h-[450px] w-[350px] md:w-[500px] bg-gray-800 rounded-3xl border border-gray-700 overflow-hidden hover:border-brand-primary transition-colors duration-500">
         {/* Image Placeholder */}
         <div className="h-2/3 bg-gray-700 w-full flex items-center justify-center relative group-hover:bg-gray-750 transition-colors">
           {/* Overlay Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-60" />
+          <div className="absolute inset-0 bg-linear-to-t from-gray-900 to-transparent opacity-60" />
 
           <span className="text-gray-500 font-mono text-sm relative z-10 px-4 py-2 border border-gray-600 rounded bg-gray-800/50 backdrop-blur-sm">
             [PROJECT_IMAGE_SLOT_{item.id}]
@@ -141,7 +150,7 @@ function PortfolioCard({ item }: { item: PortfolioItem }) {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs uppercase tracking-wider text-[var(--color-brand-primary)] font-semibold">
+            <span className="text-xs uppercase tracking-wider text-brand-primary font-semibold">
               {item.sector}
             </span>
           </div>

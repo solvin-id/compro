@@ -60,6 +60,7 @@ export function useServicesData(): Service[] {
 // Team member interface for i18n
 export interface TeamMember {
   id: string
+  profileImage?: string
   name: string
   role: string
   bio: string
@@ -75,53 +76,58 @@ export function useTeamData(): TeamMember[] {
 
   return [
     {
-      id: 'ceo',
-      name: t('team.members.ceo.name'),
-      role: t('team.members.ceo.role'),
-      bio: t('team.members.ceo.bio'),
-      github: 'https://github.com',
-      linkedin: 'https://linkedin.com',
-      position: { top: '30%', left: '10%' },
-      hotspotArea: { width: '12%', height: '50%' },
-    },
-    {
       id: 'cto',
+      profileImage: '/image/teguh.webp',
       name: t('team.members.cto.name'),
       role: t('team.members.cto.role'),
       bio: t('team.members.cto.bio'),
       github: 'https://github.com',
       linkedin: 'https://linkedin.com',
-      position: { top: '25%', left: '28%' },
+      position: { top: '55%', left: '18%' },
       hotspotArea: { width: '12%', height: '55%' },
     },
     {
       id: 'lead-dev',
+      profileImage: '/image/akbar.webp',
       name: t('team.members.lead-dev.name'),
       role: t('team.members.lead-dev.role'),
       bio: t('team.members.lead-dev.bio'),
       github: 'https://github.com',
       linkedin: 'https://linkedin.com',
-      position: { top: '20%', left: '44%' },
+      position: { top: '50%', left: '30%' },
       hotspotArea: { width: '12%', height: '60%' },
     },
     {
-      id: 'designer',
-      name: t('team.members.designer.name'),
-      role: t('team.members.designer.role'),
-      bio: t('team.members.designer.bio'),
+      id: 'ceo',
+      profileImage: '/image/dafa.webp',
+      name: t('team.members.ceo.name'),
+      role: t('team.members.ceo.role'),
+      bio: t('team.members.ceo.bio'),
       github: 'https://github.com',
       linkedin: 'https://linkedin.com',
-      position: { top: '25%', left: '60%' },
+      position: { top: '45%', left: '44.5%' },
+      hotspotArea: { width: '12%', height: '50%' },
+    },
+    {
+      id: 'bussiness',
+      profileImage: '/image/rino.webp',
+      name: t('team.members.bussiness.name'),
+      role: t('team.members.bussiness.role'),
+      bio: t('team.members.bussiness.bio'),
+      github: 'https://github.com',
+      linkedin: 'https://linkedin.com',
+      position: { top: '50%', left: '60%' },
       hotspotArea: { width: '12%', height: '55%' },
     },
     {
       id: 'pm',
+      profileImage: '/image/aisy.webp',
       name: t('team.members.pm.name'),
       role: t('team.members.pm.role'),
       bio: t('team.members.pm.bio'),
       github: 'https://github.com',
       linkedin: 'https://linkedin.com',
-      position: { top: '30%', left: '78%' },
+      position: { top: '55%', left: '72%' },
       hotspotArea: { width: '12%', height: '50%' },
     },
   ]

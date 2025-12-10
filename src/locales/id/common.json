@@ -80,29 +80,29 @@
     "subtitle": "Temui otak-otak di balik mesin. Arahkan kursor ke tim untuk info lebih lanjut.",
     "members": {
       "ceo": {
-        "name": "Alexandra Chen",
+        "name": "M. Daffa Nazhirul Haq",
         "role": "Chief Executive Officer",
-        "bio": "Pemimpin visioner dengan 15+ tahun di transformasi digital. Membangun 3 startup sukses sebelum mendirikan Solvin."
+        "bio": "Visionary leader with great experience in digital transformation. Best decision maker and strategist."
       },
       "cto": {
-        "name": "Marcus Rivera",
+        "name": "Teguh Dwi Cahya Kusuma",
         "role": "Chief Technology Officer",
-        "bio": "Mantan engineer Google. Arsitek sistem enterprise yang melayani jutaan pengguna. Terobsesi dengan kode bersih dan infrastruktur skalabel."
+        "bio": "Ex-Bangkit graduate. Developer @ Berijalan. Obsessed with clean code and scalable infrastructure."
       },
       "lead-dev": {
-        "name": "Sarah Kim",
+        "name": "Akbar Pratama Suryamin",
         "role": "Lead Developer",
-        "bio": "Ahli full-stack. React, Node, dan segalanya di antaranya. Kontributor open source dan pembicara komunitas teknologi."
+        "bio": "Full-stack wizard. React, Vue, Laravel, and everything in between. Open source contributor and tech mentor @ campus."
       },
-      "designer": {
-        "name": "James Okonkwo",
-        "role": "Head of Design",
-        "bio": "Desainer UI/UX pemenang penghargaan. Percaya pada kekuatan design system untuk menciptakan pengalaman yang konsisten dan menyenangkan."
+      "bussiness": {
+        "name": "Ansyafarino Armawahyudi",
+        "role": "Business Lead",
+        "bio": "Partial lecturer @ Universitas Ahmad Dahlan. Expert in bridging business needs with technical solutions."
       },
       "pm": {
-        "name": "Elena Volkov",
+        "name": "Rohadatul Aisy",
         "role": "Project Manager",
-        "bio": "Bersertifikasi PMP. Master metodologi Agile. Memastikan setiap proyek selesai tepat waktu dan melampaui ekspektasi."
+        "bio": "PMP certified. Master of Agile methodologies. Ensures every project ships on time and exceeds expectations."
       }
     }
   },

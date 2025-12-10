@@ -80,27 +80,27 @@
     "subtitle": "Meet the minds behind the machine. Hover over the team to learn more.",
     "members": {
       "ceo": {
-        "name": "Alexandra Chen",
+        "name": "M. Daffa Nazhirul Haq",
         "role": "Chief Executive Officer",
-        "bio": "Visionary leader with 15+ years in digital transformation. Built 3 successful startups before founding Solvin."
+        "bio": "Visionary leader with great experience in digital transformation. Best decision maker and strategist."
       },
       "cto": {
-        "name": "Marcus Rivera",
+        "name": "Teguh Dwi Cahya Kusuma",
         "role": "Chief Technology Officer",
-        "bio": "Ex-Google engineer. Architect of enterprise systems serving millions. Obsessed with clean code and scalable infrastructure."
+        "bio": "Ex-Bangkit graduate. Fullstack Developer @ Berijalan. Obsessed with clean code and scalable infrastructure."
       },
       "lead-dev": {
-        "name": "Sarah Kim",
+        "name": "Akbar Pratama Suryamin",
         "role": "Lead Developer",
-        "bio": "Full-stack wizard. React, Node, and everything in between. Open source contributor and tech community speaker."
+        "bio": "Full-stack wizard. React, Vue, Laravel, and everything in between. Open source contributor and tech mentor @ campus."
       },
-      "designer": {
-        "name": "James Okonkwo",
-        "role": "Head of Design",
-        "bio": "Award-winning UI/UX designer. Believes in the power of design systems to create consistent, delightful experiences."
+      "bussiness": {
+        "name": "Ansyafarino Armawahyudi",
+        "role": "Business Lead",
+        "bio": "Partial lecturer @ Universitas Ahmad Dahlan. Expert in bridging business needs with technical solutions."
       },
       "pm": {
-        "name": "Elena Volkov",
+        "name": "Rohadatul Aisy",
         "role": "Project Manager",
         "bio": "PMP certified. Master of Agile methodologies. Ensures every project ships on time and exceeds expectations."
       }

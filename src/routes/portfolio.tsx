@@ -4,6 +4,8 @@ import { ArrowLeft, CheckCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { portfolio } from '../data'
 import { Button } from '../components/ui/Button'
+import { useMountedTheme } from '@/hooks/useMountedTheme'
+import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/portfolio')({
   component: PortfolioPage,
@@ -11,6 +13,7 @@ export const Route = createFileRoute('/portfolio')({
 
 function PortfolioPage() {
   const { t } = useTranslation()
+  const { theme } = useMountedTheme()
 
   return (
     <div className="min-h-screen pt-24 pb-20 relative overflow-hidden bg-transparent">
@@ -122,13 +125,38 @@ function PortfolioPage() {
                     {item.solution || t('portfolio.defaultSolution')}
                   </p>
 
-                  <div className="bg-green-50 dark:bg-green-950/30 rounded-xl p-6 border border-green-100 dark:border-green-900/50 flex items-start gap-3 mt-4">
-                    <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400 flex-shrink-0" />
+                  <div
+                    className={cn(
+                      theme === 'light' && 'bg-green-50 border-green-100',
+                      theme !== 'light' &&
+                        'bg-green-950/30 border-green-900/50',
+                      'rounded-xl p-6 border flex items-start gap-3 mt-4',
+                    )}
+                  >
+                    <CheckCircle
+                      className={cn(
+                        theme === 'light' && 'text-green-600',
+                        theme !== 'light' && 'text-green-400',
+                        'w-6 h-6 shrink-0',
+                      )}
+                    />
                     <div>
-                      <h4 className="font-bold text-green-900 dark:text-green-300 text-sm uppercase tracking-wide mb-1">
+                      <h4
+                        className={cn(
+                          theme === 'light' && 'text-green-900',
+                          theme !== 'light' && 'text-green-300',
+                          'font-bold text-sm uppercase tracking-wide mb-1',
+                        )}
+                      >
                         {t('portfolio.impact')}
                       </h4>
-                      <p className="text-green-800 dark:text-green-400 font-medium">
+                      <p
+                        className={cn(
+                          theme === 'light' && 'text-green-800',
+                          theme !== 'light' && 'text-green-400',
+                          'font-medium',
+                        )}
+                      >
                         {item.outcome || t('portfolio.defaultOutcome')}
                       </p>
                     </div>

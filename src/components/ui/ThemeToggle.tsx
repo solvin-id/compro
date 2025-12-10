@@ -6,14 +6,21 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export function ThemeToggle() {
-  const { theme, setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const { theme, setTheme, resolvedTheme } = useTheme()
 
-  // Avoid hydration mismatch
+  // Prevent hydration mismatch by only rendering after mount
   useEffect(() => {
     setMounted(true)
   }, [])
 
+  useEffect(() => {
+    if (!mounted) return
+    if (theme) localStorage.setItem('theme', theme)
+    else localStorage.removeItem('theme')
+  }, [theme, mounted])
+
+  // Show placeholder during SSR and initial hydration
   if (!mounted) {
     return (
       <button

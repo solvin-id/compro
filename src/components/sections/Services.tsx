@@ -1,18 +1,18 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowUpRight,
+  Cloud,
+  Database,
   Globe,
+  LineChart,
   Server,
   Smartphone,
-  Database,
-  Cloud,
   X,
-  LineChart,
 } from 'lucide-react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useServicesData } from '../../hooks/useTranslatedData'
 import { Service } from '../../data'
+import { useServicesData } from '../../hooks/useTranslatedData'
 import { cn } from '../../lib/utils'
 
 const icons: Record<string, any> = {

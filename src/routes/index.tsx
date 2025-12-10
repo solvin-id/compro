@@ -9,6 +9,8 @@ import { Portfolio } from '../components/sections/Portfolio'
 import { Insights } from '../components/sections/Insights'
 import { BackgroundLayer } from '../components/ui/BackgroundLayer'
 import { TeamSchematic } from '../components/sections/TeamSchematic'
+import { useEffect } from 'react'
+import { useNavigateStore } from '../hooks/useNavigateStore'
 
 export const Route = createFileRoute('/')({ component: App })
 
@@ -31,7 +33,7 @@ function Hero() {
   }
 
   return (
-    <section className="min-h-[85vh] flex items-center justify-center overflow-hidden relative pt-20">
+    <section className="min-h-screen top-0 flex items-center justify-center overflow-hidden relative pt-20">
       {/* Background Elements */}
       <div className="absolute inset-0 z-0">
         <BackgroundLayer />
@@ -92,7 +94,7 @@ function Hero() {
         </motion.h1>
 
         <motion.p
-          className="text-xl md:text-2xl text-gray-600 max-w-4xl leading-relaxed mx-auto"
+          className="text-xl md:text-2xl text-muted-foreground max-w-4xl leading-relaxed mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8 }}
@@ -134,8 +136,8 @@ function Hero() {
           transition={{ delay: 0.8, duration: 1 }}
         >
           {[
-            { label: '5+', value: t('hero.stats.experience') },
-            { label: '50+', value: t('hero.stats.projects') },
+            { label: '3+', value: t('hero.stats.experience') },
+            { label: '10+', value: t('hero.stats.projects') },
             { label: '98%', value: t('hero.stats.clients') },
           ].map((stat, i) => (
             <div key={i} className="flex flex-col items-center">
@@ -153,6 +155,40 @@ function Hero() {
 
 function App() {
   const { t } = useTranslation()
+  const section = useNavigateStore((state) => state.section)
+  const isNavigating = useNavigateStore((state) => state.isNavigating)
+  const clearSection = useNavigateStore((state) => state.clearSection)
+
+  useEffect(() => {
+    if (!isNavigating || !section) return
+
+    const timeout = setTimeout(() => {
+      const targetId = section === 'home' ? undefined : section
+
+      if (!targetId) {
+        // @ts-ignore
+        if (window.lenis) {
+          // @ts-ignore
+          window.lenis.scrollTo(0)
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+      } else {
+        // @ts-ignore
+        if (window.lenis) {
+          // @ts-ignore
+          window.lenis.scrollTo(`#${targetId}`)
+        } else {
+          const element = document.getElementById(targetId)
+          element?.scrollIntoView({ behavior: 'smooth' })
+        }
+      }
+
+      clearSection()
+    }, 500)
+
+    return () => clearTimeout(timeout)
+  }, [isNavigating, section, clearSection])
 
   return (
     <div className="bg-background min-h-screen">

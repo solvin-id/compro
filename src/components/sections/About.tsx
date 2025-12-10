@@ -1,9 +1,12 @@
+import { cn } from '@/lib/utils'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useMountedTheme } from '@/hooks/useMountedTheme'
 
 export function About() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const { theme } = useMountedTheme()
   const { t } = useTranslation()
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -17,7 +20,11 @@ export function About() {
     <section
       ref={containerRef}
       id="about"
-      className="py-24 md:py-32 relative bg-background"
+      className={cn(
+        'py-24 md:py-32 relative',
+        theme === 'dark' && 'bg-background/30 backdrop-blur-sm',
+        theme === 'light' && 'bg-background',
+      )}
     >
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
         {/* Sticky Visual Side */}

@@ -16,7 +16,9 @@ export function Insights() {
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
             {t('insights.title')}
           </h2>
-          <p className="text-gray-600 max-w-xl">{t('insights.subtitle')}</p>
+          <p className="text-muted-foreground max-w-xl">
+            {t('insights.subtitle')}
+          </p>
         </div>
         <Link to="/articles">
           <Button variant="ghost" className="gap-2 group hidden md:flex">
@@ -51,7 +53,7 @@ export function Insights() {
             <h3 className="text-3xl font-bold group-hover:text-brand-primary transition-colors">
               {featured.title}
             </h3>
-            <p className="text-gray-600 leading-relaxed text-lg">
+            <p className="text-muted-foreground leading-relaxed text-lg">
               {featured.summary}
             </p>
             <div className="flex items-center gap-2 text-brand-primary font-medium pt-2">
@@ -76,7 +78,7 @@ export function Insights() {
               <div className="w-24 h-24 bg-gray-100 rounded-xl shrink-0 border border-gray-200" />
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-xs font-medium text-gray-500 uppercase">
-                  <span className="text-(--color-brand-secondary)">
+                  <span className="text-muted-foreground">
                     {article.category}
                   </span>
                   <span>•</span>
@@ -85,7 +87,7 @@ export function Insights() {
                 <h4 className="text-xl font-bold group-hover:text-brand-primary transition-colors leading-tight">
                   {article.title}
                 </h4>
-                <p className="text-sm text-gray-500 line-clamp-2">
+                <p className="text-sm text-muted-foreground line-clamp-2">
                   {article.summary}
                 </p>
               </div>
