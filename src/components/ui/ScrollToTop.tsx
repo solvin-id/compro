@@ -44,7 +44,6 @@ export function ScrollToTop() {
           className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-white shadow-lg border border-gray-100 flex items-center justify-center cursor-pointer group overflow-hidden"
           aria-label="Scroll to top"
         >
-          {/* Progress ring */}
           <svg
             className="absolute inset-0 w-full h-full -rotate-90"
             viewBox="0 0 56 56"
@@ -71,7 +70,6 @@ export function ScrollToTop() {
             />
           </svg>
 
-          {/* Arrow icon */}
           <motion.div
             animate={{ y: [0, -2, 0] }}
             transition={{
@@ -87,7 +85,6 @@ export function ScrollToTop() {
             />
           </motion.div>
 
-          {/* Hover glow effect */}
           <div className="absolute inset-0 bg-brand-primary/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-full" />
         </motion.button>
       )}

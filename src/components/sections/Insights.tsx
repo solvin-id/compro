@@ -29,7 +29,6 @@ export function Insights() {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-12">
-        {/* Featured Article */}
         <Link
           to="/articles/$slug"
           params={{ slug: featured.slug }}
@@ -66,7 +65,6 @@ export function Insights() {
           </div>
         </Link>
 
-        {/* Sidebar List */}
         <div className="divide-y divide-gray-100">
           {others.map((article) => (
             <Link

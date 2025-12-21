@@ -143,7 +143,23 @@
     "articleNotFound": "Artikel Tidak Ditemukan"
   },
   "footer": {
-    "copyright": "© 2024 Solvin. Hak cipta dilindungi."
+    "tagline": "Solve with Innovation.",
+    "description": "Kami membangun ekosistem digital yang memberdayakan bisnis untuk berkembang. Dari Odoo ERP hingga platform Next.js kustom.",
+    "company": "Perusahaan",
+    "solutions": "Solusi",
+    "contact": "Ayo Bangun",
+    "startProject": "Mulai Proyek",
+    "careers": "Karir",
+    "wordpress": "Ahli WordPress",
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "location": "Lokasi",
+    "copyright": "© {{year}} Solvin. Hak cipta dilindungi.",
+    "privacy": "Kebijakan Privasi",
+    "terms": "Syarat Layanan",
+    "subscribe": "Berlangganan untuk Wawasan",
+    "subscribePlaceholder": "Email Anda",
+    "subscribeButton": "Berlangganan"
   },
   "notFound": {
     "title": "Oops! Halaman tidak ditemukan",

@@ -12,7 +12,6 @@ interface ButtonProps
   variant?: 'primary' | 'outline' | 'ghost'
   size?: 'sm' | 'md' | 'lg'
   asMotion?: boolean
-  // Allow motion props
   [key: string]: any
 }
 

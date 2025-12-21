@@ -21,7 +21,6 @@ export function LanguageToggle() {
     localStorage.setItem('i18nextLng', newLang)
   }
 
-  // Show consistent placeholder during SSR
   if (!mounted) {
     return (
       <button

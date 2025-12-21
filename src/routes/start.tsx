@@ -31,7 +31,6 @@ function StartWizard() {
     contact: { name: '', email: '', details: '' },
   })
 
-  // State update helpers
   const updateData = (key: string, value: any) => {
     setFormData((prev) => ({ ...prev, [key]: value }))
   }
@@ -40,7 +39,6 @@ function StartWizard() {
   const prevStep = () => setStep(step - 1)
 
   const handleSubmit = () => {
-    // Construct WhatsApp message
     const message = `
 Hi Solvin Team! 👋
 I'd like to start a project:
@@ -60,7 +58,6 @@ I'd like to start a project:
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-transparent relative overflow-hidden py-12">
-      {/* Progress Bar */}
       <div className="absolute top-0 left-0 right-0 h-2 bg-muted">
         <motion.div
           className="h-full bg-brand-primary"

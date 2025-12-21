@@ -17,7 +17,6 @@ function PortfolioPage() {
 
   return (
     <div className="min-h-screen pt-24 pb-20 relative overflow-hidden bg-transparent">
-      {/* Static Background for better performance */}
       <div className="absolute inset-0 z-0 bg-linear-to-br from-blue-50/50 dark:from-blue-950/20 via-transparent to-purple-50/50 dark:to-purple-950/20 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -61,7 +60,6 @@ function PortfolioPage() {
               transition={{ duration: 0.8 }}
               className="grid lg:grid-cols-2 gap-12 items-start group"
             >
-              {/* Project Visual / Summary Card */}
               <div
                 className={`rounded-3xl bg-muted/50 dark:bg-card/30 border border-border p-8 md:p-12 h-full flex flex-col justify-between ${index % 2 === 1 ? 'lg:order-2' : ''}`}
               >
@@ -82,7 +80,6 @@ function PortfolioPage() {
                   </p>
                 </div>
 
-                {/* Tech Stack */}
                 <div className="flex flex-wrap gap-2 mt-auto">
                   {item.techStack?.map((tech) => (
                     <span
@@ -95,7 +92,6 @@ function PortfolioPage() {
                 </div>
               </div>
 
-              {/* Detailed Case Study */}
               <div
                 className={`space-y-10 py-4 ${index % 2 === 1 ? 'lg:order-1' : ''}`}
               >

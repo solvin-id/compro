@@ -8,9 +8,8 @@ import { useMountedTheme } from '@/hooks/useMountedTheme'
 
 const LINE_COLOR = '#FFA629'
 const CORNER_RADIUS = 20
-const AUTO_ROTATE_DURATION = 4000 // Duration per person in milliseconds
+const AUTO_ROTATE_DURATION = 4000
 
-// Generate a rounded path from hotspot (top) to card (bottom)
 function generateVerticalPath(
   x1: number,
   y1: number,
@@ -20,7 +19,6 @@ function generateVerticalPath(
   const r = CORNER_RADIUS
   const midY = y1 + (y2 - y1) / 2
 
-  // Path: Start -> Vertical down -> Curve -> Horizontal to center -> Curve -> Vertical down to card
   let path = `M ${x1} ${y1} `
   path += `L ${x1} ${midY - r} `
   path += `Q ${x1} ${midY} ${x1 + (x2 > x1 ? r : -r)} ${midY} `
@@ -47,9 +45,8 @@ export function TeamSchematic() {
   })
   const [cardAnchor, setCardAnchor] = useState({ x: 0, y: 0 })
 
-  // Auto-rotation effect
   useEffect(() => {
-    if (isHovering) return // Pause when hovering
+    if (isHovering) return
 
     const interval = setInterval(() => {
       setActiveId((current) => {
@@ -71,10 +68,10 @@ export function TeamSchematic() {
         height: imgRect.height,
         top: imgRect.top - sectionRect.top,
       })
-      // Card anchor is at the center bottom of the image container
+
       setCardAnchor({
         x: imgRect.width / 2,
-        y: imgRect.height + 40, // 40px gap to the card
+        y: imgRect.height + 40,
       })
     }
   }, [])
@@ -88,14 +85,12 @@ export function TeamSchematic() {
   const activeMember =
     TEAM_MEMBERS.find((m) => m.id === activeId) || TEAM_MEMBERS[0]
 
-  // Calculate pixel positions from percentages
   const getPixelPosition = (pos: { top: string; left: string }) => {
     const top = (parseFloat(pos.top) / 100) * imageDimensions.height
     const left = (parseFloat(pos.left) / 100) * imageDimensions.width
     return { x: left, y: top }
   }
 
-  // SVG path coordinates - Start from top center of hotspot (same as visual indicator)
   const startPos = activeMember
     ? getPixelPosition(activeMember.position)
     : { x: 0, y: 0 }
@@ -105,7 +100,7 @@ export function TeamSchematic() {
         imageDimensions.width) /
         2
     : 0
-  const startY = startPos.y + 10 // Small offset below the indicator dot
+  const startY = startPos.y + 10
 
   const pathD = generateVerticalPath(startX, startY, cardAnchor.x, cardAnchor.y)
 
@@ -116,7 +111,6 @@ export function TeamSchematic() {
       className="min-h-screen bg-transparent py-16 flex flex-col"
     >
       <div className="max-w-7xl mx-auto px-6 w-full flex-1 flex flex-col">
-        {/* Header */}
         <div className="mb-8">
           <h2 className="text-4xl font-bold text-foreground mb-4">
             {t('team.title')}
@@ -124,14 +118,11 @@ export function TeamSchematic() {
           <p className="text-muted-foreground max-w-xl">{t('team.subtitle')}</p>
         </div>
 
-        {/* Desktop Layout: Vertical Stack (Image on top, Card below) */}
         <div className="hidden md:flex flex-col flex-1 relative">
-          {/* Group Photo Container */}
           <div
             ref={imageContainerRef}
             className="relative w-full aspect-21/9 rounded-2xl overflow-visible"
           >
-            {/* Placeholder Group Photo Background */}
             <div
               className={cn(
                 'absolute inset-0  flex items-center justify-center rounded-2xl overflow-hidden',
@@ -168,7 +159,6 @@ export function TeamSchematic() {
               />
             </div>
 
-            {/* Hotspots Layer */}
             {TEAM_MEMBERS.map((member) => (
               <button
                 key={member.id}
@@ -185,7 +175,6 @@ export function TeamSchematic() {
                   height: member.hotspotArea.height,
                 }}
               >
-                {/* Visual indicator */}
                 <motion.div
                   animate={{
                     scale: activeId === member.id ? [1, 1.3, 1] : 1,
@@ -212,13 +201,11 @@ export function TeamSchematic() {
             ))}
           </div>
 
-          {/* SVG Connector - MOVED OUTSIDE image container to avoid clipping */}
           <svg
             className="absolute top-0 left-0 pointer-events-none z-10 w-full"
             height={cardAnchor.y + 50}
             style={{ overflow: 'visible' }}
           >
-            {/* Background dashed lines */}
             {TEAM_MEMBERS.map((member) => {
               const pos = getPixelPosition(member.position)
               const memberStartX =
@@ -226,7 +213,7 @@ export function TeamSchematic() {
                 ((parseFloat(member.hotspotArea.width) / 100) *
                   imageDimensions.width) /
                   2
-              const memberStartY = pos.y + 10 // Same as active line start
+              const memberStartY = pos.y + 10
               const memberPath = generateVerticalPath(
                 memberStartX,
                 memberStartY,
@@ -246,7 +233,6 @@ export function TeamSchematic() {
               )
             })}
 
-            {/* Active animated line */}
             <AnimatePresence mode="wait">
               <motion.path
                 key={activeId}
@@ -261,7 +247,6 @@ export function TeamSchematic() {
               />
             </AnimatePresence>
 
-            {/* Endpoint marker */}
             <motion.circle
               key={`dot-${activeId}`}
               cx={cardAnchor.x}
@@ -274,7 +259,6 @@ export function TeamSchematic() {
             />
           </svg>
 
-          {/* Detail Card - Below the image */}
           <div className="mt-12 flex justify-center relative z-30">
             <AnimatePresence mode="wait">
               <motion.div
@@ -355,9 +339,7 @@ export function TeamSchematic() {
           </div>
         </div>
 
-        {/* Mobile Layout: Simple Vertical Stack */}
         <div className="md:hidden space-y-6 flex-1">
-          {/* Group Photo */}
           <div
             className={cn(
               'w-full rounded-xl overflow-hidden flex items-center justify-center',
@@ -369,7 +351,6 @@ export function TeamSchematic() {
             <img src="/image/team-fg.webp" alt="Solvin Group Team" />
           </div>
 
-          {/* Team Cards */}
           <div className="space-y-4">
             {TEAM_MEMBERS.map((member) => (
               <div

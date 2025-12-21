@@ -94,7 +94,6 @@ export function Services() {
             </motion.div>
           ))}
 
-          {/* CTA Card */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -116,7 +115,6 @@ export function Services() {
         </div>
       </div>
 
-      {/* Service Modal */}
       <AnimatePresence>
         {selectedService && (
           <div className="fixed inset-0 z-100 flex items-center justify-center p-4">

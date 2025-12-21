@@ -27,7 +27,6 @@ export function About() {
       )}
     >
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
-        {/* Sticky Visual Side */}
         <div className="hidden md:block sticky top-32 h-fit">
           <motion.div
             style={{ opacity, scale }}
@@ -46,12 +45,10 @@ export function About() {
               </p>
             </div>
 
-            {/* Decorative Elements */}
             <div className="absolute inset-0 bg-linear-to-br from-brand-primary to-brand-purple opacity-0 group-hover:opacity-5 transition-opacity duration-500" />
           </motion.div>
         </div>
 
-        {/* Scrolling Text Side */}
         <div className="space-y-24 md:py-12">
           <div className="space-y-6">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
@@ -82,7 +79,6 @@ export function About() {
             </p>
           </div>
 
-          {/* Mobile Visual Fallback */}
           <div className="md:hidden aspect-square rounded-2xl border-2 border-dashed border-border bg-muted flex items-center justify-center">
             <p className="text-xs text-center text-muted-foreground font-mono">
               [ILLUSTRATION_SLOT_2 Mobile]

@@ -143,7 +143,23 @@
     "articleNotFound": "Article Not Found"
   },
   "footer": {
-    "copyright": "© 2024 Solvin. All rights reserved."
+    "tagline": "Solve with Innovation.",
+    "description": "We build digital ecosystems that empower businesses to scale. From Odoo ERPs to custom Next.js platforms.",
+    "company": "Company",
+    "solutions": "Solutions",
+    "contact": "Let's Build",
+    "startProject": "Start a Project",
+    "careers": "Careers",
+    "wordpress": "WordPress Experts",
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "location": "Location",
+    "copyright": "© {{year}} Solvin. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "subscribe": "Subscribe for Insights",
+    "subscribePlaceholder": "Your email",
+    "subscribeButton": "Subscribe"
   },
   "notFound": {
     "title": "Oops! Page not found",

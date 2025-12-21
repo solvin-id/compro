@@ -66,7 +66,6 @@ export function Navbar() {
       )}
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
         <button
           onClick={scrollToTop}
           className="text-xl font-bold tracking-tight flex items-center gap-2 cursor-pointer"
@@ -75,7 +74,6 @@ export function Navbar() {
           <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
         </button>
 
-        {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
           {links.map((link) => (
             <Fragment key={link.labelKey}>
@@ -116,7 +114,6 @@ export function Navbar() {
           ))}
         </div>
 
-        {/* Right side: Theme + Language Toggle + CTA */}
         <div className="hidden md:flex items-center gap-4">
           <ThemeToggle />
           <LanguageToggle />
@@ -145,7 +142,6 @@ export function Navbar() {
           </Button>
         </div>
 
-        {/* Mobile Menu Toggle */}
         <button
           className="md:hidden p-2 text-gray-600"
           onClick={() => setIsOpen(!isOpen)}
@@ -154,7 +150,6 @@ export function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {isOpen && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}

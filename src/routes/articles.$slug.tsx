@@ -31,7 +31,6 @@ function ArticleComponent() {
 
   return (
     <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">
-      {/* Background - Reused for consistency but fainter */}
       <div className="absolute inset-0 z-0 opacity-20">
         <InteractiveBackground />
       </div>
@@ -42,7 +41,6 @@ function ArticleComponent() {
         transition={{ duration: 0.8 }}
         className="max-w-3xl mx-auto px-6 relative z-10"
       >
-        {/* Navigation */}
         <Link
           to="/"
           className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-brand-primary mb-12 transition-colors"
@@ -51,7 +49,6 @@ function ArticleComponent() {
           {t('common.backToInsights')}
         </Link>
 
-        {/* Header */}
         <header className="mb-12 space-y-6">
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-muted/50 border border-border text-brand-secondary font-medium">
@@ -73,7 +70,6 @@ function ArticleComponent() {
           </h1>
         </header>
 
-        {/* Content Placeholder */}
         <div className="prose prose-lg dark:prose-invert max-w-none text-muted-foreground leading-relaxed space-y-8">
           <p className="text-xl leading-relaxed font-medium text-foreground">
             {article.summary}
@@ -124,7 +120,6 @@ function ArticleComponent() {
           </div>
         </div>
 
-        {/* CTA Footer */}
         <div className="mt-20 pt-10 border-t border-border text-center">
           <p className="text-muted-foreground mb-6 font-medium">
             {t('insights.enjoyedPerspective')}

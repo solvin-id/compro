@@ -10,14 +10,11 @@ export function NotFound() {
 
   return (
     <div className="min-h-screen relative flex items-center justify-center overflow-hidden">
-      {/* Background */}
       <div className="absolute inset-0 z-0">
         <BackgroundLayer />
       </div>
 
-      {/* Content */}
       <div className="relative z-10 max-w-2xl mx-auto px-6 text-center">
-        {/* 404 Number with Animation */}
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -67,21 +64,19 @@ export function NotFound() {
           </h1>
         </motion.div>
 
-        {/* Message */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             {t('notFound.title')}
           </h2>
-          <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
+          <p className="text-muted-foreground text-lg mb-8 max-w-md mx-auto">
             {t('notFound.description')}
           </p>
         </motion.div>
 
-        {/* Actions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -105,7 +100,6 @@ export function NotFound() {
           </Button>
         </motion.div>
 
-        {/* Fun suggestion */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

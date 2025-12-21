@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { Service, PortfolioItem, Article } from '../data'
 
-// Hook for translated services data
 export function useServicesData(): Service[] {
   const { t } = useTranslation()
 
@@ -57,7 +56,6 @@ export function useServicesData(): Service[] {
   ]
 }
 
-// Team member interface for i18n
 export interface TeamMember {
   id: string
   profileImage?: string
@@ -70,7 +68,6 @@ export interface TeamMember {
   hotspotArea: { width: string; height: string }
 }
 
-// Hook for translated team data
 export function useTeamData(): TeamMember[] {
   const { t } = useTranslation()
 
@@ -133,18 +130,12 @@ export function useTeamData(): TeamMember[] {
   ]
 }
 
-// Portfolio items remain mostly the same (client names, tech stacks are proper nouns)
-// But we could internationalize descriptions if needed
 export function usePortfolioData(): PortfolioItem[] {
-  // For now, portfolio data uses English as the content is client-specific
-  // In a real implementation, these would come from a CMS with multi-language support
   const { portfolio } = require('../data')
   return portfolio
 }
 
-// Articles data
 export function useArticlesData(): Article[] {
-  // Same as portfolio - article content would typically come from a CMS
   const { articles } = require('../data')
   return articles
 }

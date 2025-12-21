@@ -3,7 +3,6 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 export function BackgroundLayer() {
   const { scrollY } = useScroll()
 
-  // Parallax Transforms
   const gridY = useTransform(scrollY, [0, 1000], [0, 200])
   const orangeOrbY = useTransform(scrollY, [0, 1000], [0, -150])
   const blueOrbY = useTransform(scrollY, [0, 1000], [0, 400])
@@ -11,10 +10,6 @@ export function BackgroundLayer() {
 
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none top-0">
-      {/* 
-        Layer 1: The Grid (Deepest)
-        Z-Index: -2
-      */}
       <motion.div style={{ y: gridY }} className="absolute inset-0 -z-20">
         <div
           className="absolute inset-0 h-full w-full bg-background"
@@ -24,7 +19,6 @@ export function BackgroundLayer() {
             backgroundSize: '32px 32px',
           }}
         >
-          {/* Faded edges mask */}
           <div
             className="absolute inset-0 bg-background"
             style={{
@@ -32,7 +26,6 @@ export function BackgroundLayer() {
                 'radial-gradient(ellipse at center, transparent 20%, white)',
             }}
           ></div>
-          {/* Center visible mask */}
           <div className="absolute inset-0 bg-background/0 mask-[radial-gradient(ellipse_at_center,black_40%,transparent_100%)]"></div>
         </div>
 
@@ -44,14 +37,7 @@ export function BackgroundLayer() {
           }}
         ></div>
       </motion.div>
-
-      {/* 
-        Layer 2: The Aurora Orbs (Atmosphere)
-        Z-Index: -1
-        Uses CSS variable --aurora-opacity for light/dark mode
-      */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        {/* Orb A: Innovation (Primary Orange) - Top Right */}
         <motion.div style={{ y: orangeOrbY }} className="absolute inset-0">
           <motion.div
             animate={{
@@ -72,7 +58,6 @@ export function BackgroundLayer() {
           />
         </motion.div>
 
-        {/* Orb B: Intensity (Secondary Red) - Bottom Left */}
         <motion.div style={{ y: redOrbY }} className="absolute inset-0">
           <motion.div
             animate={{
@@ -94,7 +79,6 @@ export function BackgroundLayer() {
           />
         </motion.div>
 
-        {/* Orb C: Trust (Royal Blue - Balancer) - Center Left Floating */}
         <motion.div style={{ y: blueOrbY }} className="absolute inset-0">
           <motion.div
             animate={{
@@ -116,7 +100,6 @@ export function BackgroundLayer() {
           />
         </motion.div>
 
-        {/* Additional "Connector" Orb to blend (Optional) */}
         <motion.div
           animate={{
             scale: [1, 1.5, 1],

@@ -14,7 +14,6 @@ function ArticlesPage() {
 
   return (
     <div className="min-h-screen pt-24 pb-20 relative overflow-hidden bg-transparent">
-      {/* Background with reduced opacity for performance/readability */}
       <div className="absolute inset-0 z-0 opacity-10">
         <InteractiveBackground />
       </div>
@@ -65,7 +64,6 @@ function ArticlesPage() {
                 transition={{ delay: i * 0.1 }}
                 className="h-full bg-card/40 dark:bg-card/20 rounded-3xl border border-border overflow-hidden shadow-sm hover:shadow-xl hover:shadow-muted/50 transition-all duration-300 flex flex-col"
               >
-                {/* Image Placeholder */}
                 <div className="h-48 bg-muted relative overflow-hidden">
                   <div className="absolute inset-0 bg-linear-to-tr from-muted to-card group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute inset-0 flex items-center justify-center text-muted-foreground font-mono text-xs">

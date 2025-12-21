@@ -10,10 +10,9 @@ function ParticleWave(props: any) {
   const positions = useMemo(() => {
     const positions = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
-      // Spread particles across a wide area
-      positions[i * 3] = (Math.random() - 0.5) * 15 // x
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 15 // y
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 10 // z
+      positions[i * 3] = (Math.random() - 0.5) * 15
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 15
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 10
     }
     return positions
   }, [count])
@@ -21,13 +20,9 @@ function ParticleWave(props: any) {
   useFrame((state) => {
     const time = state.clock.getElapsedTime()
     if (ref.current) {
-      // Gentle rotation
       ref.current.rotation.x = time / 15
       ref.current.rotation.y = time / 20
 
-      // Wave motion for individual particles could be done in shader,
-      // but for simplicity/performance in this "minimal" request, we just rotate the whole cloud
-      // To make it more "interactive" we could use mouse position from state.mouse
       const mouseX = state.mouse.x * 0.5
       const mouseY = state.mouse.y * 0.5
 
@@ -47,7 +42,7 @@ function ParticleWave(props: any) {
       >
         <PointMaterial
           transparent
-          color="#2563EB" // Brand Primary Blue
+          color="#2563EB"
           size={0.03}
           sizeAttenuation={true}
           depthWrite={false}
@@ -64,7 +59,6 @@ export function InteractiveBackground() {
       <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
         <ParticleWave />
       </Canvas>
-      {/* Gradient Overlay to blend it softly into white */}
       <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white opacity-80" />
     </div>
   )

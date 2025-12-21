@@ -34,12 +34,10 @@ function Hero() {
 
   return (
     <section className="min-h-screen top-0 flex items-center justify-center overflow-hidden relative pt-20">
-      {/* Background Elements */}
       <div className="absolute inset-0 z-0">
         <BackgroundLayer />
       </div>
 
-      {/* Side Vignettes/Glows */}
       <div
         className="absolute inset-y-0 left-0 w-1/4 z-10 pointer-events-none"
         style={{
@@ -55,7 +53,6 @@ function Hero() {
         }}
       />
 
-      {/* Parallax Hero Visual (Lightweight Wireframe Circles) */}
       <motion.div
         style={{ y: imageY }}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] opacity-30 pointer-events-none z-10"
@@ -66,7 +63,6 @@ function Hero() {
         <div className="absolute inset-0 bg-linear-to-tr from-indigo-50/20 to-transparent rounded-full blur-2xl" />
       </motion.div>
 
-      {/* Main Content */}
       <div className="max-w-5xl mx-auto px-6 relative z-20 w-full flex flex-col items-center text-center space-y-10">
         <motion.h1
           className="text-6xl md:text-8xl font-bold tracking-tight text-foreground leading-[1.1]"
@@ -199,9 +195,6 @@ function App() {
         <TeamSchematic />
         <Portfolio />
         <Insights />
-        <footer className="py-8 text-center text-gray-400 text-sm">
-          {t('footer.copyright')}
-        </footer>
       </div>
     </div>
   )

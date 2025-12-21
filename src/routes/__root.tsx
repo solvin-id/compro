@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { Navbar } from '../components/layout/Navbar'
+import { Footer } from '../components/layout/Footer'
 import { NotFound } from '../components/NotFound'
 import { Suspense } from 'react'
 import { I18nextProvider } from 'react-i18next'
@@ -86,6 +87,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               <ScrollToTop />
               <Navbar />
               <main className="pt-16">{children}</main>
+              <Footer />
             </Suspense>
           </I18nextProvider>
         </ThemeProvider>
