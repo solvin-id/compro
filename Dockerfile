@@ -1,24 +1,19 @@
-FROM node:20-alpine AS deps
+FROM node:24-alpine AS deps
 WORKDIR /app
 
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile --silent;
 
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY . ./
 
-RUN npm run db:generate || true
-RUN npm run build
+RUN yarn db:generate || true
+RUN yarn build
 
-FROM node:20-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
