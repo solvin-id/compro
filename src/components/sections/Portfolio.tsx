@@ -11,11 +11,12 @@ import {
 } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { portfolio, PortfolioItem } from '../../data'
+import type { Portfolio as PortfolioType } from '@/db/schema'
 import { Button } from '../ui/Button'
 import { Link } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { useMountedTheme } from '@/hooks/useMountedTheme'
+import { ImageFromStorage } from '../ImageFromStorage'
 
 interface ParallaxProps {
   children: React.ReactNode
@@ -67,9 +68,17 @@ function ParallaxText({ children, baseVelocity = 100 }: ParallaxProps) {
   )
 }
 
-export function Portfolio() {
+interface PortfolioProps {
+  items?: PortfolioType[]
+}
+
+export function Portfolio({ items = [] }: PortfolioProps) {
   const { t } = useTranslation()
   const { theme } = useMountedTheme()
+
+  if (items.length === 0) {
+    return null
+  }
 
   return (
     <section
@@ -102,7 +111,7 @@ export function Portfolio() {
 
       <div className="relative w-full">
         <ParallaxText baseVelocity={-2}>
-          {portfolio.map((item) => (
+          {items.map((item) => (
             <PortfolioCard key={item.id} item={item} />
           ))}
         </ParallaxText>
@@ -111,19 +120,31 @@ export function Portfolio() {
   )
 }
 
-function PortfolioCard({ item }: { item: PortfolioItem }) {
-  const { theme } = useMountedTheme()
+function PortfolioCard({ item }: { item: PortfolioType }) {
   return (
     <Link to="/portfolio" className="block outline-none shrink-0">
       <div className="group relative h-[450px] w-[350px] md:w-[500px] bg-gray-800 rounded-3xl border border-gray-700 overflow-hidden hover:border-brand-primary transition-colors duration-500">
-        <div className="h-2/3 bg-gray-700 w-full flex items-center justify-center relative group-hover:bg-gray-750 transition-colors">
-          <div className="absolute inset-0 bg-linear-to-t from-gray-900 to-transparent opacity-60" />
+        <div className="h-2/3 bg-gray-700 w-full flex items-center justify-center relative group-hover:bg-gray-750 transition-colors overflow-hidden">
+          <div className="absolute inset-0 bg-linear-to-t from-gray-900 to-transparent opacity-60 z-10" />
 
-          <span className="text-gray-500 font-mono text-sm relative z-10 px-4 py-2 border border-gray-600 rounded bg-gray-800/50 backdrop-blur-sm">
-            [PROJECT_IMAGE_SLOT_{item.id}]
-          </span>
+          {item.image ? (
+            <ImageFromStorage
+              objectKey={item.image}
+              alt={item.title}
+              className="w-full h-full object-cover"
+              fallback={
+                <span className="text-gray-500 font-mono text-sm relative z-10 px-4 py-2 border border-gray-600 rounded bg-gray-800/50 backdrop-blur-sm">
+                  [PROJECT_IMAGE]
+                </span>
+              }
+            />
+          ) : (
+            <span className="text-gray-500 font-mono text-sm relative z-10 px-4 py-2 border border-gray-600 rounded bg-gray-800/50 backdrop-blur-sm">
+              [PROJECT_IMAGE]
+            </span>
+          )}
 
-          <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/10 backdrop-blur-md p-4 rounded-full">
+          <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/10 backdrop-blur-md p-4 rounded-full z-20">
             <ArrowUpRight className="text-white w-6 h-6" />
           </div>
         </div>

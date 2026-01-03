@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as StartRouteImport } from './routes/start'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -18,13 +19,22 @@ import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminSubscribersIndexRouteImport } from './routes/admin/subscribers.index'
+import { Route as AdminPortfolioIndexRouteImport } from './routes/admin/portfolio.index'
 import { Route as AdminArticlesIndexRouteImport } from './routes/admin/articles.index'
 import { Route as AdminAdminsIndexRouteImport } from './routes/admin/admins.index'
+import { Route as AdminPortfolioNewRouteImport } from './routes/admin/portfolio.new'
+import { Route as AdminPortfolioIdRouteImport } from './routes/admin/portfolio.$id'
 import { Route as AdminArticlesNewRouteImport } from './routes/admin/articles.new'
 import { Route as AdminArticlesIdRouteImport } from './routes/admin/articles.$id'
 import { Route as AdminAdminsNewRouteImport } from './routes/admin/admins.new'
 import { Route as AdminAdminsIdRouteImport } from './routes/admin/admins.$id'
 
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StartRoute = StartRouteImport.update({
   id: '/start',
   path: '/start',
@@ -70,6 +80,16 @@ const AdminLoginRoute = AdminLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminSubscribersIndexRoute = AdminSubscribersIndexRouteImport.update({
+  id: '/subscribers/',
+  path: '/subscribers/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPortfolioIndexRoute = AdminPortfolioIndexRouteImport.update({
+  id: '/portfolio/',
+  path: '/portfolio/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminArticlesIndexRoute = AdminArticlesIndexRouteImport.update({
   id: '/articles/',
   path: '/articles/',
@@ -78,6 +98,16 @@ const AdminArticlesIndexRoute = AdminArticlesIndexRouteImport.update({
 const AdminAdminsIndexRoute = AdminAdminsIndexRouteImport.update({
   id: '/admins/',
   path: '/admins/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPortfolioNewRoute = AdminPortfolioNewRouteImport.update({
+  id: '/portfolio/new',
+  path: '/portfolio/new',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPortfolioIdRoute = AdminPortfolioIdRouteImport.update({
+  id: '/portfolio/$id',
+  path: '/portfolio/$id',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminArticlesNewRoute = AdminArticlesNewRouteImport.update({
@@ -107,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/portfolio': typeof PortfolioRoute
   '/start': typeof StartRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/login': typeof AdminLoginRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -115,14 +146,19 @@ export interface FileRoutesByFullPath {
   '/admin/admins/new': typeof AdminAdminsNewRoute
   '/admin/articles/$id': typeof AdminArticlesIdRoute
   '/admin/articles/new': typeof AdminArticlesNewRoute
+  '/admin/portfolio/$id': typeof AdminPortfolioIdRoute
+  '/admin/portfolio/new': typeof AdminPortfolioNewRoute
   '/admin/admins': typeof AdminAdminsIndexRoute
   '/admin/articles': typeof AdminArticlesIndexRoute
+  '/admin/portfolio': typeof AdminPortfolioIndexRoute
+  '/admin/subscribers': typeof AdminSubscribersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
   '/portfolio': typeof PortfolioRoute
   '/start': typeof StartRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/login': typeof AdminLoginRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -131,8 +167,12 @@ export interface FileRoutesByTo {
   '/admin/admins/new': typeof AdminAdminsNewRoute
   '/admin/articles/$id': typeof AdminArticlesIdRoute
   '/admin/articles/new': typeof AdminArticlesNewRoute
+  '/admin/portfolio/$id': typeof AdminPortfolioIdRoute
+  '/admin/portfolio/new': typeof AdminPortfolioNewRoute
   '/admin/admins': typeof AdminAdminsIndexRoute
   '/admin/articles': typeof AdminArticlesIndexRoute
+  '/admin/portfolio': typeof AdminPortfolioIndexRoute
+  '/admin/subscribers': typeof AdminSubscribersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -141,6 +181,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/portfolio': typeof PortfolioRoute
   '/start': typeof StartRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/login': typeof AdminLoginRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -149,8 +190,12 @@ export interface FileRoutesById {
   '/admin/admins/new': typeof AdminAdminsNewRoute
   '/admin/articles/$id': typeof AdminArticlesIdRoute
   '/admin/articles/new': typeof AdminArticlesNewRoute
+  '/admin/portfolio/$id': typeof AdminPortfolioIdRoute
+  '/admin/portfolio/new': typeof AdminPortfolioNewRoute
   '/admin/admins/': typeof AdminAdminsIndexRoute
   '/admin/articles/': typeof AdminArticlesIndexRoute
+  '/admin/portfolio/': typeof AdminPortfolioIndexRoute
+  '/admin/subscribers/': typeof AdminSubscribersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -160,6 +205,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/portfolio'
     | '/start'
+    | '/unsubscribe'
     | '/admin/login'
     | '/articles/$slug'
     | '/admin/'
@@ -168,14 +214,19 @@ export interface FileRouteTypes {
     | '/admin/admins/new'
     | '/admin/articles/$id'
     | '/admin/articles/new'
+    | '/admin/portfolio/$id'
+    | '/admin/portfolio/new'
     | '/admin/admins'
     | '/admin/articles'
+    | '/admin/portfolio'
+    | '/admin/subscribers'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/$'
     | '/portfolio'
     | '/start'
+    | '/unsubscribe'
     | '/admin/login'
     | '/articles/$slug'
     | '/admin'
@@ -184,8 +235,12 @@ export interface FileRouteTypes {
     | '/admin/admins/new'
     | '/admin/articles/$id'
     | '/admin/articles/new'
+    | '/admin/portfolio/$id'
+    | '/admin/portfolio/new'
     | '/admin/admins'
     | '/admin/articles'
+    | '/admin/portfolio'
+    | '/admin/subscribers'
   id:
     | '__root__'
     | '/'
@@ -193,6 +248,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/portfolio'
     | '/start'
+    | '/unsubscribe'
     | '/admin/login'
     | '/articles/$slug'
     | '/admin/'
@@ -201,8 +257,12 @@ export interface FileRouteTypes {
     | '/admin/admins/new'
     | '/admin/articles/$id'
     | '/admin/articles/new'
+    | '/admin/portfolio/$id'
+    | '/admin/portfolio/new'
     | '/admin/admins/'
     | '/admin/articles/'
+    | '/admin/portfolio/'
+    | '/admin/subscribers/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -211,12 +271,20 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   PortfolioRoute: typeof PortfolioRoute
   StartRoute: typeof StartRoute
+  UnsubscribeRoute: typeof UnsubscribeRoute
   ArticlesSlugRoute: typeof ArticlesSlugRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/start': {
       id: '/start'
       path: '/start'
@@ -280,6 +348,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/subscribers/': {
+      id: '/admin/subscribers/'
+      path: '/subscribers'
+      fullPath: '/admin/subscribers'
+      preLoaderRoute: typeof AdminSubscribersIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/portfolio/': {
+      id: '/admin/portfolio/'
+      path: '/portfolio'
+      fullPath: '/admin/portfolio'
+      preLoaderRoute: typeof AdminPortfolioIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/articles/': {
       id: '/admin/articles/'
       path: '/articles'
@@ -292,6 +374,20 @@ declare module '@tanstack/react-router' {
       path: '/admins'
       fullPath: '/admin/admins'
       preLoaderRoute: typeof AdminAdminsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/portfolio/new': {
+      id: '/admin/portfolio/new'
+      path: '/portfolio/new'
+      fullPath: '/admin/portfolio/new'
+      preLoaderRoute: typeof AdminPortfolioNewRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/portfolio/$id': {
+      id: '/admin/portfolio/$id'
+      path: '/portfolio/$id'
+      fullPath: '/admin/portfolio/$id'
+      preLoaderRoute: typeof AdminPortfolioIdRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/articles/new': {
@@ -332,8 +428,12 @@ interface AdminRouteChildren {
   AdminAdminsNewRoute: typeof AdminAdminsNewRoute
   AdminArticlesIdRoute: typeof AdminArticlesIdRoute
   AdminArticlesNewRoute: typeof AdminArticlesNewRoute
+  AdminPortfolioIdRoute: typeof AdminPortfolioIdRoute
+  AdminPortfolioNewRoute: typeof AdminPortfolioNewRoute
   AdminAdminsIndexRoute: typeof AdminAdminsIndexRoute
   AdminArticlesIndexRoute: typeof AdminArticlesIndexRoute
+  AdminPortfolioIndexRoute: typeof AdminPortfolioIndexRoute
+  AdminSubscribersIndexRoute: typeof AdminSubscribersIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -343,8 +443,12 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAdminsNewRoute: AdminAdminsNewRoute,
   AdminArticlesIdRoute: AdminArticlesIdRoute,
   AdminArticlesNewRoute: AdminArticlesNewRoute,
+  AdminPortfolioIdRoute: AdminPortfolioIdRoute,
+  AdminPortfolioNewRoute: AdminPortfolioNewRoute,
   AdminAdminsIndexRoute: AdminAdminsIndexRoute,
   AdminArticlesIndexRoute: AdminArticlesIndexRoute,
+  AdminPortfolioIndexRoute: AdminPortfolioIndexRoute,
+  AdminSubscribersIndexRoute: AdminSubscribersIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
@@ -355,6 +459,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   PortfolioRoute: PortfolioRoute,
   StartRoute: StartRoute,
+  UnsubscribeRoute: UnsubscribeRoute,
   ArticlesSlugRoute: ArticlesSlugRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
 }

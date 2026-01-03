@@ -2,18 +2,34 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { ArrowLeft, CheckCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { portfolio } from '../data'
 import { Button } from '../components/ui/Button'
 import { useMountedTheme } from '@/hooks/useMountedTheme'
 import { cn } from '@/lib/utils'
+import { getPublishedPortfolioFn } from '@/functions/portfolio'
+import type { Portfolio } from '@/db/schema'
+import { ImageFromStorage } from '@/components/ImageFromStorage'
 
 export const Route = createFileRoute('/portfolio')({
+  loader: async () => {
+    const items = await getPublishedPortfolioFn()
+    return { items }
+  },
   component: PortfolioPage,
 })
+
+function parseTechStack(techStack: string | null | undefined): string[] {
+  if (!techStack) return []
+  try {
+    return JSON.parse(techStack)
+  } catch {
+    return []
+  }
+}
 
 function PortfolioPage() {
   const { t } = useTranslation()
   const { theme } = useMountedTheme()
+  const { items } = Route.useLoaderData()
 
   return (
     <div className="min-h-screen pt-24 pb-20 relative overflow-hidden bg-transparent">
@@ -51,115 +67,14 @@ function PortfolioPage() {
         </header>
 
         <div className="space-y-24">
-          {portfolio.map((item, index) => (
-            <motion.article
+          {items.map((item, index) => (
+            <PortfolioArticle
               key={item.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.8 }}
-              className="grid lg:grid-cols-2 gap-12 items-start group"
-            >
-              <div
-                className={`rounded-3xl bg-muted/50 dark:bg-card/30 border border-border p-8 md:p-12 h-full flex flex-col justify-between ${index % 2 === 1 ? 'lg:order-2' : ''}`}
-              >
-                <div>
-                  <div className="flex items-center gap-3 mb-6">
-                    <span className="px-3 py-1 rounded-full bg-background border border-border text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                      {item.sector}
-                    </span>
-                    <span className="text-muted-foreground font-mono text-sm">
-                      {item.year}
-                    </span>
-                  </div>
-                  <h2 className="text-3xl font-bold text-foreground mb-4">
-                    {item.title}
-                  </h2>
-                  <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                    {item.description}
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-2 mt-auto">
-                  {item.techStack?.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 bg-background rounded-md text-sm font-medium text-muted-foreground shadow-sm border border-border"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div
-                className={`space-y-10 py-4 ${index % 2 === 1 ? 'lg:order-1' : ''}`}
-              >
-                <div className="space-y-2">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-brand-primary">
-                    {t('portfolio.theClient')}
-                  </h3>
-                  <p className="text-xl font-medium text-foreground">
-                    {item.client || t('portfolio.confidentialClient')}
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-                    {t('portfolio.theProblem')}
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {item.problem || t('portfolio.defaultProblem')}
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-brand-secondary">
-                    {t('portfolio.theSolution')}
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {item.solution || t('portfolio.defaultSolution')}
-                  </p>
-
-                  <div
-                    className={cn(
-                      theme === 'light' && 'bg-green-50 border-green-100',
-                      theme !== 'light' &&
-                        'bg-green-950/30 border-green-900/50',
-                      'rounded-xl p-6 border flex items-start gap-3 mt-4',
-                    )}
-                  >
-                    <CheckCircle
-                      className={cn(
-                        theme === 'light' && 'text-green-600',
-                        theme !== 'light' && 'text-green-400',
-                        'w-6 h-6 shrink-0',
-                      )}
-                    />
-                    <div>
-                      <h4
-                        className={cn(
-                          theme === 'light' && 'text-green-900',
-                          theme !== 'light' && 'text-green-300',
-                          'font-bold text-sm uppercase tracking-wide mb-1',
-                        )}
-                      >
-                        {t('portfolio.impact')}
-                      </h4>
-                      <p
-                        className={cn(
-                          theme === 'light' && 'text-green-800',
-                          theme !== 'light' && 'text-green-400',
-                          'font-medium',
-                        )}
-                      >
-                        {item.outcome || t('portfolio.defaultOutcome')}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.article>
+              item={item}
+              index={index}
+              theme={theme}
+              t={t}
+            />
           ))}
         </div>
 
@@ -181,5 +96,133 @@ function PortfolioPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+interface PortfolioArticleProps {
+  item: Portfolio
+  index: number
+  theme: string | undefined
+  t: (key: string) => string
+}
+
+function PortfolioArticle({ item, index, theme, t }: PortfolioArticleProps) {
+  const techStack = parseTechStack(item.techStack)
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-100px' }}
+      transition={{ duration: 0.8 }}
+      className="grid lg:grid-cols-2 gap-12 items-start group"
+    >
+      <div
+        className={`rounded-3xl bg-muted/50 dark:bg-card/30 border border-border p-8 md:p-12 h-full flex flex-col justify-between ${index % 2 === 1 ? 'lg:order-2' : ''}`}
+      >
+        <div>
+          <div className="flex items-center gap-3 mb-6">
+            <span className="px-3 py-1 rounded-full bg-background border border-border text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {item.sector}
+            </span>
+            <span className="text-muted-foreground font-mono text-sm">
+              {item.year}
+            </span>
+          </div>
+          <h2 className="text-3xl font-bold text-foreground mb-4">
+            {item.title}
+          </h2>
+          <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+            {item.description}
+          </p>
+
+          {item.image && (
+            <div className="mb-8 rounded-xl overflow-hidden">
+              <ImageFromStorage
+                objectKey={item.image}
+                alt={item.title}
+                className="w-full h-48 object-cover"
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-wrap gap-2 mt-auto">
+          {techStack.map((tech) => (
+            <span
+              key={tech}
+              className="px-3 py-1 bg-background rounded-md text-sm font-medium text-muted-foreground shadow-sm border border-border"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className={`space-y-10 py-4 ${index % 2 === 1 ? 'lg:order-1' : ''}`}>
+        <div className="space-y-2">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-brand-primary">
+            {t('portfolio.theClient')}
+          </h3>
+          <p className="text-xl font-medium text-foreground">
+            {item.client || t('portfolio.confidentialClient')}
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+            {t('portfolio.theProblem')}
+          </h3>
+          <p className="text-muted-foreground leading-relaxed">
+            {item.problem || t('portfolio.defaultProblem')}
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-brand-secondary">
+            {t('portfolio.theSolution')}
+          </h3>
+          <p className="text-muted-foreground leading-relaxed">
+            {item.solution || t('portfolio.defaultSolution')}
+          </p>
+
+          <div
+            className={cn(
+              theme === 'light' && 'bg-green-50 border-green-100',
+              theme !== 'light' && 'bg-green-950/30 border-green-900/50',
+              'rounded-xl p-6 border flex items-start gap-3 mt-4',
+            )}
+          >
+            <CheckCircle
+              className={cn(
+                theme === 'light' && 'text-green-600',
+                theme !== 'light' && 'text-green-400',
+                'w-6 h-6 shrink-0',
+              )}
+            />
+            <div>
+              <h4
+                className={cn(
+                  theme === 'light' && 'text-green-900',
+                  theme !== 'light' && 'text-green-300',
+                  'font-bold text-sm uppercase tracking-wide mb-1',
+                )}
+              >
+                {t('portfolio.impact')}
+              </h4>
+              <p
+                className={cn(
+                  theme === 'light' && 'text-green-800',
+                  theme !== 'light' && 'text-green-400',
+                  'font-medium',
+                )}
+              >
+                {item.outcome || t('portfolio.defaultOutcome')}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.article>
   )
 }

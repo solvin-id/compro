@@ -1,4 +1,11 @@
-import { pgTable, serial, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import {
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  uuid,
+  integer,
+} from 'drizzle-orm/pg-core'
 
 // Users table for admin authentication
 export const users = pgTable('users', {
@@ -57,3 +64,55 @@ export const articles = pgTable('articles', {
 // Type inference helpers
 export type Article = typeof articles.$inferSelect
 export type NewArticle = typeof articles.$inferInsert
+
+// Portfolio table for case studies
+export const portfolio = pgTable('portfolio', {
+  id: serial('id').primaryKey(),
+  slug: text('slug').notNull().unique(),
+  title: text('title').notNull(),
+  year: text('year').notNull(),
+  sector: text('sector').notNull(),
+  description: text('description').notNull(),
+  client: text('client'),
+  problem: text('problem'),
+  solution: text('solution'),
+  outcome: text('outcome'),
+  techStack: text('tech_stack'), // JSON array stored as string
+  image: text('image'), // RustFS object key
+  status: text('status').default('draft'), // draft | published
+  displayOrder: integer('display_order').default(0),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+})
+
+export type Portfolio = typeof portfolio.$inferSelect
+export type NewPortfolio = typeof portfolio.$inferInsert
+
+// Newsletter Subscribers
+export const subscribers = pgTable('subscribers', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  token: text('token').notNull(), // For unsubscribe/verification
+  status: text('status').default('pending'), // pending | subscribed | unsubscribed
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+})
+
+export type Subscriber = typeof subscribers.$inferSelect
+export type NewSubscriber = typeof subscribers.$inferInsert
+
+// Email Queue for async sending
+export const emailQueue = pgTable('email_queue', {
+  id: serial('id').primaryKey(),
+  to: text('to').notNull(),
+  subject: text('subject').notNull(),
+  body: text('body').notNull(), // HTML content
+  status: text('status').default('pending'), // pending | sent | failed
+  attempts: integer('attempts').default(0),
+  error: text('error'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+})
+
+export type EmailQueue = typeof emailQueue.$inferSelect
+export type NewEmailQueue = typeof emailQueue.$inferInsert
