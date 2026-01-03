@@ -12,6 +12,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Shield,
+  Briefcase,
 } from 'lucide-react'
 import { useState } from 'react'
 import { logoutFn } from '@/functions/auth'
@@ -24,6 +25,7 @@ interface AdminSidebarProps {
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { href: '/admin/articles', label: 'Articles', icon: FileText },
+  { href: '/admin/portfolio', label: 'Portfolio', icon: Briefcase },
   { href: '/admin/admins', label: 'Admins', icon: Shield },
   { href: '/admin/team', label: 'Team', icon: Users },
   { href: '/admin/settings', label: 'Settings', icon: Settings },

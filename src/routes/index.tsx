@@ -12,11 +12,15 @@ import { TeamSchematic } from '../components/sections/TeamSchematic'
 import { useEffect } from 'react'
 import { useNavigateStore } from '../hooks/useNavigateStore'
 import { getPublishedArticlesFn } from '@/functions/articles'
+import { getPublishedPortfolioFn } from '@/functions/portfolio'
 
 export const Route = createFileRoute('/')({
   loader: async () => {
-    const articles = await getPublishedArticlesFn()
-    return { articles }
+    const [articles, portfolioItems] = await Promise.all([
+      getPublishedArticlesFn(),
+      getPublishedPortfolioFn(),
+    ])
+    return { articles, portfolioItems }
   },
   component: App,
 })
@@ -157,7 +161,7 @@ function Hero() {
 }
 
 function App() {
-  const { articles } = Route.useLoaderData()
+  const { articles, portfolioItems } = Route.useLoaderData()
   const { t } = useTranslation()
   const section = useNavigateStore((state) => state.section)
   const isNavigating = useNavigateStore((state) => state.isNavigating)
@@ -201,7 +205,7 @@ function App() {
         <About />
         <Services />
         <TeamSchematic />
-        <Portfolio />
+        <Portfolio items={portfolioItems} />
         <Insights articles={articles} />
       </div>
     </div>

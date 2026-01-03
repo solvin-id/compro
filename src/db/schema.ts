@@ -1,4 +1,11 @@
-import { pgTable, serial, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import {
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  uuid,
+  integer,
+} from 'drizzle-orm/pg-core'
 
 // Users table for admin authentication
 export const users = pgTable('users', {
@@ -57,3 +64,26 @@ export const articles = pgTable('articles', {
 // Type inference helpers
 export type Article = typeof articles.$inferSelect
 export type NewArticle = typeof articles.$inferInsert
+
+// Portfolio table for case studies
+export const portfolio = pgTable('portfolio', {
+  id: serial('id').primaryKey(),
+  slug: text('slug').notNull().unique(),
+  title: text('title').notNull(),
+  year: text('year').notNull(),
+  sector: text('sector').notNull(),
+  description: text('description').notNull(),
+  client: text('client'),
+  problem: text('problem'),
+  solution: text('solution'),
+  outcome: text('outcome'),
+  techStack: text('tech_stack'), // JSON array stored as string
+  image: text('image'), // RustFS object key
+  status: text('status').default('draft'), // draft | published
+  displayOrder: integer('display_order').default(0),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+})
+
+export type Portfolio = typeof portfolio.$inferSelect
+export type NewPortfolio = typeof portfolio.$inferInsert
