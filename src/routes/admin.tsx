@@ -31,9 +31,9 @@ function AdminLayout() {
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex">
       <AdminSidebar user={user} />
-      <main className="flex-1 overflow-auto">
+      <main className="flex-1">
         <div className="p-6">
           <Outlet />
         </div>

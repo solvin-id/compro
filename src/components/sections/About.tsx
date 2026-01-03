@@ -32,20 +32,11 @@ export function About() {
             style={{ opacity, scale }}
             className="aspect-square rounded-3xl border border-border/40 bg-card/20 backdrop-blur-md flex items-center justify-center relative overflow-hidden group hover:border-brand-primary transition-colors duration-500 shadow-xl shadow-muted/50 dark:shadow-none"
           >
-            <div className="text-center p-8 bg-card/50 rounded-2xl backdrop-blur-sm border border-border/50">
-              <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
-                <span className="text-[10px] font-mono">ISO_COMP</span>
-              </div>
-              <p className="text-sm text-muted-foreground font-mono">
-                [ILLUSTRATION_SLOT_2]
-                <br />
-                Isometric Abstract Composition
-                <br />
-                Gears Morphing into Cloud
-              </p>
+            <div className="text-center p-8 bg-card/50 rounded-2xl backdrop-blur-sm">
+              <img alt="rocketman" src="/image/launch.svg" />
             </div>
 
-            <div className="absolute inset-0 bg-linear-to-br from-brand-primary to-brand-purple opacity-0 group-hover:opacity-5 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-linear-to-br from-brand-primary to-brand-purple opacity-0 group-hover:opacity-15 transition-opacity duration-500" />
           </motion.div>
         </div>
 

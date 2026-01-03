@@ -1,6 +1,7 @@
 'use client'
 
-import { Link, useLocation } from '@tanstack/react-router'
+import { Link, useLocation, useRouter } from '@tanstack/react-router'
+import { useQueryClient } from '@tanstack/react-query'
 import { cn } from '@/lib/utils'
 import {
   LayoutDashboard,
@@ -10,6 +11,7 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  Shield,
 } from 'lucide-react'
 import { useState } from 'react'
 import { logoutFn } from '@/functions/auth'
@@ -22,16 +24,21 @@ interface AdminSidebarProps {
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { href: '/admin/articles', label: 'Articles', icon: FileText },
+  { href: '/admin/admins', label: 'Admins', icon: Shield },
   { href: '/admin/team', label: 'Team', icon: Users },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
 ]
 
 export function AdminSidebar({ user }: AdminSidebarProps) {
   const location = useLocation()
+  const router = useRouter()
+  const queryClient = useQueryClient()
   const [collapsed, setCollapsed] = useState(false)
 
   const handleLogout = async () => {
     await logoutFn()
+    queryClient.removeQueries({ queryKey: ['currentUser'] })
+    router.navigate({ to: '/admin/login' })
   }
 
   const isActive = (href: string, exact = false) => {
@@ -44,7 +51,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
   return (
     <aside
       className={cn(
-        'h-screen bg-card border-r border-border flex flex-col transition-all duration-300',
+        'h-[calc(100vh-4rem)] sticky top-16 bg-card border-r border-border flex flex-col transition-all duration-300',
         collapsed ? 'w-16' : 'w-64',
       )}
     >

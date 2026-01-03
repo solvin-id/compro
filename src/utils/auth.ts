@@ -16,13 +16,7 @@ export async function verifyPassword(
   plainPassword: string,
   hashedPassword: string,
 ): Promise<boolean> {
-  const startTime = Date.now()
   const result = await bcrypt.compare(plainPassword, hashedPassword)
-  const elapsed = Date.now() - startTime
-
-  if (elapsed < 500) {
-    await new Promise((resolve) => setTimeout(resolve, 500 - elapsed))
-  }
 
   return result
 }

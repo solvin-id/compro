@@ -1,7 +1,7 @@
 'use client'
 
 import { useMountedTheme } from '@/hooks/useMountedTheme'
-import { Link } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 import { ArrowRight, Mail, MapPin, MessageCircle, Send } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,6 +15,7 @@ import { cn } from '../../lib/utils'
 
 export function Footer() {
   const { t } = useTranslation()
+  const { pathname } = useLocation()
   const currentYear = new Date().getFullYear()
   const { theme } = useMountedTheme()
   const [email, setEmail] = useState('')
@@ -24,6 +25,10 @@ export function Footer() {
     // TODO: Implement newsletter subscription
     console.log('Subscribe:', email)
     setEmail('')
+  }
+
+  if (pathname.includes('/admin')) {
+    return null
   }
 
   return (

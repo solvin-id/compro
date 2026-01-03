@@ -1,38 +1,40 @@
 'use client'
 
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import {
   Plus,
-  Eye,
   Pencil,
   Trash2,
   Search,
-  Filter,
-  MoreVertical,
   ExternalLink,
+  Loader2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import { getArticlesFn, deleteArticleFn } from '@/functions/articles'
-import type { Article } from '@/db/schema'
 
 export const Route = createFileRoute('/admin/articles/')({
-  loader: async () => {
-    const articles = await getArticlesFn()
-    return { articles }
-  },
   component: ArticlesListPage,
 })
 
 function ArticlesListPage() {
-  const { articles: initialArticles } = Route.useLoaderData()
-  const [articles, setArticles] = useState<Article[]>(initialArticles)
+  const queryClient = useQueryClient()
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null)
-  const router = useRouter()
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  const {
+    data: articles = [],
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['admin-articles'],
+    queryFn: () => getArticlesFn(),
+  })
 
   const filteredArticles = articles.filter((article) => {
     const matchesSearch =
@@ -45,11 +47,14 @@ function ArticlesListPage() {
 
   const handleDelete = async (id: number) => {
     try {
+      setIsDeleting(true)
       await deleteArticleFn({ data: { id } })
-      setArticles((prev) => prev.filter((a) => a.id !== id))
+      await queryClient.invalidateQueries({ queryKey: ['admin-articles'] })
       setDeleteConfirm(null)
     } catch (error) {
       console.error('Failed to delete article:', error)
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -64,6 +69,14 @@ function ArticlesListPage() {
       default:
         return 'bg-gray-500/10 text-gray-500'
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />
+      </div>
+    )
   }
 
   return (
@@ -204,9 +217,10 @@ function ArticlesListPage() {
                           <div className="flex items-center gap-1">
                             <button
                               onClick={() => handleDelete(article.id)}
-                              className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600"
+                              disabled={isDeleting}
+                              className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50"
                             >
-                              Confirm
+                              {isDeleting ? 'Deleting...' : 'Confirm'}
                             </button>
                             <button
                               onClick={() => setDeleteConfirm(null)}

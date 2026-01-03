@@ -44,6 +44,7 @@ export function RichTextEditor({
     ],
     content: value,
     editable,
+    immediatelyRender: false, // Prevent SSR hydration mismatch
     editorProps: {
       attributes: {
         class: cn(
