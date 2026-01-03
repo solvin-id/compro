@@ -19,12 +19,33 @@ export function Footer() {
   const currentYear = new Date().getFullYear()
   const { theme } = useMountedTheme()
   const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<
+    'idle' | 'loading' | 'success' | 'error'
+  >('idle')
+  const [message, setMessage] = useState('')
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement newsletter subscription
-    console.log('Subscribe:', email)
-    setEmail('')
+    setStatus('loading')
+    setMessage('')
+
+    try {
+      const { subscribeFn } = await import('@/functions/newsletter')
+      const result = await subscribeFn({ data: { email } })
+
+      if (result.success) {
+        setStatus('success')
+        setMessage(result.message)
+        setEmail('')
+      } else {
+        setStatus('error')
+        setMessage(result.message)
+      }
+    } catch (error) {
+      console.error('Subscribe error:', error)
+      setStatus('error')
+      setMessage('Something went wrong. Please try again.')
+    }
   }
 
   if (pathname.includes('/admin')) {
@@ -181,31 +202,53 @@ export function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t('footer.subscribePlaceholder')}
+                disabled={status === 'loading' || status === 'success'}
                 className={cn(
                   'flex-1 px-4 py-2.5 rounded-lg',
                   'bg-white/5 border border-white/10',
                   'text-white placeholder:text-gray-500',
                   'focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary',
                   'transition-all duration-300',
+                  'disabled:opacity-50 disabled:cursor-not-allowed',
                 )}
                 required
               />
               <button
                 type="submit"
+                disabled={status === 'loading' || status === 'success'}
                 className={cn(
                   'px-4 py-2.5 rounded-lg',
                   'bg-brand-primary hover:bg-brand-primary-hover',
                   'text-white font-medium',
                   'flex items-center gap-2',
                   'transition-colors duration-300',
+                  'disabled:opacity-50 disabled:cursor-not-allowed',
                 )}
               >
-                <Send size={18} />
+                {status === 'loading' ? (
+                  <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : status === 'success' ? (
+                  <Send size={18} className="text-white" />
+                ) : (
+                  <Send size={18} />
+                )}
                 <span className="hidden sm:inline">
-                  {t('footer.subscribeButton')}
+                  {status === 'success'
+                    ? t('footer.subscribed') || 'Subscribed'
+                    : t('footer.subscribeButton')}
                 </span>
               </button>
             </form>
+            {message && (
+              <p
+                className={cn(
+                  'mt-2 text-sm',
+                  status === 'error' ? 'text-red-400' : 'text-green-400',
+                )}
+              >
+                {message}
+              </p>
+            )}
           </div>
         </div>
       </div>

@@ -6,13 +6,12 @@ import { cn } from '@/lib/utils'
 import {
   LayoutDashboard,
   FileText,
-  Users,
-  Settings,
   LogOut,
   ChevronLeft,
   ChevronRight,
   Shield,
   Briefcase,
+  Mail,
 } from 'lucide-react'
 import { useState } from 'react'
 import { logoutFn } from '@/functions/auth'
@@ -26,9 +25,8 @@ const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { href: '/admin/articles', label: 'Articles', icon: FileText },
   { href: '/admin/portfolio', label: 'Portfolio', icon: Briefcase },
+  { href: '/admin/subscribers', label: 'Subscribers', icon: Mail },
   { href: '/admin/admins', label: 'Admins', icon: Shield },
-  { href: '/admin/team', label: 'Team', icon: Users },
-  { href: '/admin/settings', label: 'Settings', icon: Settings },
 ]
 
 export function AdminSidebar({ user }: AdminSidebarProps) {

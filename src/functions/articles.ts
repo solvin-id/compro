@@ -11,6 +11,7 @@ import {
   isStorageConfigured,
   deleteFile,
 } from '@/utils/storage'
+import { notifySubscribersFn } from './newsletter'
 
 const MOCK_ARTICLES: Article[] = [
   {
@@ -265,6 +266,18 @@ export const createArticleFn = createServerFn({
         publishedAt: data.status === 'published' ? new Date() : null,
       } as NewArticle)
       .returning()
+
+    // Notify subscribers if published
+    if (article.status === 'published') {
+      await notifySubscribersFn({
+        data: {
+          articleId: article.id,
+          title: article.title,
+          slug: article.slug,
+          summary: article.summary,
+        },
+      })
+    }
 
     // Step 2: Upload content to storage if configured
     if (isStorageConfigured()) {

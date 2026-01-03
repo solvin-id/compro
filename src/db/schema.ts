@@ -87,3 +87,32 @@ export const portfolio = pgTable('portfolio', {
 
 export type Portfolio = typeof portfolio.$inferSelect
 export type NewPortfolio = typeof portfolio.$inferInsert
+
+// Newsletter Subscribers
+export const subscribers = pgTable('subscribers', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  token: text('token').notNull(), // For unsubscribe/verification
+  status: text('status').default('pending'), // pending | subscribed | unsubscribed
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+})
+
+export type Subscriber = typeof subscribers.$inferSelect
+export type NewSubscriber = typeof subscribers.$inferInsert
+
+// Email Queue for async sending
+export const emailQueue = pgTable('email_queue', {
+  id: serial('id').primaryKey(),
+  to: text('to').notNull(),
+  subject: text('subject').notNull(),
+  body: text('body').notNull(), // HTML content
+  status: text('status').default('pending'), // pending | sent | failed
+  attempts: integer('attempts').default(0),
+  error: text('error'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+})
+
+export type EmailQueue = typeof emailQueue.$inferSelect
+export type NewEmailQueue = typeof emailQueue.$inferInsert
