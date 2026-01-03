@@ -1,18 +1,17 @@
-import { createServerFn } from '@tanstack/react-start'
-import { getRequest, setCookie } from '@tanstack/react-start/server'
-import { z } from 'zod'
-import { eq } from 'drizzle-orm'
 import { db } from '@/db'
 import { users } from '@/db/schema'
 import { env } from '@/env'
 import {
-  verifyPassword,
-  createSessionToken,
-  verifySessionToken,
-  getSessionTokenFromCookies,
   createSessionCookieHeader,
-  createClearSessionCookieHeader,
+  createSessionToken,
+  getSessionTokenFromCookies,
+  verifyPassword,
+  verifySessionToken,
 } from '@/utils/auth'
+import { createServerFn } from '@tanstack/react-start'
+import { getRequest, setCookie } from '@tanstack/react-start/server'
+import { eq } from 'drizzle-orm'
+import { z } from 'zod'
 
 const DEV_USER = {
   id: 'dev-user-001',
@@ -56,7 +55,6 @@ export const loginFn = createServerFn({
     })
 
     if (!user) {
-      await new Promise((resolve) => setTimeout(resolve, 500))
       return { error: 'Invalid credentials' }
     }
 
@@ -86,7 +84,13 @@ export const loginFn = createServerFn({
 export const logoutFn = createServerFn({
   method: 'POST',
 }).handler(async () => {
-  return { clearCookie: createClearSessionCookieHeader() }
+  setCookie('solvin_session', '', {
+    path: '/',
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: 0,
+  })
+  return { success: true }
 })
 
 export const validateSessionFn = createServerFn({

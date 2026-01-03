@@ -1,14 +1,15 @@
 'use client'
 
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { ArrowLeft, Save, Eye, Loader2 } from 'lucide-react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useState, useRef } from 'react'
+import { ArrowLeft, Save, Loader2, Upload, X } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/Button'
 import { RichTextEditor } from '@/components/editor'
-import { cn } from '@/lib/utils'
 import { createArticleFn } from '@/functions/articles'
+import { uploadImageFn } from '@/functions/storage'
+import imageCompression from 'browser-image-compression'
 
 export const Route = createFileRoute('/admin/articles/new')({
   component: NewArticlePage,
@@ -16,6 +17,7 @@ export const Route = createFileRoute('/admin/articles/new')({
 
 function NewArticlePage() {
   const router = useRouter()
+  const queryClient = useQueryClient()
   const { user } = Route.useRouteContext()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -26,10 +28,15 @@ function NewArticlePage() {
   const [summary, setSummary] = useState('')
   const [category, setCategory] = useState('')
   const [status, setStatus] = useState<'draft' | 'published'>('draft')
-  const [coverImage, setCoverImage] = useState('')
+  const [coverImageKey, setCoverImageKey] = useState<string | null>(null)
+  const [coverImagePreview, setCoverImagePreview] = useState<string | null>(
+    null,
+  )
   const [coverImageAlt, setCoverImageAlt] = useState('')
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
   const [seoTitle, setSeoTitle] = useState('')
   const [seoDescription, setSeoDescription] = useState('')
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleTitleChange = (value: string) => {
     setTitle(value)
@@ -52,6 +59,76 @@ function NewArticlePage() {
     return `${minutes} min read`
   }
 
+  const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please select an image file')
+      return
+    }
+
+    setIsUploadingImage(true)
+    setError(null)
+
+    try {
+      // Compress image
+      const compressedFile = await imageCompression(file, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+      })
+
+      // Create preview
+      const previewUrl = URL.createObjectURL(compressedFile)
+      setCoverImagePreview(previewUrl)
+
+      // Convert to base64 using FileReader (browser-compatible)
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+          const result = reader.result as string
+          // Remove data URL prefix (e.g., "data:image/jpeg;base64,")
+          const base64Data = result.split(',')[1]
+          resolve(base64Data)
+        }
+        reader.onerror = reject
+        reader.readAsDataURL(compressedFile)
+      })
+
+      // Upload to storage
+      const result = await uploadImageFn({
+        data: {
+          base64Data: base64,
+          filename: file.name,
+          contentType: compressedFile.type,
+          prefix: 'covers',
+        },
+      })
+
+      if ('error' in result) {
+        setError(result.error)
+        setCoverImagePreview(null)
+      } else {
+        setCoverImageKey(result.key)
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to upload image')
+      setCoverImagePreview(null)
+    } finally {
+      setIsUploadingImage(false)
+    }
+  }
+
+  const handleRemoveImage = () => {
+    setCoverImageKey(null)
+    setCoverImagePreview(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
@@ -66,7 +143,7 @@ function NewArticlePage() {
           summary,
           category,
           status,
-          coverImage: coverImage || undefined,
+          coverImage: coverImageKey || undefined,
           coverImageAlt: coverImageAlt || undefined,
           seoTitle: seoTitle || undefined,
           seoDescription: seoDescription || undefined,
@@ -75,6 +152,9 @@ function NewArticlePage() {
           readTime: calculateReadTime(content),
         },
       })
+
+      // Invalidate article queries to refetch data
+      await queryClient.invalidateQueries({ queryKey: ['admin-articles'] })
 
       router.navigate({ to: '/admin/articles' })
     } catch (err: any) {
@@ -213,15 +293,53 @@ function NewArticlePage() {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                Cover Image URL
+                Cover Image
               </label>
               <input
-                type="url"
-                value={coverImage}
-                onChange={(e) => setCoverImage(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-brand-primary/50"
-                placeholder="https://..."
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageSelect}
+                className="hidden"
+                id="cover-image-input"
               />
+              {coverImagePreview ? (
+                <div className="relative">
+                  <img
+                    src={coverImagePreview}
+                    alt="Cover preview"
+                    className="w-full h-40 object-cover rounded-lg border border-border"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleRemoveImage}
+                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                  {isUploadingImage && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg">
+                      <Loader2 className="w-6 h-6 animate-spin text-white" />
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <label
+                  htmlFor="cover-image-input"
+                  className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-brand-primary/50 transition-colors"
+                >
+                  {isUploadingImage ? (
+                    <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+                  ) : (
+                    <>
+                      <Upload className="w-8 h-8 text-muted-foreground mb-2" />
+                      <span className="text-sm text-muted-foreground">
+                        Click to upload image
+                      </span>
+                    </>
+                  )}
+                </label>
+              )}
             </div>
 
             <div>

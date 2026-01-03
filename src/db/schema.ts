@@ -28,7 +28,7 @@ export const articles = pgTable('articles', {
   id: serial('id').primaryKey(),
   slug: text('slug').notNull().unique(),
   title: text('title').notNull(),
-  content: text('content').notNull(), // HTML content from Tiptap editor
+  content: text('content').notNull(), // Object key pointing to HTML content in RustFS storage
   summary: text('summary').notNull(),
   category: text('category').notNull(),
 

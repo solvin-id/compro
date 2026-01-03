@@ -2,28 +2,46 @@ import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Clock, Calendar, Tag } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { articles } from '../data'
 import { InteractiveBackground } from '../components/ui/InteractiveBackground'
 import { Button } from '../components/ui/Button'
+import { getArticleBySlugFn } from '@/functions/articles'
+import { ArticleRenderer } from '@/components/ArticleRenderer'
+import { ImageFromStorage } from '@/components/ImageFromStorage'
 
 export const Route = createFileRoute('/articles/$slug')({
-  component: ArticleComponent,
-  loader: ({ params }) => {
-    const article = articles.find((a) => a.slug === params.slug)
+  loader: async ({ params }) => {
+    const article = await getArticleBySlugFn({ data: { slug: params.slug } })
     if (!article) {
       throw notFound()
     }
     return { article }
   },
+  component: ArticleComponent,
   notFoundComponent: () => {
     const { t } = useTranslation()
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        {t('insights.articleNotFound')}
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <p className="text-xl text-muted-foreground">
+          {t('insights.articleNotFound', 'Article not found')}
+        </p>
+        <Link to="/articles">
+          <Button variant="outline">
+            {t('insights.backToArticles', 'Back to Articles')}
+          </Button>
+        </Link>
       </div>
     )
   },
 })
+
+function formatDate(date: Date | null): string {
+  if (!date) return ''
+  return new Date(date).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  })
+}
 
 function ArticleComponent() {
   const { article } = Route.useLoaderData()
@@ -42,11 +60,11 @@ function ArticleComponent() {
         className="max-w-3xl mx-auto px-6 relative z-10"
       >
         <Link
-          to="/"
+          to="/articles"
           className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-brand-primary mb-12 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          {t('common.backToInsights')}
+          {t('common.backToInsights', 'Back to Insights')}
         </Link>
 
         <header className="mb-12 space-y-6">
@@ -57,75 +75,57 @@ function ArticleComponent() {
             </span>
             <span className="flex items-center gap-1.5">
               <Calendar className="w-4 h-4" />
-              {article.date}
+              {formatDate(article.publishedAt)}
             </span>
             <span className="flex items-center gap-1.5">
               <Clock className="w-4 h-4" />
-              {article.readTime}
+              {article.readTime || '5 min read'}
             </span>
           </div>
 
           <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
             {article.title}
           </h1>
+
+          {article.authorName && (
+            <div className="flex items-center gap-3 pt-4">
+              <div className="w-10 h-10 rounded-full bg-brand-primary/20 flex items-center justify-center text-brand-primary font-medium">
+                {article.authorName.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <p className="font-medium text-foreground">
+                  {article.authorName}
+                </p>
+                <p className="text-xs text-muted-foreground">Author</p>
+              </div>
+            </div>
+          )}
         </header>
 
-        <div className="prose prose-lg dark:prose-invert max-w-none text-muted-foreground leading-relaxed space-y-8">
-          <p className="text-xl leading-relaxed font-medium text-foreground">
+        {article.coverImage && (
+          <div className="mb-12 rounded-2xl overflow-hidden border border-border">
+            <ImageFromStorage
+              objectKey={article.coverImage}
+              alt={article.coverImageAlt || article.title}
+              className="w-full h-auto"
+            />
+          </div>
+        )}
+
+        <div className="prose prose-lg dark:prose-invert max-w-none">
+          <p className="text-xl leading-relaxed font-medium text-foreground mb-8">
             {article.summary}
           </p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </p>
 
-          <h2 className="text-2xl font-bold text-foreground pt-4">
-            {t('insights.theChallenge')}
-          </h2>
-          <p>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-            cupidatat non proident, sunt in culpa qui officia deserunt mollit
-            anim id est laborum.
-          </p>
-
-          <blockquote className="border-l-4 border-brand-primary pl-6 italic my-8 text-foreground bg-muted/50 py-4 rounded-r-lg">
-            "Innovation distinguishes between a leader and a follower. Adopting
-            these technologies is no longer an option but a specific survival
-            trait."
-          </blockquote>
-
-          <h2 className="text-2xl font-bold text-foreground pt-4">
-            {t('insights.implementingSolution')}
-          </h2>
-          <p>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-            quae ab illo inventore veritatis et quasi architecto beatae vitae
-            dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-            aspernatur aut odit aut fugit.
-          </p>
-
-          <div className="bg-muted/50 p-8 rounded-2xl border border-border not-prose my-8">
-            <h3 className="font-bold text-lg text-foreground mb-2">
-              {t('insights.keyTakeaway')}
-            </h3>
-            <p className="text-muted-foreground m-0">
-              Focus on incremental adoption rather than "big bang" rewrites.
-              This approach mitigates risk while delivering continuous value to
-              stakeholders.
-            </p>
-          </div>
+          <ArticleRenderer content={article.content} />
         </div>
 
         <div className="mt-20 pt-10 border-t border-border text-center">
           <p className="text-muted-foreground mb-6 font-medium">
-            {t('insights.enjoyedPerspective')}
+            {t('insights.enjoyedPerspective', 'Enjoyed this perspective?')}
           </p>
           <Button size="lg" className="rounded-full">
-            {t('insights.discussStrategy')}
+            {t('insights.discussStrategy', "Let's Discuss Your Strategy")}
           </Button>
         </div>
       </motion.article>

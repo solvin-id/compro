@@ -1,10 +1,12 @@
 'use client'
+import { getAuthenticatedUserFn } from '@/functions/auth'
 import { Section, useNavigateStore } from '@/hooks/useNavigateStore'
 import { RenderIf } from '@/lib/render-if'
 import { Link, useLocation, useRouter } from '@tanstack/react-router'
+import { useQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
-import { Fragment, useState } from 'react'
+import { Menu, Settings, X } from 'lucide-react'
+import { Fragment, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '../../lib/utils'
 import { Button } from '../ui/Button'
@@ -17,6 +19,19 @@ export function Navbar() {
   const router = useRouter()
   const { t } = useTranslation()
   const { pathname } = useLocation()
+
+  const { data: currentUser, refetch } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: () => getAuthenticatedUserFn(),
+    staleTime: 1000 * 60 * 5,
+    retry: false,
+  })
+
+  useEffect(() => {
+    refetch()
+  }, [pathname])
+
+  const isLoggedIn = !!currentUser
 
   const links = [
     { to: '/', labelKey: 'nav.home', hash: 'home' as Section },
@@ -117,6 +132,15 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-4">
           <ThemeToggle />
           <LanguageToggle />
+          {isLoggedIn && (
+            <Link
+              to="/admin"
+              className="p-2 rounded-md text-muted-foreground hover:text-brand-primary hover:bg-accent transition-colors"
+              title="Admin Dashboard"
+            >
+              <Settings size={20} />
+            </Link>
+          )}
           <Button
             asMotion
             onClick={() => window.open('https://wa.me/6281234567890', '_blank')}
@@ -191,6 +215,16 @@ export function Navbar() {
               <div className="flex gap-2">
                 <ThemeToggle />
                 <LanguageToggle />
+                {isLoggedIn && (
+                  <Link
+                    to="/admin"
+                    className="p-2 rounded-md text-muted-foreground hover:text-brand-primary hover:bg-accent transition-colors"
+                    title="Admin Dashboard"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <Settings size={20} />
+                  </Link>
+                )}
               </div>
               <Button
                 onClick={() =>

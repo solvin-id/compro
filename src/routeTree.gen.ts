@@ -19,8 +19,11 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminArticlesIndexRouteImport } from './routes/admin/articles.index'
+import { Route as AdminAdminsIndexRouteImport } from './routes/admin/admins.index'
 import { Route as AdminArticlesNewRouteImport } from './routes/admin/articles.new'
 import { Route as AdminArticlesIdRouteImport } from './routes/admin/articles.$id'
+import { Route as AdminAdminsNewRouteImport } from './routes/admin/admins.new'
+import { Route as AdminAdminsIdRouteImport } from './routes/admin/admins.$id'
 
 const StartRoute = StartRouteImport.update({
   id: '/start',
@@ -72,6 +75,11 @@ const AdminArticlesIndexRoute = AdminArticlesIndexRouteImport.update({
   path: '/articles/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAdminsIndexRoute = AdminAdminsIndexRouteImport.update({
+  id: '/admins/',
+  path: '/admins/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminArticlesNewRoute = AdminArticlesNewRouteImport.update({
   id: '/articles/new',
   path: '/articles/new',
@@ -80,6 +88,16 @@ const AdminArticlesNewRoute = AdminArticlesNewRouteImport.update({
 const AdminArticlesIdRoute = AdminArticlesIdRouteImport.update({
   id: '/articles/$id',
   path: '/articles/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAdminsNewRoute = AdminAdminsNewRouteImport.update({
+  id: '/admins/new',
+  path: '/admins/new',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAdminsIdRoute = AdminAdminsIdRouteImport.update({
+  id: '/admins/$id',
+  path: '/admins/$id',
   getParentRoute: () => AdminRoute,
 } as any)
 
@@ -93,8 +111,11 @@ export interface FileRoutesByFullPath {
   '/articles/$slug': typeof ArticlesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/articles': typeof ArticlesIndexRoute
+  '/admin/admins/$id': typeof AdminAdminsIdRoute
+  '/admin/admins/new': typeof AdminAdminsNewRoute
   '/admin/articles/$id': typeof AdminArticlesIdRoute
   '/admin/articles/new': typeof AdminArticlesNewRoute
+  '/admin/admins': typeof AdminAdminsIndexRoute
   '/admin/articles': typeof AdminArticlesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -106,8 +127,11 @@ export interface FileRoutesByTo {
   '/articles/$slug': typeof ArticlesSlugRoute
   '/admin': typeof AdminIndexRoute
   '/articles': typeof ArticlesIndexRoute
+  '/admin/admins/$id': typeof AdminAdminsIdRoute
+  '/admin/admins/new': typeof AdminAdminsNewRoute
   '/admin/articles/$id': typeof AdminArticlesIdRoute
   '/admin/articles/new': typeof AdminArticlesNewRoute
+  '/admin/admins': typeof AdminAdminsIndexRoute
   '/admin/articles': typeof AdminArticlesIndexRoute
 }
 export interface FileRoutesById {
@@ -121,8 +145,11 @@ export interface FileRoutesById {
   '/articles/$slug': typeof ArticlesSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/articles/': typeof ArticlesIndexRoute
+  '/admin/admins/$id': typeof AdminAdminsIdRoute
+  '/admin/admins/new': typeof AdminAdminsNewRoute
   '/admin/articles/$id': typeof AdminArticlesIdRoute
   '/admin/articles/new': typeof AdminArticlesNewRoute
+  '/admin/admins/': typeof AdminAdminsIndexRoute
   '/admin/articles/': typeof AdminArticlesIndexRoute
 }
 export interface FileRouteTypes {
@@ -137,8 +164,11 @@ export interface FileRouteTypes {
     | '/articles/$slug'
     | '/admin/'
     | '/articles'
+    | '/admin/admins/$id'
+    | '/admin/admins/new'
     | '/admin/articles/$id'
     | '/admin/articles/new'
+    | '/admin/admins'
     | '/admin/articles'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -150,8 +180,11 @@ export interface FileRouteTypes {
     | '/articles/$slug'
     | '/admin'
     | '/articles'
+    | '/admin/admins/$id'
+    | '/admin/admins/new'
     | '/admin/articles/$id'
     | '/admin/articles/new'
+    | '/admin/admins'
     | '/admin/articles'
   id:
     | '__root__'
@@ -164,8 +197,11 @@ export interface FileRouteTypes {
     | '/articles/$slug'
     | '/admin/'
     | '/articles/'
+    | '/admin/admins/$id'
+    | '/admin/admins/new'
     | '/admin/articles/$id'
     | '/admin/articles/new'
+    | '/admin/admins/'
     | '/admin/articles/'
   fileRoutesById: FileRoutesById
 }
@@ -251,6 +287,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminArticlesIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/admins/': {
+      id: '/admin/admins/'
+      path: '/admins'
+      fullPath: '/admin/admins'
+      preLoaderRoute: typeof AdminAdminsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/articles/new': {
       id: '/admin/articles/new'
       path: '/articles/new'
@@ -265,22 +308,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminArticlesIdRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/admins/new': {
+      id: '/admin/admins/new'
+      path: '/admins/new'
+      fullPath: '/admin/admins/new'
+      preLoaderRoute: typeof AdminAdminsNewRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/admins/$id': {
+      id: '/admin/admins/$id'
+      path: '/admins/$id'
+      fullPath: '/admin/admins/$id'
+      preLoaderRoute: typeof AdminAdminsIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminAdminsIdRoute: typeof AdminAdminsIdRoute
+  AdminAdminsNewRoute: typeof AdminAdminsNewRoute
   AdminArticlesIdRoute: typeof AdminArticlesIdRoute
   AdminArticlesNewRoute: typeof AdminArticlesNewRoute
+  AdminAdminsIndexRoute: typeof AdminAdminsIndexRoute
   AdminArticlesIndexRoute: typeof AdminArticlesIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminAdminsIdRoute: AdminAdminsIdRoute,
+  AdminAdminsNewRoute: AdminAdminsNewRoute,
   AdminArticlesIdRoute: AdminArticlesIdRoute,
   AdminArticlesNewRoute: AdminArticlesNewRoute,
+  AdminAdminsIndexRoute: AdminAdminsIndexRoute,
   AdminArticlesIndexRoute: AdminArticlesIndexRoute,
 }
 

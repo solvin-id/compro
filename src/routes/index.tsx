@@ -11,8 +11,15 @@ import { BackgroundLayer } from '../components/ui/BackgroundLayer'
 import { TeamSchematic } from '../components/sections/TeamSchematic'
 import { useEffect } from 'react'
 import { useNavigateStore } from '../hooks/useNavigateStore'
+import { getPublishedArticlesFn } from '@/functions/articles'
 
-export const Route = createFileRoute('/')({ component: App })
+export const Route = createFileRoute('/')({
+  loader: async () => {
+    const articles = await getPublishedArticlesFn()
+    return { articles }
+  },
+  component: App,
+})
 
 function Hero() {
   const { scrollY } = useScroll()
@@ -150,6 +157,7 @@ function Hero() {
 }
 
 function App() {
+  const { articles } = Route.useLoaderData()
   const { t } = useTranslation()
   const section = useNavigateStore((state) => state.section)
   const isNavigating = useNavigateStore((state) => state.isNavigating)
@@ -194,7 +202,7 @@ function App() {
         <Services />
         <TeamSchematic />
         <Portfolio />
-        <Insights />
+        <Insights articles={articles} />
       </div>
     </div>
   )
