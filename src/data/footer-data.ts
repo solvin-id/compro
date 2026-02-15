@@ -35,7 +35,7 @@ export const FOOTER_SOLUTIONS_LINKS: FooterLink[] = [
 export const FOOTER_SOCIAL_LINKS: SocialLink[] = [
   {
     name: 'LinkedIn',
-    href: 'https://linkedin.com/company/solvin',
+    href: 'https://linkedin.com',
     icon: Linkedin,
     ariaLabel: 'Visit Solvin LinkedIn page',
   },

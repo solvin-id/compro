@@ -56,13 +56,6 @@ function Hero() {
             'linear-gradient(to right, hsl(var(--background)), hsl(var(--background) / 0.5), transparent)',
         }}
       />
-      <div
-        className="absolute inset-y-0 right-0 w-1/4 z-10 pointer-events-none"
-        style={{
-          background:
-            'linear-gradient(to left, hsl(var(--background)), hsl(var(--background) / 0.5), transparent)',
-        }}
-      />
 
       <motion.div
         style={{ y: imageY }}

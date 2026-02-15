@@ -15,6 +15,7 @@ import { ThemeToggle } from '../ui/ThemeToggle'
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const setNavigate = useNavigateStore((state) => state.setSection)
   const router = useRouter()
   const { t } = useTranslation()
@@ -30,6 +31,15 @@ export function Navbar() {
   useEffect(() => {
     refetch()
   }, [pathname])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const isLoggedIn = !!currentUser
 
@@ -72,171 +82,196 @@ export function Navbar() {
 
   return (
     <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        'bg-background/70 backdrop-blur-md border-b border-border',
-      )}
+      initial={{ y: -100, padding: '1rem 0 0 0' }}
+      animate={{ y: 0, padding: isScrolled ? '0px' : '1rem 0 0 0' }}
+      transition={{ duration: 0.8, ease: 'backOut' }}
+      className="fixed top-0 left-0 right-0 z-50"
     >
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <button
-          onClick={scrollToTop}
-          className="text-xl font-bold tracking-tight flex items-center gap-2 cursor-pointer"
-        >
-          <span className="text-foreground">Solvin</span>
-          <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
-        </button>
-
-        <div className="hidden md:flex items-center gap-8">
-          {links.map((link) => (
-            <Fragment key={link.labelKey}>
-              <RenderIf
-                condition={link.labelKey === 'nav.home' && pathname === link.to}
-              >
-                <button
-                  onClick={scrollToTop}
-                  className="text-sm font-medium text-muted-foreground hover:text-brand-primary transition-colors cursor-pointer"
-                >
-                  {t(link.labelKey)}
-                </button>
-              </RenderIf>
-              <RenderIf
-                condition={
-                  !!link.hash &&
-                  link.labelKey !== 'nav.home' &&
-                  pathname === link.to
-                }
-              >
-                <button
-                  onClick={() => handleScroll(link.hash!)}
-                  className="text-sm font-medium text-muted-foreground hover:text-brand-primary transition-colors cursor-pointer"
-                >
-                  {t(link.labelKey)}
-                </button>
-              </RenderIf>
-              <RenderIf condition={pathname !== link.to}>
-                <Link
-                  to={link.to}
-                  onClick={() => setNavigate(link.hash)}
-                  className="text-sm font-medium text-gray-600 hover:text-brand-primary transition-colors"
-                >
-                  {t(link.labelKey)}
-                </Link>
-              </RenderIf>
-            </Fragment>
-          ))}
-        </div>
-
-        <div className="hidden md:flex items-center gap-4">
-          <ThemeToggle />
-          <LanguageToggle />
-          {isLoggedIn && (
-            <Link
-              to="/admin"
-              className="p-2 rounded-md text-muted-foreground hover:text-brand-primary hover:bg-accent transition-colors"
-              title="Admin Dashboard"
-            >
-              <Settings size={20} />
-            </Link>
-          )}
-          <Button
-            asMotion
-            onClick={() => window.open('https://wa.me/6281234567890', '_blank')}
-            whileHover={{ scale: 1.05 }}
-            animate={{
-              boxShadow: [
-                '0 0 0 0px rgba(37, 99, 235, 0)',
-                '0 0 0 4px rgba(37, 99, 235, 0.1)',
-                '0 0 0 0px rgba(37, 99, 235, 0)',
-              ],
-            }}
-            transition={{
-              boxShadow: {
-                duration: 2,
-                repeat: Infinity,
-                repeatType: 'loop',
-                ease: 'easeInOut',
-                delay: 3,
-              },
-            }}
+      <motion.div
+        initial={{
+          borderRadius: '100px',
+          margin: '0 auto',
+          maxWidth: '1280px',
+        }}
+        animate={{
+          borderRadius: isScrolled ? '0px' : '100px',
+          margin: isScrolled ? '0px' : '0 auto',
+          maxWidth: isScrolled ? '100%' : '1280px',
+          boxShadow: isScrolled
+            ? 'none'
+            : '0 10px 40px -10px rgba(0, 0, 0, 0.1)',
+        }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className={cn(
+          'transition-all duration-300',
+          'backdrop-blur-md',
+          isScrolled
+            ? 'border-b border-border/10 bg-white/5'
+            : 'bg-background/70 border border-border',
+        )}
+      >
+        <div className="max-w-7xl mx-auto pl-6 pr-4 h-16 flex items-center justify-between">
+          <button
+            onClick={scrollToTop}
+            className="text-xl font-bold tracking-tight flex items-center gap-2 cursor-pointer"
           >
-            {t('nav.cta')}
-          </Button>
-        </div>
+            <span className="text-foreground">Solvin</span>
+            <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
+          </button>
 
-        <button
-          className="md:hidden p-2 text-gray-600"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          className="md:hidden bg-background/5 backdrop-blur-md border-b border-border overflow-hidden"
-        >
-          <div className="px-6 py-4 flex flex-col gap-4">
-            {links.map((link, i) =>
-              link.hash ? (
-                <motion.button
-                  initial={{ y: -20 }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.1 * i, delay: 0.015 * i }}
-                  key={link.labelKey}
-                  onClick={() => handleScroll(link.hash!)}
-                  className="text-base font-medium text-gray-600 hover:text-brand-primary text-left"
+          <div className="hidden md:flex items-center gap-8">
+            {links.map((link) => (
+              <Fragment key={link.labelKey}>
+                <RenderIf
+                  condition={
+                    link.labelKey === 'nav.home' && pathname === link.to
+                  }
                 >
-                  {t(link.labelKey)}
-                </motion.button>
-              ) : (
-                <motion.span
-                  initial={{ y: -20 }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.1 * i, delay: 0.015 * i }}
-                  key={link.labelKey}
+                  <button
+                    onClick={scrollToTop}
+                    className="text-sm font-medium text-muted-foreground hover:text-brand-primary transition-colors cursor-pointer"
+                  >
+                    {t(link.labelKey)}
+                  </button>
+                </RenderIf>
+                <RenderIf
+                  condition={
+                    !!link.hash &&
+                    link.labelKey !== 'nav.home' &&
+                    pathname === link.to
+                  }
                 >
+                  <button
+                    onClick={() => handleScroll(link.hash!)}
+                    className="text-sm font-medium text-muted-foreground hover:text-brand-primary transition-colors cursor-pointer"
+                  >
+                    {t(link.labelKey)}
+                  </button>
+                </RenderIf>
+                <RenderIf condition={pathname !== link.to}>
                   <Link
                     to={link.to}
-                    className="text-base font-medium text-gray-600 hover:text-brand-primary"
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => setNavigate(link.hash)}
+                    className="text-sm font-medium text-gray-600 hover:text-brand-primary transition-colors"
                   >
                     {t(link.labelKey)}
                   </Link>
-                </motion.span>
-              ),
-            )}
-            <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-              <div className="flex gap-2">
-                <ThemeToggle />
-                <LanguageToggle />
-                {isLoggedIn && (
-                  <Link
-                    to="/admin"
-                    className="p-2 rounded-md text-muted-foreground hover:text-brand-primary hover:bg-accent transition-colors"
-                    title="Admin Dashboard"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <Settings size={20} />
-                  </Link>
-                )}
-              </div>
-              <Button
-                onClick={() =>
-                  window.open('https://wa.me/6281234567890', '_blank')
-                }
-              >
-                {t('nav.cta')}
-              </Button>
-            </div>
+                </RenderIf>
+              </Fragment>
+            ))}
           </div>
-        </motion.div>
-      )}
+
+          <div className="hidden md:flex items-center gap-4">
+            <ThemeToggle />
+            <LanguageToggle />
+            <RenderIf condition={isLoggedIn}>
+              <Link
+                to="/admin"
+                className="p-2 rounded-md text-muted-foreground hover:text-brand-primary hover:bg-accent transition-colors"
+                title="Admin Dashboard"
+              >
+                <Settings size={20} />
+              </Link>
+            </RenderIf>
+            <Button
+              asMotion
+              onClick={() =>
+                window.open('https://wa.me/6281234567890', '_blank')
+              }
+              whileHover={{ scale: 1.05 }}
+              animate={{
+                boxShadow: [
+                  '0 0 0 0px rgba(37, 99, 235, 0)',
+                  '0 0 0 4px rgba(37, 99, 235, 0.1)',
+                  '0 0 0 0px rgba(37, 99, 235, 0)',
+                ],
+              }}
+              transition={{
+                boxShadow: {
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatType: 'loop',
+                  ease: 'easeInOut',
+                  delay: 3,
+                },
+              }}
+            >
+              {t('nav.cta')}
+            </Button>
+          </div>
+
+          <button
+            className="md:hidden p-2 text-gray-600"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        <RenderIf condition={isOpen}>
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-background/5 backdrop-blur-md border-b border-border overflow-hidden"
+          >
+            <div className="px-6 py-4 flex flex-col gap-4">
+              {links.map((link, i) =>
+                link.hash ? (
+                  <motion.button
+                    initial={{ y: -20 }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.1 * i, delay: 0.015 * i }}
+                    key={link.labelKey}
+                    onClick={() => handleScroll(link.hash!)}
+                    className="text-base font-medium text-gray-600 hover:text-brand-primary text-left"
+                  >
+                    {t(link.labelKey)}
+                  </motion.button>
+                ) : (
+                  <motion.span
+                    initial={{ y: -20 }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.1 * i, delay: 0.015 * i }}
+                    key={link.labelKey}
+                  >
+                    <Link
+                      to={link.to}
+                      className="text-base font-medium text-gray-600 hover:text-brand-primary"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {t(link.labelKey)}
+                    </Link>
+                  </motion.span>
+                ),
+              )}
+              <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                <div className="flex gap-2">
+                  <ThemeToggle />
+                  <LanguageToggle />
+                  <RenderIf condition={isLoggedIn}>
+                    <Link
+                      to="/admin"
+                      className="p-2 rounded-md text-muted-foreground hover:text-brand-primary hover:bg-accent transition-colors"
+                      title="Admin Dashboard"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <Settings size={20} />
+                    </Link>
+                  </RenderIf>
+                </div>
+                <Button
+                  onClick={() =>
+                    window.open('https://wa.me/6281234567890', '_blank')
+                  }
+                >
+                  {t('nav.cta')}
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        </RenderIf>
+      </motion.div>
     </motion.nav>
   )
 }
