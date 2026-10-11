@@ -1,17 +1,17 @@
 FROM node:24-alpine AS deps
 WORKDIR /app
 
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --silent;
+COPY package.json package-lock.json ./
+RUN npm ci --silent
 
 FROM node:24-alpine AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
-COPY . ./
+COPY . .
 
-RUN yarn db:generate || true
-RUN yarn build
+RUN npm run db:generate || true
+RUN npm run build
 
 FROM node:24-alpine AS runner
 WORKDIR /app

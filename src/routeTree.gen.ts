@@ -9,45 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
-import { Route as StartRouteImport } from './routes/start'
-import { Route as PortfolioRouteImport } from './routes/portfolio'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
+import { Route as SplatRouteImport } from './routes/$'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as PortfolioRouteImport } from './routes/portfolio'
+import { Route as StartRouteImport } from './routes/start'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
-import { Route as AdminSubscribersIndexRouteImport } from './routes/admin/subscribers.index'
-import { Route as AdminPortfolioIndexRouteImport } from './routes/admin/portfolio.index'
-import { Route as AdminArticlesIndexRouteImport } from './routes/admin/articles.index'
+import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
+import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
 import { Route as AdminAdminsIndexRouteImport } from './routes/admin/admins.index'
-import { Route as AdminPortfolioNewRouteImport } from './routes/admin/portfolio.new'
-import { Route as AdminPortfolioIdRouteImport } from './routes/admin/portfolio.$id'
-import { Route as AdminArticlesNewRouteImport } from './routes/admin/articles.new'
-import { Route as AdminArticlesIdRouteImport } from './routes/admin/articles.$id'
-import { Route as AdminAdminsNewRouteImport } from './routes/admin/admins.new'
 import { Route as AdminAdminsIdRouteImport } from './routes/admin/admins.$id'
+import { Route as AdminAdminsNewRouteImport } from './routes/admin/admins.new'
+import { Route as AdminArticlesIndexRouteImport } from './routes/admin/articles.index'
+import { Route as AdminArticlesIdRouteImport } from './routes/admin/articles.$id'
+import { Route as AdminArticlesNewRouteImport } from './routes/admin/articles.new'
+import { Route as AdminPortfolioIndexRouteImport } from './routes/admin/portfolio.index'
+import { Route as AdminPortfolioIdRouteImport } from './routes/admin/portfolio.$id'
+import { Route as AdminPortfolioNewRouteImport } from './routes/admin/portfolio.new'
+import { Route as AdminSubscribersIndexRouteImport } from './routes/admin/subscribers.index'
 
-const UnsubscribeRoute = UnsubscribeRouteImport.update({
-  id: '/unsubscribe',
-  path: '/unsubscribe',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StartRoute = StartRouteImport.update({
-  id: '/start',
-  path: '/start',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortfolioRoute = PortfolioRouteImport.update({
-  id: '/portfolio',
-  path: '/portfolio',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SplatRoute = SplatRouteImport.update({
@@ -55,14 +40,24 @@ const SplatRoute = SplatRouteImport.update({
   path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
-  id: '/articles/',
-  path: '/articles/',
+const PortfolioRoute = PortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StartRoute = StartRouteImport.update({
+  id: '/start',
+  path: '/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -70,54 +65,29 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
-const ArticlesSlugRoute = ArticlesSlugRouteImport.update({
-  id: '/articles/$slug',
-  path: '/articles/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminSubscribersIndexRoute = AdminSubscribersIndexRouteImport.update({
-  id: '/subscribers/',
-  path: '/subscribers/',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminPortfolioIndexRoute = AdminPortfolioIndexRouteImport.update({
-  id: '/portfolio/',
-  path: '/portfolio/',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminArticlesIndexRoute = AdminArticlesIndexRouteImport.update({
+const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
   id: '/articles/',
   path: '/articles/',
-  getParentRoute: () => AdminRoute,
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArticlesSlugRoute = ArticlesSlugRouteImport.update({
+  id: '/articles/$slug',
+  path: '/articles/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminAdminsIndexRoute = AdminAdminsIndexRouteImport.update({
   id: '/admins/',
   path: '/admins/',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminPortfolioNewRoute = AdminPortfolioNewRouteImport.update({
-  id: '/portfolio/new',
-  path: '/portfolio/new',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminPortfolioIdRoute = AdminPortfolioIdRouteImport.update({
-  id: '/portfolio/$id',
-  path: '/portfolio/$id',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminArticlesNewRoute = AdminArticlesNewRouteImport.update({
-  id: '/articles/new',
-  path: '/articles/new',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminArticlesIdRoute = AdminArticlesIdRouteImport.update({
-  id: '/articles/$id',
-  path: '/articles/$id',
+const AdminAdminsIdRoute = AdminAdminsIdRouteImport.update({
+  id: '/admins/$id',
+  path: '/admins/$id',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminAdminsNewRoute = AdminAdminsNewRouteImport.update({
@@ -125,9 +95,39 @@ const AdminAdminsNewRoute = AdminAdminsNewRouteImport.update({
   path: '/admins/new',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminAdminsIdRoute = AdminAdminsIdRouteImport.update({
-  id: '/admins/$id',
-  path: '/admins/$id',
+const AdminArticlesIndexRoute = AdminArticlesIndexRouteImport.update({
+  id: '/articles/',
+  path: '/articles/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminArticlesIdRoute = AdminArticlesIdRouteImport.update({
+  id: '/articles/$id',
+  path: '/articles/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminArticlesNewRoute = AdminArticlesNewRouteImport.update({
+  id: '/articles/new',
+  path: '/articles/new',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPortfolioIndexRoute = AdminPortfolioIndexRouteImport.update({
+  id: '/portfolio/',
+  path: '/portfolio/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPortfolioIdRoute = AdminPortfolioIdRouteImport.update({
+  id: '/portfolio/$id',
+  path: '/portfolio/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPortfolioNewRoute = AdminPortfolioNewRouteImport.update({
+  id: '/portfolio/new',
+  path: '/portfolio/new',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSubscribersIndexRoute = AdminSubscribersIndexRouteImport.update({
+  id: '/subscribers/',
+  path: '/subscribers/',
   getParentRoute: () => AdminRoute,
 } as any)
 
@@ -141,17 +141,17 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/articles/$slug': typeof ArticlesSlugRoute
   '/admin/': typeof AdminIndexRoute
-  '/articles': typeof ArticlesIndexRoute
+  '/articles/': typeof ArticlesIndexRoute
   '/admin/admins/$id': typeof AdminAdminsIdRoute
   '/admin/admins/new': typeof AdminAdminsNewRoute
   '/admin/articles/$id': typeof AdminArticlesIdRoute
   '/admin/articles/new': typeof AdminArticlesNewRoute
   '/admin/portfolio/$id': typeof AdminPortfolioIdRoute
   '/admin/portfolio/new': typeof AdminPortfolioNewRoute
-  '/admin/admins': typeof AdminAdminsIndexRoute
-  '/admin/articles': typeof AdminArticlesIndexRoute
-  '/admin/portfolio': typeof AdminPortfolioIndexRoute
-  '/admin/subscribers': typeof AdminSubscribersIndexRoute
+  '/admin/admins/': typeof AdminAdminsIndexRoute
+  '/admin/articles/': typeof AdminArticlesIndexRoute
+  '/admin/portfolio/': typeof AdminPortfolioIndexRoute
+  '/admin/subscribers/': typeof AdminSubscribersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -209,17 +209,17 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/articles/$slug'
     | '/admin/'
-    | '/articles'
+    | '/articles/'
     | '/admin/admins/$id'
     | '/admin/admins/new'
     | '/admin/articles/$id'
     | '/admin/articles/new'
     | '/admin/portfolio/$id'
     | '/admin/portfolio/new'
-    | '/admin/admins'
-    | '/admin/articles'
-    | '/admin/portfolio'
-    | '/admin/subscribers'
+    | '/admin/admins/'
+    | '/admin/articles/'
+    | '/admin/portfolio/'
+    | '/admin/subscribers/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -278,32 +278,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/unsubscribe': {
-      id: '/unsubscribe'
-      path: '/unsubscribe'
-      fullPath: '/unsubscribe'
-      preLoaderRoute: typeof UnsubscribeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/start': {
-      id: '/start'
-      path: '/start'
-      fullPath: '/start'
-      preLoaderRoute: typeof StartRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portfolio': {
-      id: '/portfolio'
-      path: '/portfolio'
-      fullPath: '/portfolio'
-      preLoaderRoute: typeof PortfolioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$': {
@@ -313,18 +292,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/articles/': {
-      id: '/articles/'
-      path: '/articles'
-      fullPath: '/articles'
-      preLoaderRoute: typeof ArticlesIndexRouteImport
+    '/portfolio': {
+      id: '/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof PortfolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/start': {
+      id: '/start'
+      path: '/start'
+      fullPath: '/start'
+      preLoaderRoute: typeof StartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -334,13 +327,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/articles/$slug': {
-      id: '/articles/$slug'
-      path: '/articles/$slug'
-      fullPath: '/articles/$slug'
-      preLoaderRoute: typeof ArticlesSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
@@ -348,60 +334,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/subscribers/': {
-      id: '/admin/subscribers/'
-      path: '/subscribers'
-      fullPath: '/admin/subscribers'
-      preLoaderRoute: typeof AdminSubscribersIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/portfolio/': {
-      id: '/admin/portfolio/'
-      path: '/portfolio'
-      fullPath: '/admin/portfolio'
-      preLoaderRoute: typeof AdminPortfolioIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/articles/': {
-      id: '/admin/articles/'
+    '/articles/': {
+      id: '/articles/'
       path: '/articles'
-      fullPath: '/admin/articles'
-      preLoaderRoute: typeof AdminArticlesIndexRouteImport
-      parentRoute: typeof AdminRoute
+      fullPath: '/articles/'
+      preLoaderRoute: typeof ArticlesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/articles/$slug': {
+      id: '/articles/$slug'
+      path: '/articles/$slug'
+      fullPath: '/articles/$slug'
+      preLoaderRoute: typeof ArticlesSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/admins/': {
       id: '/admin/admins/'
       path: '/admins'
-      fullPath: '/admin/admins'
+      fullPath: '/admin/admins/'
       preLoaderRoute: typeof AdminAdminsIndexRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/portfolio/new': {
-      id: '/admin/portfolio/new'
-      path: '/portfolio/new'
-      fullPath: '/admin/portfolio/new'
-      preLoaderRoute: typeof AdminPortfolioNewRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/portfolio/$id': {
-      id: '/admin/portfolio/$id'
-      path: '/portfolio/$id'
-      fullPath: '/admin/portfolio/$id'
-      preLoaderRoute: typeof AdminPortfolioIdRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/articles/new': {
-      id: '/admin/articles/new'
-      path: '/articles/new'
-      fullPath: '/admin/articles/new'
-      preLoaderRoute: typeof AdminArticlesNewRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/articles/$id': {
-      id: '/admin/articles/$id'
-      path: '/articles/$id'
-      fullPath: '/admin/articles/$id'
-      preLoaderRoute: typeof AdminArticlesIdRouteImport
+    '/admin/admins/$id': {
+      id: '/admin/admins/$id'
+      path: '/admins/$id'
+      fullPath: '/admin/admins/$id'
+      preLoaderRoute: typeof AdminAdminsIdRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/admins/new': {
@@ -411,11 +369,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminsNewRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/admins/$id': {
-      id: '/admin/admins/$id'
-      path: '/admins/$id'
-      fullPath: '/admin/admins/$id'
-      preLoaderRoute: typeof AdminAdminsIdRouteImport
+    '/admin/articles/': {
+      id: '/admin/articles/'
+      path: '/articles'
+      fullPath: '/admin/articles/'
+      preLoaderRoute: typeof AdminArticlesIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/articles/$id': {
+      id: '/admin/articles/$id'
+      path: '/articles/$id'
+      fullPath: '/admin/articles/$id'
+      preLoaderRoute: typeof AdminArticlesIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/articles/new': {
+      id: '/admin/articles/new'
+      path: '/articles/new'
+      fullPath: '/admin/articles/new'
+      preLoaderRoute: typeof AdminArticlesNewRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/portfolio/': {
+      id: '/admin/portfolio/'
+      path: '/portfolio'
+      fullPath: '/admin/portfolio/'
+      preLoaderRoute: typeof AdminPortfolioIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/portfolio/$id': {
+      id: '/admin/portfolio/$id'
+      path: '/portfolio/$id'
+      fullPath: '/admin/portfolio/$id'
+      preLoaderRoute: typeof AdminPortfolioIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/portfolio/new': {
+      id: '/admin/portfolio/new'
+      path: '/portfolio/new'
+      fullPath: '/admin/portfolio/new'
+      preLoaderRoute: typeof AdminPortfolioNewRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/subscribers/': {
+      id: '/admin/subscribers/'
+      path: '/subscribers'
+      fullPath: '/admin/subscribers/'
+      preLoaderRoute: typeof AdminSubscribersIndexRouteImport
       parentRoute: typeof AdminRoute
     }
   }

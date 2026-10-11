@@ -4,12 +4,12 @@ import { db } from '@/db'
 import { subscribers, type Subscriber, emailQueue } from '@/db/schema'
 import { desc, eq, sql } from 'drizzle-orm'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { flexRender } from '@tanstack/react-table'
 import {
-  createColumnHelper,
-  flexRender,
   getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
+  legacyCreateColumnHelper as createColumnHelper,
+  useLegacyTable as useReactTable,
+} from '@tanstack/react-table/legacy'
 import {
   Trash2,
   Search,

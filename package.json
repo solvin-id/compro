@@ -19,7 +19,6 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1149.0",
     "@electric-sql/pglite": "^0.5.8",
-    "@faker-js/faker": "^10.6.0",
     "@react-spring/web": "^10.1.2",
     "@react-three/drei": "^10.7.9",
     "@react-three/fiber": "^9.8.1",
@@ -53,7 +52,7 @@
     "i18next-http-backend": "^4.0.2",
     "jose": "^6.2.12",
     "lenis": "^1.3.26",
-    "lucide-react": "^1.55.0",
+    "lucide-react": "^0.562.0",
     "motion": "^14.1.0",
     "next-themes": "^0.4.6",
     "nitro": "latest",
@@ -79,15 +78,15 @@
     "@types/pg": "^8.23.1",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
+    "@vitejs/plugin-react": "^5.1.2",
     "babel-plugin-react-compiler": "^1.0.0",
-    "dotenv": "^18.0.7",
+    "dotenv": "17.2.3",
     "jsdom": "^30.1.2",
     "prettier": "^3.9.10",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
-    "vite": "^8.3.4",
-    "vitest": "^5.0.3",
+    "vite": "^7.3.0",
+    "vitest": "^4.0.16",
     "web-vitals": "^6.2.3"
   }
 }

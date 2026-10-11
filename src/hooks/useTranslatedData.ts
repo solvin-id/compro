@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import type { Service, PortfolioItem, Article } from '../data'
+import type { Service } from '../data'
 
 export function useServicesData(): Service[] {
   const { t } = useTranslation()
@@ -128,14 +128,4 @@ export function useTeamData(): TeamMember[] {
       hotspotArea: { width: '12%', height: '50%' },
     },
   ]
-}
-
-export function usePortfolioData(): PortfolioItem[] {
-  const { portfolio } = require('../data')
-  return portfolio
-}
-
-export function useArticlesData(): Article[] {
-  const { articles } = require('../data')
-  return articles
 }
