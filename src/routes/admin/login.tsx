@@ -5,11 +5,8 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, Lock, Loader2, AlertCircle } from 'lucide-react'
 import { z } from 'zod'
-import {
-  loginFn,
-  validateSessionFn,
-  getSessionTokenFromCookies,
-} from '@/functions/auth'
+import { loginFn, validateSessionFn } from '@/functions/auth'
+import { getSessionTokenFromCookies } from '@/utils/session'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 

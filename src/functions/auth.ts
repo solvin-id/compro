@@ -175,4 +175,4 @@ export const getAuthenticatedUserFn = createServerFn({
   return user || null
 })
 
-export { getSessionTokenFromCookies } from '@/utils/auth'
+export { getSessionTokenFromCookies } from '@/utils/session'
