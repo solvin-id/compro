@@ -7,11 +7,5 @@ export default defineConfig({
   out: './drizzle',
   schema: './src/db/schema.ts',
   casing: 'camelCase',
-  introspect: {
-    casing: 'camel',
-  },
-  dialect: 'postgresql',
-  dbCredentials: {
-    url: process.env.DATABASE_URL || '',
-  },
+  dialect: 'sqlite',
 })

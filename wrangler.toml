@@ -1,0 +1,7 @@
+name = "solvin-id-compro"
+compatibility_date = "2025-10-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "solvin-id-compro-db"
+database_id = "c2aeb762-7c0f-4589-9ba5-a4f01dd5941e"
