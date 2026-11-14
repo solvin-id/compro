@@ -96,7 +96,7 @@ export function Hero() {
 
         <div className="grid grid-cols-1 border-t border-line sm:grid-cols-3 lg:col-span-12">
           {[
-            'JKT 06°12′S 106°49′E',
+            'YOG 07°47′S 110°21′E',
             'SYS: OPERATIONAL',
             'MODE: PAPER / CAD',
           ].map((label) => (

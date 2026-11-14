@@ -22,7 +22,7 @@ export function Profile() {
           total={7}
           id="profile"
           label="PROFILE"
-          coord="06°12′S / 106°49′E"
+          coord="07°47′S / 110°21′E"
           title={
             <>
               {t('about.heading')}{' '}

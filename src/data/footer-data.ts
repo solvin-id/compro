@@ -57,5 +57,5 @@ export const FOOTER_CONTACT = {
   email: 'hello@solvin.id',
   whatsapp: '+62 812 3456 7890',
   whatsappLink: 'https://wa.me/6281234567890',
-  location: 'Jakarta, Indonesia',
+  location: 'Yogyakarta, Indonesia',
 }
