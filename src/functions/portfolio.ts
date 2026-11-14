@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { eq, desc, asc } from 'drizzle-orm'
+import { eq, desc, asc, and } from 'drizzle-orm'
 import { db } from '@/db'
 import { portfolio, type Portfolio, type NewPortfolio } from '@/db/schema'
 import { env } from '@/env'
@@ -11,7 +11,7 @@ import {
   isStorageConfigured,
 } from '@/utils/storage'
 
-// Mock data for DEV_MODE
+// Constant fixtures used when the backend is off
 const MOCK_PORTFOLIO: Portfolio[] = [
   {
     id: 1,
@@ -111,16 +111,6 @@ const idSchema = z.object({
   id: z.number(),
 })
 
-// Helper to parse techStack
-function parseTechStack(techStack: string | null | undefined): string[] {
-  if (!techStack) return []
-  try {
-    return JSON.parse(techStack)
-  } catch {
-    return []
-  }
-}
-
 /**
  * Get all portfolio items (admin - includes drafts)
  */
@@ -128,7 +118,7 @@ export const getPortfolioItemsFn = createServerFn({
   method: 'GET',
 }).handler(async (): Promise<Portfolio[]> => {
   if (!env.BACKEND_ENABLED) {
-    console.log('[DEV MODE] Returning mock portfolio items')
+    console.log('[BACKEND OFF] Returning mock portfolio items')
     return devPortfolio.sort(
       (a, b) => (a.displayOrder || 0) - (b.displayOrder || 0),
     )
@@ -146,7 +136,7 @@ export const getPublishedPortfolioFn = createServerFn({
   method: 'GET',
 }).handler(async (): Promise<Portfolio[]> => {
   if (!env.BACKEND_ENABLED) {
-    console.log('[DEV MODE] Returning published mock portfolio items')
+    console.log('[BACKEND OFF] Returning published mock portfolio items')
     return devPortfolio
       .filter((p) => p.status === 'published')
       .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
@@ -167,7 +157,7 @@ export const getPortfolioItemFn = createServerFn({
   .inputValidator((data: unknown) => idSchema.parse(data))
   .handler(async ({ data }): Promise<Portfolio | null> => {
     if (!env.BACKEND_ENABLED) {
-      console.log('[DEV MODE] Finding mock portfolio by ID:', data.id)
+      console.log('[BACKEND OFF] Finding mock portfolio by ID:', data.id)
       return devPortfolio.find((p) => p.id === data.id) || null
     }
 
@@ -175,6 +165,34 @@ export const getPortfolioItemFn = createServerFn({
       where: eq(portfolio.id, data.id),
     })
     return item || null
+  })
+
+/**
+ * Get a published portfolio item by slug (public spec sheet)
+ */
+export const getPortfolioItemBySlugFn = createServerFn({
+  method: 'GET',
+})
+  .inputValidator((data: unknown) =>
+    z.object({ slug: z.string().min(1) }).parse(data),
+  )
+  .handler(async ({ data }): Promise<Portfolio | null> => {
+    if (!env.BACKEND_ENABLED) {
+      return (
+        devPortfolio.find(
+          (item) => item.slug === data.slug && item.status === 'published',
+        ) ?? null
+      )
+    }
+
+    return (
+      (await db.query.portfolio.findFirst({
+        where: and(
+          eq(portfolio.slug, data.slug),
+          eq(portfolio.status, 'published'),
+        ),
+      })) ?? null
+    )
   })
 
 /**
@@ -186,7 +204,7 @@ export const createPortfolioFn = createServerFn({
   .inputValidator((data: unknown) => createPortfolioSchema.parse(data))
   .handler(async ({ data }): Promise<Portfolio | { error: string }> => {
     if (!env.BACKEND_ENABLED) {
-      console.log('[DEV MODE] Creating mock portfolio:', data.title)
+      console.log('[BACKEND OFF] Creating mock portfolio:', data.title)
       const newItem: Portfolio = {
         id: nextDevId++,
         slug: data.slug,
@@ -237,7 +255,7 @@ export const updatePortfolioFn = createServerFn({
     const { id, ...updateData } = data
 
     if (!env.BACKEND_ENABLED) {
-      console.log('[DEV MODE] Updating mock portfolio:', id)
+      console.log('[BACKEND OFF] Updating mock portfolio:', id)
       const index = devPortfolio.findIndex((p) => p.id === id)
       if (index === -1) {
         return { error: 'Portfolio item not found' }
@@ -306,7 +324,7 @@ export const deletePortfolioFn = createServerFn({
   .inputValidator((data: unknown) => idSchema.parse(data))
   .handler(async ({ data }): Promise<{ success: boolean }> => {
     if (!env.BACKEND_ENABLED) {
-      console.log('[DEV MODE] Deleting mock portfolio:', data.id)
+      console.log('[BACKEND OFF] Deleting mock portfolio:', data.id)
       const item = devPortfolio.find((p) => p.id === data.id)
 
       // Clean up storage

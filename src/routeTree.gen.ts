@@ -15,8 +15,10 @@ import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PortfolioIndexRouteImport } from './routes/portfolio.index'
 import { Route as ArticlesIndexRouteImport } from './routes/articles.index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as PortfolioSlugRouteImport } from './routes/portfolio.$slug'
 import { Route as ArticlesSlugRouteImport } from './routes/articles.$slug'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminSubscribersIndexRouteImport } from './routes/admin/subscribers.index'
@@ -60,6 +62,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortfolioIndexRoute = PortfolioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortfolioRoute,
+} as any)
 const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
   id: '/articles/',
   path: '/articles/',
@@ -69,6 +76,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRoute,
+} as any)
+const PortfolioSlugRoute = PortfolioSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => PortfolioRoute,
 } as any)
 const ArticlesSlugRoute = ArticlesSlugRouteImport.update({
   id: '/articles/$slug',
@@ -135,13 +147,15 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
   '/admin': typeof AdminRouteWithChildren
-  '/portfolio': typeof PortfolioRoute
+  '/portfolio': typeof PortfolioRouteWithChildren
   '/start': typeof StartRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin/login': typeof AdminLoginRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/portfolio/$slug': typeof PortfolioSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/articles': typeof ArticlesIndexRoute
+  '/portfolio/': typeof PortfolioIndexRoute
   '/admin/admins/$id': typeof AdminAdminsIdRoute
   '/admin/admins/new': typeof AdminAdminsNewRoute
   '/admin/articles/$id': typeof AdminArticlesIdRoute
@@ -156,13 +170,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
-  '/portfolio': typeof PortfolioRoute
   '/start': typeof StartRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin/login': typeof AdminLoginRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/portfolio/$slug': typeof PortfolioSlugRoute
   '/admin': typeof AdminIndexRoute
   '/articles': typeof ArticlesIndexRoute
+  '/portfolio': typeof PortfolioIndexRoute
   '/admin/admins/$id': typeof AdminAdminsIdRoute
   '/admin/admins/new': typeof AdminAdminsNewRoute
   '/admin/articles/$id': typeof AdminArticlesIdRoute
@@ -179,13 +194,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
   '/admin': typeof AdminRouteWithChildren
-  '/portfolio': typeof PortfolioRoute
+  '/portfolio': typeof PortfolioRouteWithChildren
   '/start': typeof StartRoute
   '/unsubscribe': typeof UnsubscribeRoute
   '/admin/login': typeof AdminLoginRoute
   '/articles/$slug': typeof ArticlesSlugRoute
+  '/portfolio/$slug': typeof PortfolioSlugRoute
   '/admin/': typeof AdminIndexRoute
   '/articles/': typeof ArticlesIndexRoute
+  '/portfolio/': typeof PortfolioIndexRoute
   '/admin/admins/$id': typeof AdminAdminsIdRoute
   '/admin/admins/new': typeof AdminAdminsNewRoute
   '/admin/articles/$id': typeof AdminArticlesIdRoute
@@ -208,8 +225,10 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/admin/login'
     | '/articles/$slug'
+    | '/portfolio/$slug'
     | '/admin/'
     | '/articles'
+    | '/portfolio/'
     | '/admin/admins/$id'
     | '/admin/admins/new'
     | '/admin/articles/$id'
@@ -224,13 +243,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$'
-    | '/portfolio'
     | '/start'
     | '/unsubscribe'
     | '/admin/login'
     | '/articles/$slug'
+    | '/portfolio/$slug'
     | '/admin'
     | '/articles'
+    | '/portfolio'
     | '/admin/admins/$id'
     | '/admin/admins/new'
     | '/admin/articles/$id'
@@ -251,8 +271,10 @@ export interface FileRouteTypes {
     | '/unsubscribe'
     | '/admin/login'
     | '/articles/$slug'
+    | '/portfolio/$slug'
     | '/admin/'
     | '/articles/'
+    | '/portfolio/'
     | '/admin/admins/$id'
     | '/admin/admins/new'
     | '/admin/articles/$id'
@@ -269,7 +291,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SplatRoute: typeof SplatRoute
   AdminRoute: typeof AdminRouteWithChildren
-  PortfolioRoute: typeof PortfolioRoute
+  PortfolioRoute: typeof PortfolioRouteWithChildren
   StartRoute: typeof StartRoute
   UnsubscribeRoute: typeof UnsubscribeRoute
   ArticlesSlugRoute: typeof ArticlesSlugRoute
@@ -320,6 +342,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portfolio/': {
+      id: '/portfolio/'
+      path: '/'
+      fullPath: '/portfolio/'
+      preLoaderRoute: typeof PortfolioIndexRouteImport
+      parentRoute: typeof PortfolioRoute
+    }
     '/articles/': {
       id: '/articles/'
       path: '/articles'
@@ -333,6 +362,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/portfolio/$slug': {
+      id: '/portfolio/$slug'
+      path: '/$slug'
+      fullPath: '/portfolio/$slug'
+      preLoaderRoute: typeof PortfolioSlugRouteImport
+      parentRoute: typeof PortfolioRoute
     }
     '/articles/$slug': {
       id: '/articles/$slug'
@@ -453,11 +489,25 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface PortfolioRouteChildren {
+  PortfolioSlugRoute: typeof PortfolioSlugRoute
+  PortfolioIndexRoute: typeof PortfolioIndexRoute
+}
+
+const PortfolioRouteChildren: PortfolioRouteChildren = {
+  PortfolioSlugRoute: PortfolioSlugRoute,
+  PortfolioIndexRoute: PortfolioIndexRoute,
+}
+
+const PortfolioRouteWithChildren = PortfolioRoute._addFileChildren(
+  PortfolioRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SplatRoute: SplatRoute,
   AdminRoute: AdminRouteWithChildren,
-  PortfolioRoute: PortfolioRoute,
+  PortfolioRoute: PortfolioRouteWithChildren,
   StartRoute: StartRoute,
   UnsubscribeRoute: UnsubscribeRoute,
   ArticlesSlugRoute: ArticlesSlugRoute,
