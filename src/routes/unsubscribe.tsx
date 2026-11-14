@@ -41,7 +41,7 @@ function UnsubscribePage() {
 
   return (
     <div className="min-h-screen py-32 px-6 flex items-center justify-center relative bg-transparent overflow-hidden">
-      <div className="absolute inset-0 z-0 bg-linear-to-br from-blue-50/50 dark:from-blue-950/20 via-transparent to-purple-50/50 dark:to-purple-950/20 pointer-events-none" />
+      <div className="absolute inset-0 z-0 bg-linear-to-br from-accent-soft via-transparent to-accent-soft pointer-events-none" />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
@@ -55,13 +55,13 @@ function UnsubscribePage() {
               className={cn(
                 'w-20 h-20 rounded-full flex items-center justify-center border-4',
                 status === 'loading' &&
-                  'bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-blue-800 text-blue-600',
+                  'bg-accent-soft border-accent/30 text-accent-strong',
                 status === 'success' &&
-                  'bg-green-50 dark:bg-green-900/20 border-green-100 dark:border-green-800 text-green-600',
+                  'bg-success/10 border-success/30 text-success',
                 status === 'error' &&
-                  'bg-red-50 dark:bg-red-900/20 border-red-100 dark:border-red-800 text-red-600',
+                  'bg-signal/10 border-signal/30 text-signal',
                 status === 'idle' &&
-                  'bg-gray-50 dark:bg-gray-900/20 border-gray-100 dark:border-gray-800 text-gray-400',
+                  'bg-surface-2 border-line text-ink-muted',
               )}
             >
               {status === 'loading' && (
@@ -74,7 +74,7 @@ function UnsubscribePage() {
           </div>
 
           {/* Content */}
-          <div className="bg-background/80 dark:bg-card/50 backdrop-blur-xl border border-border rounded-3xl p-8 shadow-xl">
+          <div className="bg-surface border border-line rounded-3xl p-8">
             {status === 'loading' && (
               <>
                 <h1 className="text-2xl font-bold mb-2">Unsubscribing...</h1>
@@ -86,7 +86,7 @@ function UnsubscribePage() {
 
             {status === 'success' && (
               <>
-                <h1 className="text-2xl font-bold mb-2 text-green-600 dark:text-green-400">
+                <h1 className="text-2xl font-bold mb-2 text-success">
                   Unsubscribed
                 </h1>
                 <p className="text-muted-foreground mb-6">
@@ -101,7 +101,7 @@ function UnsubscribePage() {
 
             {status === 'error' && (
               <>
-                <h1 className="text-2xl font-bold mb-2 text-red-600 dark:text-red-400">
+                <h1 className="text-2xl font-bold mb-2 text-signal">
                   Failed
                 </h1>
                 <p className="text-muted-foreground mb-6">
