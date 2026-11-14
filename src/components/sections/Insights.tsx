@@ -1,9 +1,9 @@
-import { ArrowRight, Clock, FileText } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
-import { Button } from '../ui/Button'
 import { Link } from '@tanstack/react-router'
-import { ImageFromStorage } from '@/components/ImageFromStorage'
+import { ArrowRight, Clock } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import type { Article } from '@/db/schema'
+import { ImageFromStorage } from '@/components/ImageFromStorage'
+import { BoundingBoxFrame, SchematicSectionHeader } from '../ui/blueprint'
 
 interface InsightsProps {
   articles: Article[]
@@ -20,146 +20,135 @@ function formatDate(date: Date | null): string {
 
 export function Insights({ articles }: InsightsProps) {
   const { t } = useTranslation()
-
-  // Handle empty state
-  if (!articles || articles.length === 0) {
-    return (
-      <section id="insights" className="py-24 max-w-7xl mx-auto px-6">
-        <div className="flex justify-between items-end mb-12">
-          <div>
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">
-              {t('insights.title')}
-            </h2>
-            <p className="text-muted-foreground max-w-xl">
-              {t('insights.subtitle')}
-            </p>
-          </div>
-        </div>
-        <div className="text-center py-16">
-          <FileText className="w-12 h-12 mx-auto text-muted-foreground/50 mb-4" />
-          <p className="text-muted-foreground">
-            {t(
-              'insights.noArticles',
-              'No articles available yet. Check back soon!',
-            )}
-          </p>
-        </div>
-      </section>
-    )
-  }
-
   const featured = articles[0]
-  const others = articles.slice(1, 4) // Limit to 3 other articles
+  const others = articles.slice(1, 4)
 
   return (
-    <section id="insights" className="py-24 max-w-7xl mx-auto px-6">
-      <div className="flex justify-between items-end mb-12">
-        <div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            {t('insights.title')}
-          </h2>
-          <p className="text-muted-foreground max-w-xl">
-            {t('insights.subtitle')}
-          </p>
-        </div>
-        <Link to="/articles">
-          <Button variant="ghost" className="gap-2 group hidden md:flex">
-            {t('insights.viewAll')}
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </Button>
-        </Link>
-      </div>
+    <section
+      id="insights"
+      aria-labelledby="insights-title"
+      className="border-b border-line"
+    >
+      <div className="p-5 md:p-8 lg:p-12">
+        <SchematicSectionHeader
+          index={7}
+          total={7}
+          id="insights"
+          label="INSIGHTS"
+          title={t('insights.title')}
+          description={t('insights.subtitle')}
+          actions={
+            <Link
+              to="/articles"
+              className="label-mono inline-flex items-center gap-1 text-accent-strong hover:underline"
+            >
+              {t('insights.viewAll')} →
+            </Link>
+          }
+        />
 
-      <div className="grid lg:grid-cols-2 gap-12">
-        <Link
-          to="/articles/$slug"
-          params={{ slug: featured.slug }}
-          className="group cursor-pointer space-y-4"
-        >
-          <div className="aspect-video w-full bg-gray-100 dark:bg-gray-800 rounded-3xl overflow-hidden border border-gray-200 dark:border-gray-700">
-            {featured.coverImage ? (
-              <ImageFromStorage
-                objectKey={featured.coverImage}
-                alt={featured.coverImageAlt || featured.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-            ) : (
-              <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-400 font-mono">
-                [FEATURED_IMAGE]
+        {articles.length === 0 ? (
+          <div className="mt-12 border border-line p-8">
+            <p className="label-mono text-ink-muted">
+              {t('insights.noArticles')}
+            </p>
+            <p className="mt-2 text-sm text-ink-muted">
+              {t('insights.noArticlesDesc')}
+            </p>
+          </div>
+        ) : (
+          <div className="mt-12 grid gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <BoundingBoxFrame
+                as="article"
+                label="INS-01"
+                meta={featured.category}
+                className="bg-surface"
+              >
+                <Link
+                  to="/articles/$slug"
+                  params={{ slug: featured.slug }}
+                  className="block"
+                >
+                  <div className="aspect-video w-full overflow-hidden bg-surface-2">
+                    {featured.coverImage ? (
+                      <ImageFromStorage
+                        objectKey={featured.coverImage}
+                        alt={featured.coverImageAlt || featured.title}
+                        loading="lazy"
+                        className="h-full w-full object-cover"
+                        fallback={
+                          <span className="label-mono flex h-full items-center justify-center text-ink-muted">
+                            [FEATURED_IMAGE]
+                          </span>
+                        }
+                      />
+                    ) : (
+                      <span className="label-mono flex h-full items-center justify-center text-ink-muted">
+                        [FEATURED_IMAGE]
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="p-5 md:p-6">
+                    <div className="label-mono flex flex-wrap items-center gap-x-4 gap-y-1 text-ink-muted">
+                      <span className="text-accent-strong">{featured.category}</span>
+                      <span>{formatDate(featured.publishedAt)}</span>
+                      <span className="flex items-center gap-1">
+                        <Clock size={10} aria-hidden="true" />
+                        {featured.readTime || '5 min read'}
+                      </span>
+                    </div>
+
+                    <h3 className="display-md mt-3 text-ink">
+                      {featured.title}
+                    </h3>
+                    <p className="mt-3 max-w-[60ch] leading-relaxed text-ink-muted">
+                      {featured.summary}
+                    </p>
+                    <span className="label-mono mt-6 inline-flex items-center gap-1 text-accent-strong">
+                      {t('insights.readStory')}
+                      <ArrowRight size={12} aria-hidden="true" />
+                    </span>
+                  </div>
+                </Link>
+              </BoundingBoxFrame>
+            </div>
+
+            {others.length > 0 && (
+              <div className="divide-y divide-line border-y border-line lg:col-span-5">
+                {others.map((article, index) => (
+                  <Link
+                    key={article.slug}
+                    to="/articles/$slug"
+                    params={{ slug: article.slug }}
+                    className="group flex gap-4 p-5 md:p-6"
+                  >
+                    <span className="label-mono text-ink-muted">
+                      0{index + 2}
+                    </span>
+                    <div className="min-w-0">
+                      <div className="label-mono flex flex-wrap items-center gap-x-3 gap-y-1 text-ink-muted">
+                        <span>{article.category}</span>
+                        <span>{formatDate(article.publishedAt)}</span>
+                      </div>
+                      <h4 className="mt-2 text-lg font-semibold tracking-[-0.02em] text-ink">
+                        {article.title}
+                      </h4>
+                      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-ink-muted">
+                        {article.summary}
+                      </p>
+                      <span className="label-mono mt-3 inline-flex items-center gap-1 text-ink-muted transition-colors duration-150 ease-cad group-hover:text-accent-strong">
+                        {t('insights.readArticle')}
+                        <ArrowRight size={12} aria-hidden="true" />
+                      </span>
+                    </div>
+                  </Link>
+                ))}
               </div>
             )}
           </div>
-          <div className="space-y-3">
-            <div className="flex items-center gap-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
-              <span className="text-brand-primary">{featured.category}</span>
-              <span>•</span>
-              <span>{formatDate(featured.publishedAt)}</span>
-              <span>•</span>
-              <span className="flex items-center gap-1">
-                <Clock size={12} /> {featured.readTime || '5 min read'}
-              </span>
-            </div>
-            <h3 className="text-3xl font-bold group-hover:text-brand-primary transition-colors">
-              {featured.title}
-            </h3>
-            <p className="text-muted-foreground leading-relaxed text-lg">
-              {featured.summary}
-            </p>
-            <div className="flex items-center gap-2 text-brand-primary font-medium pt-2">
-              {t('insights.readStory')}{' '}
-              <ArrowRight
-                size={16}
-                className="group-hover:translate-x-1 transition-transform"
-              />
-            </div>
-          </div>
-        </Link>
-
-        {others.length > 0 && (
-          <div className="divide-y divide-gray-100 dark:divide-gray-800">
-            {others.map((article) => (
-              <Link
-                key={article.slug}
-                to="/articles/$slug"
-                params={{ slug: article.slug }}
-                className="group py-8 first:pt-0 flex gap-6 items-start cursor-pointer"
-              >
-                <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-xl shrink-0 border border-gray-200 dark:border-gray-700 overflow-hidden">
-                  {article.coverImage ? (
-                    <ImageFromStorage
-                      objectKey={article.coverImage}
-                      alt={article.coverImageAlt || article.title}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : null}
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-xs font-medium text-gray-500 uppercase">
-                    <span className="text-muted-foreground">
-                      {article.category}
-                    </span>
-                    <span>•</span>
-                    <span>{formatDate(article.publishedAt)}</span>
-                  </div>
-                  <h4 className="text-xl font-bold group-hover:text-brand-primary transition-colors leading-tight">
-                    {article.title}
-                  </h4>
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {article.summary}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
         )}
-      </div>
-
-      <div className="md:hidden mt-8">
-        <Link to="/articles">
-          <Button variant="outline" className="w-full justify-center">
-            {t('insights.viewAll')}
-          </Button>
-        </Link>
       </div>
     </section>
   )
