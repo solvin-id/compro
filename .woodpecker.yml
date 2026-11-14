@@ -15,9 +15,9 @@ steps:
   - name: build
     image: bash
     commands:
-      - export NODE_BIN=$(ls -d /home/diama/.nvm/versions/node/*/bin 2>/dev/null | sort -V | tail -1)
-      - export PATH="${NODE_BIN:-/usr/local/bin}:/usr/local/bin:$PATH"
+      - export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
       - export npm_config_cache="$HOME/caches/npm"
+      - mkdir -p "$npm_config_cache"
       - node -v && npm -v
       - npx -y yarn@1.22.22 install --frozen-lockfile
       - BACKEND_ENABLED=false npx --no-install vite build --config vite.config.worker.ts
@@ -34,8 +34,7 @@ steps:
         from_secret: cloudflare_account_id
     commands:
       - test "$CI_COMMIT_BRANCH" = "development-v2" || { echo "refusing to deploy from $CI_COMMIT_BRANCH"; exit 1; }
-      - export NODE_BIN=$(ls -d /home/diama/.nvm/versions/node/*/bin 2>/dev/null | sort -V | tail -1)
-      - export PATH="${NODE_BIN:-/usr/local/bin}:/usr/local/bin:$PATH"
+      - export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
       - export npm_config_cache="$HOME/caches/npm"
       - npx --no-install wrangler --version
       - npx --no-install wrangler deploy
