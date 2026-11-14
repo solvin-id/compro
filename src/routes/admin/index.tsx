@@ -5,7 +5,6 @@ import {
   FileText,
   Users,
   Plus,
-  TrendingUp,
   Clock,
   CheckCircle,
 } from 'lucide-react'

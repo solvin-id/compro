@@ -1,6 +1,6 @@
 'use client'
 
-import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
@@ -27,11 +27,7 @@ function ArticlesListPage() {
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
 
-  const {
-    data: articles = [],
-    isLoading,
-    refetch,
-  } = useQuery({
+  const { data: articles = [], isLoading } = useQuery({
     queryKey: ['admin-articles'],
     queryFn: () => getArticlesFn(),
   })

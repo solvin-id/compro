@@ -58,7 +58,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
       <div className="h-16 flex items-center justify-between px-4 border-b border-border">
         {!collapsed && (
           <Link to="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold text-gradient">Solvin</span>
+            <span className="text-xl font-bold text-ink">Solvin</span>
             <span className="text-xs bg-brand-primary/20 text-brand-primary px-2 py-0.5 rounded">
               Admin
             </span>

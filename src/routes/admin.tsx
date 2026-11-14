@@ -1,7 +1,6 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { getAuthenticatedUserFn } from '@/functions/auth'
 import { AdminSidebar } from '@/components/admin'
-import { getCookie } from '@tanstack/react-start/server'
 
 export const Route = createFileRoute('/admin')({
   beforeLoad: async ({ location }) => {

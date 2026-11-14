@@ -87,7 +87,7 @@ function LoginPage() {
       >
         <div className="bg-card border border-border rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gradient">Solvin</h1>
+            <h1 className="text-3xl font-bold text-ink">Solvin</h1>
             <p className="text-muted-foreground mt-2">Admin Dashboard</p>
           </div>
 
