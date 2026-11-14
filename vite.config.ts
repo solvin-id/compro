@@ -10,7 +10,8 @@ const config = defineConfig(({ mode }) => {
   // Single source of truth for the backend switch: .env, read at dev/build time
   // so the shell can render deterministically during SSR (no hydration mismatch).
   const fileEnv = loadEnv(mode, process.cwd(), '')
-  const backendEnabled = (fileEnv.BACKEND_ENABLED ?? 'true') !== 'false'
+  const backendEnabled =
+    (process.env.BACKEND_ENABLED ?? fileEnv.BACKEND_ENABLED ?? 'true') !== 'false'
 
   return {
     define: {
