@@ -1,0 +1,44 @@
+skip_clone: true
+labels:
+  backend: local
+
+steps:
+  - name: clone
+    image: bash
+    commands:
+      - git clone -b "$CI_COMMIT_BRANCH" git@github.com:solvin-id/compro.git .
+      - git checkout "$CI_COMMIT_SHA"
+    when:
+      event: [push, manual]
+      branch: [development-v2]
+
+  - name: build
+    image: bash
+    commands:
+      - export NODE_BIN=$(ls -d /home/diama/.nvm/versions/node/*/bin 2>/dev/null | sort -V | tail -1)
+      - export PATH="${NODE_BIN:-/usr/local/bin}:/usr/local/bin:$PATH"
+      - export npm_config_cache="$HOME/caches/npm"
+      - node -v && npm -v
+      - npx -y yarn@1.22.22 install --frozen-lockfile
+      - BACKEND_ENABLED=false npx --no-install vite build --config vite.config.worker.ts
+    when:
+      event: [push, manual]
+      branch: [development-v2]
+
+  - name: deploy
+    image: bash
+    environment:
+      CLOUDFLARE_API_TOKEN:
+        from_secret: cloudflare_api_token
+      CLOUDFLARE_ACCOUNT_ID:
+        from_secret: cloudflare_account_id
+    commands:
+      - test "$CI_COMMIT_BRANCH" = "development-v2" || { echo "refusing to deploy from $CI_COMMIT_BRANCH"; exit 1; }
+      - export NODE_BIN=$(ls -d /home/diama/.nvm/versions/node/*/bin 2>/dev/null | sort -V | tail -1)
+      - export PATH="${NODE_BIN:-/usr/local/bin}:/usr/local/bin:$PATH"
+      - export npm_config_cache="$HOME/caches/npm"
+      - npx --no-install wrangler --version
+      - npx --no-install wrangler deploy
+    when:
+      event: [push, manual]
+      branch: [development-v2]
