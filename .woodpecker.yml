@@ -16,8 +16,9 @@ steps:
     image: bash
     commands:
       - export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
-      - export npm_config_cache="$HOME/caches/npm"
-      - mkdir -p "$npm_config_cache"
+      - export npm_config_cache="/home/woodpecker/caches/npm-cache"
+      - export YARN_CACHE_FOLDER="/home/woodpecker/caches/yarn"
+      - mkdir -p "$npm_config_cache" "$YARN_CACHE_FOLDER"
       - node -v && npm -v
       - npx -y yarn@1.22.22 install --frozen-lockfile --network-timeout 600000 --prefer-offline
       - BACKEND_ENABLED=false npx --no-install vite build --config vite.config.worker.ts
@@ -35,7 +36,7 @@ steps:
     commands:
       - test "$CI_COMMIT_BRANCH" = "development-v2" || { echo "refusing to deploy from $CI_COMMIT_BRANCH"; exit 1; }
       - export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
-      - export npm_config_cache="$HOME/caches/npm"
+      - export npm_config_cache="/home/woodpecker/caches/npm-cache"
       - npx --no-install wrangler --version
       - npx --no-install wrangler deploy
     when:
