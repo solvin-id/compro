@@ -1,93 +1,70 @@
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowUp } from 'lucide-react'
+'use client'
 
+import { useEffect, useRef, useState } from 'react'
+import { ArrowUp } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { scrollToTop } from '@/lib/scroll'
+
+/**
+ * Fixed progress square. The scroll fraction is written to `--scroll-progress`
+ * on the button; React only re-renders when visibility flips.
+ */
 export function ScrollToTop() {
+  const buttonRef = useRef<HTMLButtonElement | null>(null)
   const [isVisible, setIsVisible] = useState(false)
-  const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY
-      const docHeight =
-        document.documentElement.scrollHeight - window.innerHeight
-      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
+    let frame = 0
 
-      setScrollProgress(progress)
-      setIsVisible(scrollTop > 400)
+    const update = () => {
+      frame = 0
+      const scrollTop = window.scrollY
+      const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight
+      const progress =
+        maxScroll > 0 ? Math.min(1, Math.max(0, scrollTop / maxScroll)) : 0
+
+      buttonRef.current?.style.setProperty(
+        '--scroll-progress',
+        `${Math.round(progress * 100)}%`,
+      )
+      setIsVisible(scrollTop > 600)
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    const onScroll = () => {
+      if (frame) return
+      frame = requestAnimationFrame(update)
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    update()
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (frame) cancelAnimationFrame(frame)
+    }
   }, [])
 
-  const scrollToTop = () => {
-    // @ts-ignore
-    if (window.lenis) {
-      // @ts-ignore
-      window.lenis.scrollTo(0)
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
-  }
-
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.5, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.5, y: 20 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-white shadow-lg border border-gray-100 flex items-center justify-center cursor-pointer group overflow-hidden"
-          aria-label="Scroll to top"
-        >
-          <svg
-            className="absolute inset-0 w-full h-full -rotate-90"
-            viewBox="0 0 56 56"
-          >
-            <circle
-              cx="28"
-              cy="28"
-              r="26"
-              fill="none"
-              stroke="#f3f4f6"
-              strokeWidth="2"
-            />
-            <circle
-              cx="28"
-              cy="28"
-              r="26"
-              fill="none"
-              stroke="var(--color-brand-primary)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeDasharray={`${2 * Math.PI * 26}`}
-              strokeDashoffset={`${2 * Math.PI * 26 * (1 - scrollProgress / 100)}`}
-              className="transition-all duration-150"
-            />
-          </svg>
-
-          <motion.div
-            animate={{ y: [0, -2, 0] }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-            className="relative z-10"
-          >
-            <ArrowUp
-              size={22}
-              className="text-gray-600 group-hover:text-brand-primary transition-colors"
-            />
-          </motion.div>
-
-          <div className="absolute inset-0 bg-brand-primary/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-full" />
-        </motion.button>
+    <button
+      ref={buttonRef}
+      type="button"
+      onClick={scrollToTop}
+      aria-label="Scroll to top"
+      aria-hidden={isVisible ? undefined : true}
+      tabIndex={isVisible ? 0 : -1}
+      style={{ '--scroll-progress': '0%' } as React.CSSProperties}
+      className={cn(
+        'fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center border border-line bg-surface text-ink-muted transition-opacity duration-150 ease-cad hover:border-accent hover:text-accent-strong',
+        isVisible ? 'opacity-100' : 'pointer-events-none opacity-0',
       )}
-    </AnimatePresence>
+    >
+      <ArrowUp size={16} aria-hidden="true" />
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-[2px] bg-accent"
+        style={{ width: 'var(--scroll-progress)' }}
+      />
+    </button>
   )
 }

@@ -3,6 +3,10 @@ import Lenis from 'lenis'
 
 export function SmoothScroll() {
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return
+    }
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -11,31 +15,18 @@ export function SmoothScroll() {
       smoothWheel: true,
     })
 
-    function raf(time: number) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
-
-    requestAnimationFrame(raf)
-
-    // Expose lenis instance to window for global access if needed (optional)
-    // @ts-ignore
     window.lenis = lenis
 
-    // Handle anchor links
-    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault()
-        const href = anchor.getAttribute('href')
-        if (href && href !== '#') {
-          lenis.scrollTo(href)
-        }
-      })
-    })
+    let frame = 0
+    const raf = (time: number) => {
+      lenis.raf(time)
+      frame = requestAnimationFrame(raf)
+    }
+    frame = requestAnimationFrame(raf)
 
     return () => {
+      cancelAnimationFrame(frame)
       lenis.destroy()
-      // @ts-ignore
       delete window.lenis
     }
   }, [])

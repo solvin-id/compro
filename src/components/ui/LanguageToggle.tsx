@@ -1,9 +1,8 @@
 'use client'
 
 import { useTranslation } from 'react-i18next'
-import { motion } from 'framer-motion'
 import { Globe } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export function LanguageToggle() {
   const [mounted, setMounted] = useState(false)
@@ -15,34 +14,33 @@ export function LanguageToggle() {
   }, [])
 
   const toggleLanguage = () => {
-    const newLang = currentLang === 'en' ? 'id' : 'en'
-    i18n.changeLanguage(newLang)
-    document.documentElement.lang = newLang
-    localStorage.setItem('i18nextLng', newLang)
+    const nextLang = currentLang === 'en' ? 'id' : 'en'
+    i18n.changeLanguage(nextLang)
+    document.documentElement.lang = nextLang
+    localStorage.setItem('i18nextLng', nextLang)
   }
+
+  const className =
+    'flex h-8 items-center gap-1.5 border border-line bg-surface px-2 font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted hover:border-accent hover:text-accent-strong'
 
   if (!mounted) {
     return (
-      <button
-        className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 text-sm font-medium text-gray-700"
-        aria-label="Toggle language"
-      >
-        <Globe size={16} className="text-gray-500" />
-        <span className="uppercase">en</span>
+      <button type="button" className={className} aria-label="Toggle language">
+        <Globe size={14} aria-hidden="true" />
+        <span>en</span>
       </button>
     )
   }
 
   return (
-    <motion.button
+    <button
+      type="button"
       onClick={toggleLanguage}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors text-sm font-medium text-gray-700"
+      className={className}
       aria-label={`Switch language to ${currentLang === 'en' ? 'Indonesian' : 'English'}`}
     >
-      <Globe size={16} className="text-gray-500" />
-      <span className="uppercase">{currentLang}</span>
-    </motion.button>
+      <Globe size={14} aria-hidden="true" />
+      <span>{currentLang}</span>
+    </button>
   )
 }
