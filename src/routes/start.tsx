@@ -1,18 +1,19 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
-import { ArrowRight, ArrowLeft, Send } from 'lucide-react'
-import { Button } from '../components/ui/Button'
+import { ArrowLeft, ArrowRight, Database, Globe, Send, Smartphone, Zap } from 'lucide-react'
+import { PageShell } from '@/components/layout/PageShell'
+import { Button } from '@/components/ui/Button'
 
 export const Route = createFileRoute('/start')({
   component: StartWizard,
 })
 
 const services = [
-  { id: 'web', label: 'Web Application', icon: '🌍' },
-  { id: 'mobile', label: 'Mobile App', icon: '📱' },
-  { id: 'erp', label: 'Odoo ERP', icon: '📊' },
-  { id: 'custom', label: 'Custom System', icon: '⚡' },
+  { id: 'web', label: 'Web Application', icon: Globe },
+  { id: 'mobile', label: 'Mobile App', icon: Smartphone },
+  { id: 'erp', label: 'Odoo ERP', icon: Database },
+  { id: 'custom', label: 'Custom System', icon: Zap },
 ]
 
 const budgets = [
@@ -31,7 +32,10 @@ function StartWizard() {
     contact: { name: '', email: '', details: '' },
   })
 
-  const updateData = (key: string, value: any) => {
+  const updateData = <K extends keyof typeof formData>(
+    key: K,
+    value: (typeof formData)[K],
+  ) => {
     setFormData((prev) => ({ ...prev, [key]: value }))
   }
 
@@ -56,240 +60,274 @@ I'd like to start a project:
     window.open(url, '_blank')
   }
 
+  const stepHeadingClassName =
+    'text-3xl font-semibold tracking-[-0.03em] text-ink md:text-4xl'
+  const fieldClassName =
+    'w-full rounded-none border border-line bg-canvas px-4 py-3 text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none focus:ring-0 transition-colors duration-150 ease-cad'
+  const fieldLabelClassName = 'label-mono mb-2 block text-ink-muted'
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-transparent relative overflow-hidden py-12">
-      <div className="absolute top-0 left-0 right-0 h-2 bg-muted">
-        <motion.div
-          className="h-full bg-brand-primary"
-          initial={{ width: 0 }}
-          animate={{ width: `${(step / 4) * 100}%` }}
-        />
-      </div>
-
-      <div className="max-w-2xl w-full mx-auto px-6 relative z-10">
-        <AnimatePresence mode="wait">
-          {step === 1 && (
+    <PageShell>
+      <div className="min-h-[calc(100svh-4rem)]">
+        <div className="border-b border-line p-5 md:p-8 lg:p-12">
+          <div className="flex items-baseline justify-between gap-4">
+            <span className="label-mono text-accent-strong">[INTAKE / 04 STEPS]</span>
+            <span className="label-mono text-ink-muted">
+              STEP {String(step).padStart(2, '0')} / 04
+            </span>
+          </div>
+          <div className="mt-4 h-px w-full bg-surface-2">
             <motion.div
-              key="step1"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-8"
-            >
-              <div className="text-center space-y-4">
-                <span className="text-sm font-bold uppercase text-brand-primary tracking-widest">
-                  Step 1 of 4
-                </span>
-                <h1 className="text-4xl font-bold text-foreground">
-                  What are we building today?
-                </h1>
-              </div>
+              className="h-full bg-accent"
+              initial={{ width: 0 }}
+              animate={{ width: `${(step / 4) * 100}%` }}
+            />
+          </div>
+        </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                {services.map((s) => (
+        <div className="mx-auto max-w-2xl px-5 py-12 md:px-8">
+          <AnimatePresence mode="wait">
+            {step === 1 && (
+              <motion.div
+                key="step1"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="space-y-8"
+              >
+                <div className="space-y-4">
+                  <span className="label-mono text-accent-strong">Step 1 of 4</span>
+                  <h1 className={stepHeadingClassName}>
+                    What are we building today?
+                  </h1>
+                </div>
+
+                <div className="grid grid-cols-2 border-l border-t border-line">
+                  {services.map((service) => (
+                    <button
+                      key={service.id}
+                      type="button"
+                      onClick={() => {
+                        updateData('service', service.label)
+                        nextStep()
+                      }}
+                      className="group border-r border-b border-line bg-surface p-6 text-left transition-colors duration-150 ease-cad hover:bg-accent-soft"
+                    >
+                      <service.icon
+                        className="size-6 text-accent-strong"
+                        strokeWidth={1.5}
+                        aria-hidden="true"
+                      />
+                      <span className="mt-8 block font-medium text-ink">
+                        {service.label}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {step === 2 && (
+              <motion.div
+                key="step2"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="space-y-8"
+              >
+                <div className="space-y-4">
+                  <span className="label-mono text-accent-strong">Step 2 of 4</span>
+                  <h1 className={stepHeadingClassName}>
+                    Do you have a design ready?
+                  </h1>
+                  <p className="text-ink-muted">
+                    Do you have Figma files or do we need to craft the UI/UX?
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 border-l border-t border-line md:grid-cols-2">
                   <button
-                    key={s.id}
+                    type="button"
                     onClick={() => {
-                      updateData('service', s.label)
+                      updateData('hasDesign', true)
                       nextStep()
                     }}
-                    className="group p-6 rounded-2xl bg-card border border-border hover:border-brand-primary hover:ring-2 hover:ring-brand-primary/20 transition-all text-left shadow-sm hover:shadow-lg"
+                    className="border-r border-b border-line bg-surface p-8 text-center transition-colors duration-150 ease-cad hover:bg-accent-soft"
                   >
-                    <span className="text-4xl mb-4 block group-hover:scale-110 transition-transform">
-                      {s.icon}
+                    <span className="mx-auto mb-4 flex h-16 w-16 items-center justify-center bg-accent-soft text-2xl">
+                      🎨
                     </span>
-                    <span className="font-bold text-foreground block">
-                      {s.label}
+                    <span className="block text-lg font-medium text-ink">
+                      Yes, I have designs
                     </span>
                   </button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {step === 2 && (
-            <motion.div
-              key="step2"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-8 text-center"
-            >
-              <div className="space-y-4">
-                <span className="text-sm font-bold uppercase text-brand-primary tracking-widest">
-                  Step 2 of 4
-                </span>
-                <h1 className="text-4xl font-bold text-foreground">
-                  Do you have a design ready?
-                </h1>
-                <p className="text-muted-foreground">
-                  Do you have Figma files or do we need to craft the UI/UX?
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto">
-                <button
-                  onClick={() => {
-                    updateData('hasDesign', true)
-                    nextStep()
-                  }}
-                  className="p-8 rounded-2xl bg-card border border-border hover:border-green-500 hover:ring-2 hover:ring-green-500/20 transition-all"
-                >
-                  <div className="w-16 h-16 bg-green-100 dark:bg-green-950/50 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-                    🎨
-                  </div>
-                  <span className="font-bold text-lg block text-foreground">
-                    Yes, I have designs
-                  </span>
-                </button>
-                <button
-                  onClick={() => {
-                    updateData('hasDesign', false)
-                    nextStep()
-                  }}
-                  className="p-8 rounded-2xl bg-card border border-border hover:border-blue-500 hover:ring-2 hover:ring-blue-500/20 transition-all"
-                >
-                  <div className="w-16 h-16 bg-blue-100 dark:bg-blue-950/50 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
-                    🏗️
-                  </div>
-                  <span className="font-bold text-lg block text-foreground">
-                    No, I need magic
-                  </span>
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          {step === 3 && (
-            <motion.div
-              key="step3"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-8 text-center"
-            >
-              <div className="space-y-4">
-                <span className="text-sm font-bold uppercase text-brand-primary tracking-widest">
-                  Step 3 of 4
-                </span>
-                <h1 className="text-4xl font-bold text-foreground">
-                  What is your estimated budget?
-                </h1>
-                <p className="text-muted-foreground">
-                  This helps us recommend the right tech stack.
-                </p>
-              </div>
-
-              <div className="space-y-4 max-w-md mx-auto">
-                {budgets.map((b) => (
                   <button
-                    key={b.id}
+                    type="button"
                     onClick={() => {
-                      updateData('budget', b.label)
+                      updateData('hasDesign', false)
                       nextStep()
                     }}
-                    className="w-full p-6 text-left rounded-xl bg-card border border-border hover:border-brand-primary hover:bg-brand-primary hover:text-white transition-all flex items-center justify-between group"
+                    className="border-r border-b border-line bg-surface p-8 text-center transition-colors duration-150 ease-cad hover:bg-accent-soft"
                   >
-                    <span className="font-bold text-lg">{b.label}</span>
-                    <ArrowRight className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span className="mx-auto mb-4 flex h-16 w-16 items-center justify-center bg-surface-2 text-2xl">
+                      🏗️
+                    </span>
+                    <span className="block text-lg font-medium text-ink">
+                      No, I need magic
+                    </span>
                   </button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {step === 4 && (
-            <motion.div
-              key="step4"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-8"
-            >
-              <div className="text-center space-y-4">
-                <span className="text-sm font-bold uppercase text-brand-primary tracking-widest">
-                  Final Step
-                </span>
-                <h1 className="text-4xl font-bold text-foreground">
-                  Where should we create magic?
-                </h1>
-              </div>
-
-              <div className="bg-card p-8 rounded-3xl border border-border backdrop-blur-sm shadow-xl space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-muted-foreground mb-2">
-                    Your Name
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
-                    placeholder="John Doe"
-                    value={formData.contact.name}
-                    onChange={(e) =>
-                      updateData('contact', {
-                        ...formData.contact,
-                        name: e.target.value,
-                      })
-                    }
-                  />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-muted-foreground mb-2">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all"
-                    placeholder="john@company.com"
-                    value={formData.contact.email}
-                    onChange={(e) =>
-                      updateData('contact', {
-                        ...formData.contact,
-                        email: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-muted-foreground mb-2">
-                    Additional Details (Optional)
-                  </label>
-                  <textarea
-                    className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-brand-primary focus:border-transparent outline-none transition-all min-h-[100px]"
-                    placeholder="Tell us more about your vision..."
-                    value={formData.contact.details}
-                    onChange={(e) =>
-                      updateData('contact', {
-                        ...formData.contact,
-                        details: e.target.value,
-                      })
-                    }
-                  />
+              </motion.div>
+            )}
+
+            {step === 3 && (
+              <motion.div
+                key="step3"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="space-y-8"
+              >
+                <div className="space-y-4">
+                  <span className="label-mono text-accent-strong">Step 3 of 4</span>
+                  <h1 className={stepHeadingClassName}>
+                    What is your estimated budget?
+                  </h1>
+                  <p className="text-ink-muted">
+                    This helps us recommend the right tech stack.
+                  </p>
                 </div>
 
-                <Button
-                  className="w-full h-14 text-lg rounded-xl"
-                  onClick={handleSubmit}
-                  disabled={!formData.contact.name || !formData.contact.email}
-                >
-                  Send Proposal Request <Send className="w-5 h-5 ml-2" />
-                </Button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <div className="divide-y divide-line border border-line">
+                  {budgets.map((budget) => (
+                    <button
+                      key={budget.id}
+                      type="button"
+                      onClick={() => {
+                        updateData('budget', budget.label)
+                        nextStep()
+                      }}
+                      className="group flex w-full items-center justify-between bg-surface p-6 text-left transition-colors duration-150 ease-cad hover:bg-accent hover:text-accent-ink"
+                    >
+                      <span className="text-lg font-medium">{budget.label}</span>
+                      <ArrowRight
+                        aria-hidden="true"
+                        className="opacity-0 transition-opacity group-hover:opacity-100"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
 
-        <div className="mt-12 flex justify-between items-center text-sm text-muted-foreground">
-          {step > 1 && (
-            <button
-              onClick={prevStep}
-              className="flex items-center hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" /> Back
-            </button>
-          )}
+            {step === 4 && (
+              <motion.div
+                key="step4"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="space-y-8"
+              >
+                <div className="space-y-4">
+                  <span className="label-mono text-accent-strong">Final Step</span>
+                  <h1 className={stepHeadingClassName}>
+                    Where should we create magic?
+                  </h1>
+                </div>
+
+                <div className="space-y-6 border border-line bg-surface p-8">
+                  <div>
+                    <label
+                      htmlFor="intake-name"
+                      className={fieldLabelClassName}
+                    >
+                      Your Name
+                    </label>
+                    <input
+                      id="intake-name"
+                      type="text"
+                      className={fieldClassName}
+                      placeholder="John Doe"
+                      value={formData.contact.name}
+                      onChange={(e) =>
+                        updateData('contact', {
+                          ...formData.contact,
+                          name: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="intake-email"
+                      className={fieldLabelClassName}
+                    >
+                      Email Address
+                    </label>
+                    <input
+                      id="intake-email"
+                      type="email"
+                      className={fieldClassName}
+                      placeholder="john@company.com"
+                      value={formData.contact.email}
+                      onChange={(e) =>
+                        updateData('contact', {
+                          ...formData.contact,
+                          email: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="intake-details"
+                      className={fieldLabelClassName}
+                    >
+                      Additional Details (Optional)
+                    </label>
+                    <textarea
+                      id="intake-details"
+                      className={`${fieldClassName} min-h-[100px]`}
+                      placeholder="Tell us more about your vision..."
+                      value={formData.contact.details}
+                      onChange={(e) =>
+                        updateData('contact', {
+                          ...formData.contact,
+                          details: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+
+                  <Button
+                    size="lg"
+                    className="w-full"
+                    onClick={handleSubmit}
+                    disabled={!formData.contact.name || !formData.contact.email}
+                  >
+                    Send Proposal Request
+                    <Send className="size-4" aria-hidden="true" />
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="mt-12 flex items-center justify-between">
+            {step > 1 ? (
+              <button
+                type="button"
+                onClick={prevStep}
+                className="label-mono flex items-center gap-2 text-ink-muted transition-colors duration-150 ease-cad hover:text-accent-strong"
+              >
+                <ArrowLeft size={12} aria-hidden="true" /> Back
+              </button>
+            ) : (
+              <span />
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </PageShell>
   )
 }
