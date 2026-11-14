@@ -127,7 +127,7 @@ function parseTechStack(techStack: string | null | undefined): string[] {
 export const getPortfolioItemsFn = createServerFn({
   method: 'GET',
 }).handler(async (): Promise<Portfolio[]> => {
-  if (env.DEV_MODE) {
+  if (!env.BACKEND_ENABLED) {
     console.log('[DEV MODE] Returning mock portfolio items')
     return devPortfolio.sort(
       (a, b) => (a.displayOrder || 0) - (b.displayOrder || 0),
@@ -145,7 +145,7 @@ export const getPortfolioItemsFn = createServerFn({
 export const getPublishedPortfolioFn = createServerFn({
   method: 'GET',
 }).handler(async (): Promise<Portfolio[]> => {
-  if (env.DEV_MODE) {
+  if (!env.BACKEND_ENABLED) {
     console.log('[DEV MODE] Returning published mock portfolio items')
     return devPortfolio
       .filter((p) => p.status === 'published')
@@ -166,7 +166,7 @@ export const getPortfolioItemFn = createServerFn({
 })
   .inputValidator((data: unknown) => idSchema.parse(data))
   .handler(async ({ data }): Promise<Portfolio | null> => {
-    if (env.DEV_MODE) {
+    if (!env.BACKEND_ENABLED) {
       console.log('[DEV MODE] Finding mock portfolio by ID:', data.id)
       return devPortfolio.find((p) => p.id === data.id) || null
     }
@@ -185,7 +185,7 @@ export const createPortfolioFn = createServerFn({
 })
   .inputValidator((data: unknown) => createPortfolioSchema.parse(data))
   .handler(async ({ data }): Promise<Portfolio | { error: string }> => {
-    if (env.DEV_MODE) {
+    if (!env.BACKEND_ENABLED) {
       console.log('[DEV MODE] Creating mock portfolio:', data.title)
       const newItem: Portfolio = {
         id: nextDevId++,
@@ -236,7 +236,7 @@ export const updatePortfolioFn = createServerFn({
   .handler(async ({ data }): Promise<Portfolio | { error: string }> => {
     const { id, ...updateData } = data
 
-    if (env.DEV_MODE) {
+    if (!env.BACKEND_ENABLED) {
       console.log('[DEV MODE] Updating mock portfolio:', id)
       const index = devPortfolio.findIndex((p) => p.id === id)
       if (index === -1) {
@@ -305,7 +305,7 @@ export const deletePortfolioFn = createServerFn({
 })
   .inputValidator((data: unknown) => idSchema.parse(data))
   .handler(async ({ data }): Promise<{ success: boolean }> => {
-    if (env.DEV_MODE) {
+    if (!env.BACKEND_ENABLED) {
       console.log('[DEV MODE] Deleting mock portfolio:', data.id)
       const item = devPortfolio.find((p) => p.id === data.id)
 

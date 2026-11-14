@@ -124,9 +124,10 @@ const slugSchema = z.object({
 export const getPublishedArticlesFn = createServerFn({
   method: 'GET',
 }).handler(async (): Promise<Article[]> => {
-  if (env.DEV_MODE) {
-    console.log('[DEV MODE] Returning published mock articles')
-    return devArticles.filter((a) => a.status === 'published')
+  if (!env.BACKEND_ENABLED) {
+    // Insights are a dynamic surface: with the backend off they are hidden,
+    // so the public list is empty rather than fixture-backed.
+    return []
   }
 
   return db.query.articles.findMany({
@@ -143,12 +144,8 @@ export const getArticleBySlugFn = createServerFn({
   .handler(async ({ data }): Promise<Article | null> => {
     let article: Article | null = null
 
-    if (env.DEV_MODE) {
-      console.log('[DEV MODE] Finding mock article by slug:', data.slug)
-      article =
-        devArticles.find(
-          (a) => a.slug === data.slug && a.status === 'published',
-        ) || null
+    if (!env.BACKEND_ENABLED) {
+      article = null
     } else {
       const found = await db.query.articles.findFirst({
         where: eq(articles.slug, data.slug),
@@ -175,8 +172,8 @@ export const getArticleBySlugFn = createServerFn({
 export const getArticlesFn = createServerFn({
   method: 'GET',
 }).handler(async (): Promise<Article[]> => {
-  if (env.DEV_MODE) {
-    console.log('[DEV MODE] Returning mock articles')
+  if (!env.BACKEND_ENABLED) {
+    console.log('[BACKEND OFF] Returning mock articles')
     return devArticles
   }
 
@@ -192,8 +189,8 @@ export const getArticleFn = createServerFn({
   .handler(async ({ data }): Promise<Article | null> => {
     let article: Article | null = null
 
-    if (env.DEV_MODE) {
-      console.log('[DEV MODE] Finding mock article by ID:', data.id)
+    if (!env.BACKEND_ENABLED) {
+      console.log('[BACKEND OFF] Finding mock article by ID:', data.id)
       article = devArticles.find((a) => a.id === data.id) || null
     } else {
       const found = await db.query.articles.findFirst({
@@ -218,8 +215,8 @@ export const createArticleFn = createServerFn({
 })
   .inputValidator((data: unknown) => createArticleSchema.parse(data))
   .handler(async ({ data }): Promise<Article | { error: string }> => {
-    if (env.DEV_MODE) {
-      console.log('[DEV MODE] Creating mock article:', data.title)
+    if (!env.BACKEND_ENABLED) {
+      console.log('[BACKEND OFF] Creating mock article:', data.title)
       const newArticle: Article = {
         id: nextDevId++,
         slug: data.slug,
@@ -321,8 +318,8 @@ export const updateArticleFn = createServerFn({
   .handler(async ({ data }): Promise<Article | { error: string }> => {
     const { id, ...updateData } = data
 
-    if (env.DEV_MODE) {
-      console.log('[DEV MODE] Updating mock article:', id)
+    if (!env.BACKEND_ENABLED) {
+      console.log('[BACKEND OFF] Updating mock article:', id)
       const index = devArticles.findIndex((a) => a.id === id)
       if (index === -1) {
         return { error: 'Article not found' }
@@ -459,8 +456,8 @@ export const deleteArticleFn = createServerFn({
 })
   .inputValidator((data: unknown) => idSchema.parse(data))
   .handler(async ({ data }): Promise<{ success: boolean }> => {
-    if (env.DEV_MODE) {
-      console.log('[DEV MODE] Deleting mock article:', data.id)
+    if (!env.BACKEND_ENABLED) {
+      console.log('[BACKEND OFF] Deleting mock article:', data.id)
       const article = devArticles.find((a) => a.id === data.id)
 
       // Clean up storage files in dev mode

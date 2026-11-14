@@ -19,8 +19,8 @@ interface SendEmailParams {
 }
 
 export async function sendEmail({ to, subject, html }: SendEmailParams) {
-  // In DEV_MODE or if SMTP is not configured, just log the email
-  if (env.DEV_MODE || !env.SMTP_HOST || env.SMTP_HOST === 'smtp.example.com') {
+  // Never send real mail while the backend is off or SMTP is unconfigured.
+  if (!env.BACKEND_ENABLED || !env.SMTP_HOST || env.SMTP_HOST === 'smtp.example.com') {
     console.log(`
     📧 [MOCKED EMAIL] 
     To: ${to}

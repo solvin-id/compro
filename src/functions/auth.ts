@@ -34,8 +34,8 @@ export const loginFn = createServerFn({
   .handler(async ({ data }) => {
     const { email, password } = data
 
-    if (env.DEV_MODE) {
-      console.log('[DEV MODE] Bypassing authentication for:', email)
+    if (!env.BACKEND_ENABLED) {
+      console.log('[BACKEND OFF] Bypassing authentication for:', email)
       const token = 'dev-session-token-' + Date.now()
 
       setCookie('solvin_session', token, {
@@ -98,9 +98,9 @@ export const validateSessionFn = createServerFn({
 })
   .inputValidator(z.string().optional())
   .handler(async ({ data: token }) => {
-    if (env.DEV_MODE) {
+    if (!env.BACKEND_ENABLED) {
       if (token?.startsWith('dev-session-token-')) {
-        console.log('[DEV MODE] Returning dev user for session validation')
+        console.log('[BACKEND OFF] Returning dev user for session validation')
         return DEV_USER
       }
       return null
@@ -143,9 +143,9 @@ export const getAuthenticatedUserFn = createServerFn({
   )
   console.log('[getAuthenticatedUserFn] Token:', token ? 'found' : 'not found')
 
-  if (env.DEV_MODE) {
+  if (!env.BACKEND_ENABLED) {
     if (token?.startsWith('dev-session-token-')) {
-      console.log('[DEV MODE] Returning dev user from request cookies')
+      console.log('[BACKEND OFF] Returning dev user from request cookies')
       return DEV_USER
     }
     return null

@@ -24,6 +24,13 @@ function generateToken() {
 export const subscribeFn = createServerFn({ method: 'POST' })
   .inputValidator((data: unknown) => subscribeSchema.parse(data))
   .handler(async ({ data }): Promise<{ success: boolean; message: string }> => {
+    if (!env.BACKEND_ENABLED) {
+      return {
+        success: false,
+        message: 'Newsletter is offline while the backend is disabled.',
+      }
+    }
+
     const { email } = data
 
     try {
@@ -82,6 +89,13 @@ export const subscribeFn = createServerFn({ method: 'POST' })
 export const unsubscribeFn = createServerFn({ method: 'POST' })
   .inputValidator((data: unknown) => unsubscribeSchema.parse(data))
   .handler(async ({ data }): Promise<{ success: boolean; message: string }> => {
+    if (!env.BACKEND_ENABLED) {
+      return {
+        success: false,
+        message: 'Newsletter is offline while the backend is disabled.',
+      }
+    }
+
     const { token } = data
 
     try {

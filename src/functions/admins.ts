@@ -52,8 +52,8 @@ const idSchema = z.object({
 export const getAdminsFn = createServerFn({
   method: 'GET',
 }).handler(async (): Promise<SafeUser[]> => {
-  if (env.DEV_MODE) {
-    console.log('[DEV MODE] Returning mock admins')
+  if (!env.BACKEND_ENABLED) {
+    console.log('[BACKEND OFF] Returning mock admins')
     return devAdmins
   }
 
@@ -76,8 +76,8 @@ export const getAdminFn = createServerFn({
 })
   .inputValidator((data: unknown) => idSchema.parse(data))
   .handler(async ({ data }): Promise<SafeUser | null> => {
-    if (env.DEV_MODE) {
-      console.log('[DEV MODE] Finding mock admin by ID:', data.id)
+    if (!env.BACKEND_ENABLED) {
+      console.log('[BACKEND OFF] Finding mock admin by ID:', data.id)
       return devAdmins.find((a) => a.id === data.id) || null
     }
 
@@ -100,8 +100,8 @@ export const createAdminFn = createServerFn({
 })
   .inputValidator((data: unknown) => createAdminSchema.parse(data))
   .handler(async ({ data }): Promise<SafeUser | { error: string }> => {
-    if (env.DEV_MODE) {
-      console.log('[DEV MODE] Creating mock admin:', data.name)
+    if (!env.BACKEND_ENABLED) {
+      console.log('[BACKEND OFF] Creating mock admin:', data.name)
 
       if (devAdmins.some((a) => a.email === data.email.toLowerCase())) {
         return { error: 'Email already exists' }
@@ -157,8 +157,8 @@ export const updateAdminFn = createServerFn({
   .handler(async ({ data }): Promise<SafeUser | { error: string }> => {
     const { id, password, ...updateData } = data
 
-    if (env.DEV_MODE) {
-      console.log('[DEV MODE] Updating mock admin:', id)
+    if (!env.BACKEND_ENABLED) {
+      console.log('[BACKEND OFF] Updating mock admin:', id)
       const index = devAdmins.findIndex((a) => a.id === id)
       if (index === -1) {
         return { error: 'Admin not found' }
@@ -222,8 +222,8 @@ export const deleteAdminFn = createServerFn({
 })
   .inputValidator((data: unknown) => idSchema.parse(data))
   .handler(async ({ data }): Promise<{ success: boolean; error?: string }> => {
-    if (env.DEV_MODE) {
-      console.log('[DEV MODE] Deleting mock admin:', data.id)
+    if (!env.BACKEND_ENABLED) {
+      console.log('[BACKEND OFF] Deleting mock admin:', data.id)
 
       if (devAdmins.length <= 1) {
         return { success: false, error: 'Cannot delete the last admin' }

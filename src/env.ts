@@ -1,13 +1,19 @@
+import { config } from 'dotenv'
 import { createEnv } from '@t3-oss/env-core'
 import { z } from 'zod'
+
+// Server-only module: load `.env` before `createEnv` snapshots `process.env`.
+// Without this, import order decides whether BACKEND_ENABLED/DATABASE_URL are visible.
+config()
 
 export const env = createEnv({
   server: {
     SERVER_URL: z.string().url().optional(),
-    DEV_MODE: z
+    // Master switch: true = Postgres/storage, false = constant fixtures.
+    BACKEND_ENABLED: z
       .string()
-      .default('false')
-      .transform((val) => val.toString() === 'true'),
+      .default('true')
+      .transform((val) => val.toString() !== 'false'),
     // RustFS/MinIO S3-compatible storage configuration
     MINIO_ENDPOINT: z.string().url().optional(),
     MINIO_ACCESS_KEY: z.string().optional(),
@@ -30,7 +36,7 @@ export const env = createEnv({
   runtimeEnv: {
     // Server variables from process.env
     SERVER_URL: process.env.SERVER_URL,
-    DEV_MODE: process.env.DEV_MODE,
+    BACKEND_ENABLED: process.env.BACKEND_ENABLED,
     MINIO_ENDPOINT: process.env.MINIO_ENDPOINT,
     MINIO_ACCESS_KEY: process.env.MINIO_ACCESS_KEY,
     MINIO_SECRET_KEY: process.env.MINIO_SECRET_KEY,
