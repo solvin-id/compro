@@ -19,7 +19,7 @@ steps:
       - export npm_config_cache="$HOME/caches/npm"
       - mkdir -p "$npm_config_cache"
       - node -v && npm -v
-      - npx -y yarn@1.22.22 install --frozen-lockfile
+      - npx -y yarn@1.22.22 install --frozen-lockfile --network-timeout 600000 --prefer-offline
       - BACKEND_ENABLED=false npx --no-install vite build --config vite.config.worker.ts
     when:
       event: [push, manual]
