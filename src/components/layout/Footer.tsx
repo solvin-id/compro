@@ -1,8 +1,7 @@
 'use client'
 
-import { useMountedTheme } from '@/hooks/useMountedTheme'
 import { Link, useLocation } from '@tanstack/react-router'
-import { ArrowRight, Mail, MapPin, MessageCircle, Send } from 'lucide-react'
+import { ArrowUp, Mail, MapPin, MessageCircle, Send } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -10,22 +9,26 @@ import {
   FOOTER_CONTACT,
   FOOTER_SOCIAL_LINKS,
   FOOTER_SOLUTIONS_LINKS,
-} from '../../data/footer-data'
-import { cn } from '../../lib/utils'
+  type FooterLink,
+} from '@/data/footer-data'
+import { Section, useNavigateStore } from '@/hooks/useNavigateStore'
+import { scrollToSection, scrollToTop } from '@/lib/scroll'
+import { cn } from '@/lib/utils'
+import { buttonClassName } from '../ui/Button'
 
 export function Footer() {
   const { t } = useTranslation()
   const { pathname } = useLocation()
+  const setSection = useNavigateStore((state) => state.setSection)
   const currentYear = new Date().getFullYear()
-  const { theme } = useMountedTheme()
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<
     'idle' | 'loading' | 'success' | 'error'
   >('idle')
   const [message, setMessage] = useState('')
 
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubscribe = async (event: React.FormEvent) => {
+    event.preventDefault()
     setStatus('loading')
     setMessage('')
 
@@ -48,36 +51,50 @@ export function Footer() {
     }
   }
 
+  const handleInternalLink = (event: React.MouseEvent, link: FooterLink) => {
+    if (!link.hash) return
+    if (pathname === '/') {
+      event.preventDefault()
+      scrollToSection(link.hash)
+      return
+    }
+    setSection(link.hash as Section)
+  }
+
   if (pathname.includes('/admin')) {
     return null
   }
 
+  const linkClassName =
+    'group inline-flex items-center font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted transition-colors duration-150 ease-cad hover:text-accent-strong'
+
   return (
-    <footer
-      className={cn(
-        'bg-[#0B0F19] text-white relative',
-        theme !== 'light' &&
-          'bg-gray-900/20 border-gray-800/50 backdrop-blur-md',
-        theme === 'light' && 'bg-gray-900 border-gray-200',
-      )}
-    >
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
-          <div className="lg:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl font-bold tracking-tight">Solvin</span>
-              <div className="w-2 h-2 rounded-full bg-brand-primary" />
+    <footer className="border-t border-line bg-canvas">
+      <div className="mx-auto w-full max-w-[1600px] border-line md:border-x">
+        <div className="grid divide-y divide-line lg:grid-cols-4 lg:divide-x lg:divide-y-0">
+          <div className="p-6 md:p-8">
+            <div className="flex items-center gap-2">
+              <img
+                src="/brand/solvin-mark.png"
+                alt=""
+                aria-hidden="true"
+                width={28}
+                height={28}
+                className="h-7 w-7 shrink-0"
+              />
+              <span className="text-2xl font-semibold tracking-[-0.03em] text-ink">
+                Solvin
+              </span>
             </div>
 
-            <p className="text-brand-primary font-medium mb-3">
+            <p className="mt-4 text-sm font-medium text-accent-strong">
               {t('footer.tagline')}
             </p>
-
-            <p className="text-gray-400 text-sm leading-relaxed mb-6">
+            <p className="mt-2 max-w-[38ch] text-sm leading-relaxed text-ink-muted">
               {t('footer.description')}
             </p>
 
-            <div className="flex items-center gap-4">
+            <div className="mt-6 flex items-center gap-2">
               {FOOTER_SOCIAL_LINKS.map((social) => (
                 <a
                   key={social.name}
@@ -85,196 +102,165 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.ariaLabel}
-                  className="group p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300"
+                  className="flex h-8 w-8 items-center justify-center border border-line text-ink-muted transition-colors duration-150 ease-cad hover:border-accent hover:text-accent-strong"
                 >
-                  <social.icon
-                    size={20}
-                    className="text-gray-400 group-hover:text-brand-primary group-hover:drop-shadow-[0_0_8px_rgba(255,166,41,0.6)] transition-all duration-300"
-                  />
+                  <social.icon size={14} aria-hidden="true" />
                 </a>
               ))}
             </div>
           </div>
 
-          <div>
-            <h3 className="text-lg font-semibold mb-6">
-              {t('footer.company')}
-            </h3>
-            <ul className="space-y-3">
+          <div className="p-6 md:p-8">
+            <h3 className="label-mono text-ink-muted">{t('footer.company')}</h3>
+            <ul className="mt-4 space-y-2">
               {FOOTER_COMPANY_LINKS.map((link) => (
-                <li key={link.labelKey}>
+                <li key={link.labelKey + link.to + (link.hash ?? '')}>
                   <Link
-                    to={link.href}
-                    className="group inline-flex items-center text-gray-400 hover:text-brand-primary transition-all duration-300"
+                    to={link.to}
+                    hash={link.hash}
+                    onClick={(event) => handleInternalLink(event, link)}
+                    className={linkClassName}
                   >
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">
-                      {t(link.labelKey)}
-                    </span>
+                    {t(link.labelKey)}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div>
-            <h3 className="text-lg font-semibold mb-6">
+          <div className="p-6 md:p-8">
+            <h3 className="label-mono text-ink-muted">
               {t('footer.solutions')}
             </h3>
-            <ul className="space-y-3">
+            <ul className="mt-4 space-y-2">
               {FOOTER_SOLUTIONS_LINKS.map((link) => (
-                <li key={link.labelKey}>
+                <li key={link.labelKey + link.to + (link.hash ?? '')}>
                   <Link
-                    to={link.href}
-                    className="group inline-flex items-center text-gray-400 hover:text-brand-primary transition-all duration-300"
+                    to={link.to}
+                    hash={link.hash}
+                    onClick={(event) => handleInternalLink(event, link)}
+                    className={linkClassName}
                   >
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">
-                      {t(link.labelKey)}
-                    </span>
+                    {t(link.labelKey)}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div>
-            <h3 className="text-lg font-semibold mb-6">
-              {t('footer.contact')}
-            </h3>
+          <div className="p-6 md:p-8">
+            <h3 className="label-mono text-ink-muted">{t('footer.contact')}</h3>
 
-            <a
-              href={FOOTER_CONTACT.whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 text-xl font-semibold text-brand-primary hover:text-brand-primary-hover transition-colors duration-300 mb-6"
+            <Link
+              to="/start"
+              className={cn(buttonClassName('outline', 'sm'), 'mt-4')}
             >
-              <span>{t('footer.startProject')}</span>
-              <ArrowRight
-                size={20}
-                className="group-hover:translate-x-1 transition-transform duration-300"
-              />
-            </a>
+              {t('footer.startProject')}
+            </Link>
 
-            <ul className="space-y-4">
-              <li className="flex items-center gap-3 text-gray-400">
-                <Mail size={18} className="text-brand-primary shrink-0" />
+            <ul className="mt-4 space-y-3 text-sm text-ink-muted">
+              <li className="flex items-center gap-2">
+                <Mail size={14} aria-hidden="true" className="text-accent-strong" />
                 <a
                   href={`mailto:${FOOTER_CONTACT.email}`}
-                  className="hover:text-brand-primary transition-colors duration-300"
+                  className="transition-colors hover:text-ink"
                 >
                   {FOOTER_CONTACT.email}
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-gray-400">
+              <li className="flex items-center gap-2">
                 <MessageCircle
-                  size={18}
-                  className="text-brand-primary shrink-0"
+                  size={14}
+                  aria-hidden="true"
+                  className="text-accent-strong"
                 />
                 <a
                   href={FOOTER_CONTACT.whatsappLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-brand-primary transition-colors duration-300"
+                  className="transition-colors hover:text-ink"
                 >
                   {FOOTER_CONTACT.whatsapp}
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-gray-400">
-                <MapPin size={18} className="text-brand-primary shrink-0" />
+              <li className="flex items-center gap-2">
+                <MapPin size={14} aria-hidden="true" className="text-accent-strong" />
                 <span>{FOOTER_CONTACT.location}</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-white/10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div className="border-t border-line p-6 md:p-8">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <h4 className="text-lg font-semibold mb-1">
+              <h4 className="label-mono text-ink-muted">
                 {t('footer.subscribe')}
               </h4>
-            </div>
-            <form
-              onSubmit={handleSubscribe}
-              className="flex gap-2 max-w-md w-full"
-            >
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={t('footer.subscribePlaceholder')}
-                disabled={status === 'loading' || status === 'success'}
-                className={cn(
-                  'flex-1 px-4 py-2.5 rounded-lg',
-                  'bg-white/5 border border-white/10',
-                  'text-white placeholder:text-gray-500',
-                  'focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary',
-                  'transition-all duration-300',
-                  'disabled:opacity-50 disabled:cursor-not-allowed',
-                )}
-                required
-              />
-              <button
-                type="submit"
-                disabled={status === 'loading' || status === 'success'}
-                className={cn(
-                  'px-4 py-2.5 rounded-lg',
-                  'bg-brand-primary hover:bg-brand-primary-hover',
-                  'text-white font-medium',
-                  'flex items-center gap-2',
-                  'transition-colors duration-300',
-                  'disabled:opacity-50 disabled:cursor-not-allowed',
-                )}
+              <form
+                onSubmit={handleSubscribe}
+                className="mt-3 flex w-full max-w-md gap-2"
               >
-                {status === 'loading' ? (
-                  <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                ) : status === 'success' ? (
-                  <Send size={18} className="text-white" />
-                ) : (
-                  <Send size={18} />
-                )}
-                <span className="hidden sm:inline">
-                  {status === 'success'
-                    ? t('footer.subscribed') || 'Subscribed'
-                    : t('footer.subscribeButton')}
-                </span>
-              </button>
-            </form>
-            {message && (
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder={t('footer.subscribePlaceholder')}
+                  disabled={status === 'loading' || status === 'success'}
+                  required
+                  className="h-10 min-w-0 flex-1 border border-line bg-surface px-3 font-mono text-xs text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none disabled:opacity-50"
+                />
+                <button
+                  type="submit"
+                  disabled={status === 'loading' || status === 'success'}
+                  className={buttonClassName('primary', 'sm', 'h-10')}
+                >
+                  {status === 'loading' ? (
+                    <span
+                      aria-hidden="true"
+                      className="h-4 w-4 animate-spin rounded-full border border-accent-ink/30 border-t-accent-ink"
+                    />
+                  ) : (
+                    <Send size={14} aria-hidden="true" />
+                  )}
+                  <span className="hidden sm:inline">
+                    {status === 'success'
+                      ? t('footer.subscribed')
+                      : t('footer.subscribeButton')}
+                  </span>
+                </button>
+              </form>
               <p
+                aria-live="polite"
                 className={cn(
-                  'mt-2 text-sm',
-                  status === 'error' ? 'text-red-400' : 'text-green-400',
+                  'mt-2 min-h-[1rem] font-mono text-[10px] uppercase tracking-[0.06em]',
+                  status === 'error' ? 'text-signal' : 'text-ink-muted',
                 )}
               >
                 {message}
               </p>
-            )}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <p className="text-gray-500 text-sm">
-              {t('footer.copyright', { year: currentYear })}
-            </p>
+        <div className="flex flex-col gap-3 border-t border-line p-6 md:flex-row md:items-center md:justify-between">
+          <p className="font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted">
+            {t('footer.copyright', { year: currentYear })}
+          </p>
 
-            <div className="flex items-center gap-6">
-              <a
-                href="/privacy"
-                className="text-gray-500 text-sm hover:text-brand-primary transition-colors duration-300"
-              >
-                {t('footer.privacy')}
-              </a>
-              <span className="text-gray-700">|</span>
-              <a
-                href="/terms"
-                className="text-gray-500 text-sm hover:text-brand-primary transition-colors duration-300"
-              >
-                {t('footer.terms')}
-              </a>
-            </div>
+          <div className="flex items-center gap-6">
+            <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted">
+              <span aria-hidden="true" className="h-1.5 w-1.5 bg-success" />
+              SYS: OPERATIONAL
+            </span>
+            <button
+              type="button"
+              onClick={scrollToTop}
+              className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted transition-colors duration-150 ease-cad hover:text-accent-strong"
+            >
+              BACK TO TOP
+              <ArrowUp size={12} aria-hidden="true" />
+            </button>
           </div>
         </div>
       </div>

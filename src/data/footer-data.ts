@@ -1,8 +1,9 @@
-import { Linkedin, Github, Instagram, type LucideIcon } from 'lucide-react'
+import { Github, Instagram, Linkedin, type LucideIcon } from 'lucide-react'
 
 export interface FooterLink {
   labelKey: string
-  href: string
+  to: '/' | '/portfolio' | '/articles' | '/start'
+  hash?: string
 }
 
 export interface FooterLinkGroup {
@@ -18,18 +19,17 @@ export interface SocialLink {
 }
 
 export const FOOTER_COMPANY_LINKS: FooterLink[] = [
-  { labelKey: 'nav.home', href: '/' },
-  { labelKey: 'nav.about', href: '/#about' },
-  { labelKey: 'nav.team', href: '/#team' },
-  { labelKey: 'footer.careers', href: '/careers' },
+  { labelKey: 'nav.home', to: '/' },
+  { labelKey: 'nav.about', to: '/', hash: 'profile' },
+  { labelKey: 'nav.team', to: '/', hash: 'personnel' },
+  { labelKey: 'footer.startProject', to: '/start' },
 ]
 
 export const FOOTER_SOLUTIONS_LINKS: FooterLink[] = [
-  { labelKey: 'services.items.web.title', href: '/#services' },
-  { labelKey: 'services.items.mobile.title', href: '/#services' },
-  { labelKey: 'services.items.backend.title', href: '/#services' },
-  { labelKey: 'services.items.odoo.title', href: '/#services' },
-  { labelKey: 'footer.wordpress', href: '/#services' },
+  { labelKey: 'services.items.web.title', to: '/', hash: 'capabilities' },
+  { labelKey: 'services.items.backend.title', to: '/', hash: 'capabilities' },
+  { labelKey: 'services.items.odoo.title', to: '/', hash: 'capabilities' },
+  { labelKey: 'nav.method', to: '/', hash: 'method' },
 ]
 
 export const FOOTER_SOCIAL_LINKS: SocialLink[] = [

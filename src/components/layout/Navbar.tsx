@@ -1,21 +1,36 @@
 'use client'
+
 import { getAuthenticatedUserFn } from '@/functions/auth'
 import { Section, useNavigateStore } from '@/hooks/useNavigateStore'
-import { RenderIf } from '@/lib/render-if'
 import { Link, useLocation, useRouter } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
-import { motion } from 'framer-motion'
 import { Menu, Settings, X } from 'lucide-react'
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn } from '../../lib/utils'
-import { Button } from '../ui/Button'
+import { cn } from '@/lib/utils'
+import { BACKEND_ENABLED } from '@/lib/backend'
+import { scrollToSection, scrollToTop } from '@/lib/scroll'
+import { buttonClassName } from '../ui/Button'
 import { LanguageToggle } from '../ui/LanguageToggle'
-import { ThemeToggle } from '../ui/ThemeToggle'
+import { CoordinateReadout, ThemeToggle } from '../ui/blueprint'
+
+const HOME_LINKS: { index: string; section: Section; labelKey: string }[] = [
+  { index: '01', section: 'profile', labelKey: 'nav.about' },
+  { index: '02', section: 'capabilities', labelKey: 'nav.services' },
+  { index: '03', section: 'method', labelKey: 'nav.method' },
+]
+
+const ROUTE_LINKS: { index: string; to: '/portfolio' | '/articles'; labelKey: string; match: string }[] = [
+  { index: '04', to: '/portfolio', labelKey: 'nav.portfolio', match: '/portfolio' },
+  { index: '05', to: '/articles', labelKey: 'nav.insights', match: '/articles' },
+]
+
+const CELL =
+  'flex h-16 items-center gap-2 border-l border-line px-3 font-mono text-[10px] uppercase tracking-[0.06em] transition-colors duration-150 ease-cad'
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
+  const [activeSection, setActiveSection] = useState<Section | null>(null)
   const setNavigate = useNavigateStore((state) => state.setSection)
   const router = useRouter()
   const { t } = useTranslation()
@@ -30,248 +45,194 @@ export function Navbar() {
 
   useEffect(() => {
     refetch()
-  }, [pathname])
+  }, [pathname, refetch])
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100)
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    setIsOpen(false)
+  }, [pathname])
 
   const isLoggedIn = !!currentUser
+  const isHome = pathname === '/'
+  const routeLinks = BACKEND_ENABLED
+    ? ROUTE_LINKS
+    : ROUTE_LINKS.filter((link) => link.to !== '/articles')
 
-  const links = [
-    { to: '/', labelKey: 'nav.home', hash: 'home' as Section },
-    { to: '/', labelKey: 'nav.about', hash: 'about' as Section },
-    { to: '/', labelKey: 'nav.services', hash: 'services' as Section },
-    { to: '/', labelKey: 'nav.team', hash: 'team' as Section },
-    { to: '/', labelKey: 'nav.portfolio', hash: 'portfolio' as Section },
-    { to: '/', labelKey: 'nav.insights', hash: 'insights' as Section },
-  ]
-
-  const handleScroll = (id: string) => {
-    // @ts-ignore
-    if (globalThis.window.lenis) {
-      // @ts-ignore
-      globalThis.window.lenis.scrollTo(`#${id}`)
-    } else {
-      const element = document.getElementById(id)
-      element?.scrollIntoView({ behavior: 'smooth' })
-    }
+  const handleLogo = () => {
     setIsOpen(false)
+    if (isHome) scrollToTop()
+    else router.navigate({ to: '/' })
   }
 
-  const scrollToTop = () => {
-    if (pathname !== '/') {
-      router.navigate({ to: '/' })
-      return
-    }
-
-    // @ts-ignore
-    if (globalThis.window.lenis) {
-      // @ts-ignore
-      globalThis.window.lenis.scrollTo(0)
-    } else {
-      globalThis.window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
+  const handleSectionLink = (section: Section) => {
     setIsOpen(false)
+    setActiveSection(section)
+    if (isHome) scrollToSection(section)
+    else setNavigate(section)
   }
 
   return (
-    <motion.nav
-      initial={{ y: -100, padding: '1rem 0 0 0' }}
-      animate={{ y: 0, padding: isScrolled ? '0px' : '1rem 0 0 0' }}
-      transition={{ duration: 0.8, ease: 'backOut' }}
-      className="fixed top-0 left-0 right-0 z-50"
-    >
-      <motion.div
-        initial={{
-          borderRadius: '100px',
-          margin: '0 auto',
-          maxWidth: '1280px',
-        }}
-        animate={{
-          borderRadius: isScrolled ? '0px' : '100px',
-          margin: isScrolled ? '0px' : '0 auto',
-          maxWidth: isScrolled ? '100%' : '1280px',
-          boxShadow: isScrolled
-            ? 'none'
-            : '0 10px 40px -10px rgba(0, 0, 0, 0.1)',
-        }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-        className={cn(
-          'transition-all duration-300',
-          'backdrop-blur-md',
-          isScrolled
-            ? 'border-b border-border/10 bg-white/5'
-            : 'bg-background/70 border border-border',
-        )}
-      >
-        <div className="max-w-7xl mx-auto pl-6 pr-4 h-16 flex items-center justify-between">
-          <button
-            onClick={scrollToTop}
-            className="text-xl font-bold tracking-tight flex items-center gap-2 cursor-pointer"
-          >
-            <span className="text-foreground">Solvin</span>
-            <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
-          </button>
+    <nav className="fixed inset-x-0 top-0 z-50 border-b border-line bg-canvas/95 backdrop-blur-sm">
+      <div className="mx-auto flex h-16 w-full max-w-[1600px] items-stretch border-line md:border-x">
+        <button
+          type="button"
+          onClick={handleLogo}
+          className="flex h-16 items-center gap-2 px-4 md:border-r md:border-line md:px-6"
+        >
+          <img
+            src="/brand/solvin-mark.png"
+            alt=""
+            aria-hidden="true"
+            width={24}
+            height={24}
+            className="h-6 w-6 shrink-0"
+          />
+          <span className="text-lg font-semibold tracking-[-0.03em] text-ink">
+            Solvin
+          </span>
+          <span className="label-mono ml-2 hidden text-ink-muted sm:inline">
+            DIGITAL SYSTEMS
+          </span>
+        </button>
 
-          <div className="hidden md:flex items-center gap-8">
-            {links.map((link) => (
-              <Fragment key={link.labelKey}>
-                <RenderIf
-                  condition={
-                    link.labelKey === 'nav.home' && pathname === link.to
-                  }
-                >
-                  <button
-                    onClick={scrollToTop}
-                    className="text-sm font-medium text-muted-foreground hover:text-brand-primary transition-colors cursor-pointer"
-                  >
-                    {t(link.labelKey)}
-                  </button>
-                </RenderIf>
-                <RenderIf
-                  condition={
-                    !!link.hash &&
-                    link.labelKey !== 'nav.home' &&
-                    pathname === link.to
-                  }
-                >
-                  <button
-                    onClick={() => handleScroll(link.hash!)}
-                    className="text-sm font-medium text-muted-foreground hover:text-brand-primary transition-colors cursor-pointer"
-                  >
-                    {t(link.labelKey)}
-                  </button>
-                </RenderIf>
-                <RenderIf condition={pathname !== link.to}>
-                  <Link
-                    to={link.to}
-                    onClick={() => setNavigate(link.hash)}
-                    className="text-sm font-medium text-gray-600 hover:text-brand-primary transition-colors"
-                  >
-                    {t(link.labelKey)}
-                  </Link>
-                </RenderIf>
-              </Fragment>
-            ))}
-          </div>
-
-          <div className="hidden md:flex items-center gap-4">
-            <ThemeToggle />
-            <LanguageToggle />
-            <RenderIf condition={isLoggedIn}>
-              <Link
-                to="/admin"
-                className="p-2 rounded-md text-muted-foreground hover:text-brand-primary hover:bg-accent transition-colors"
-                title="Admin Dashboard"
+        <div className="ml-auto hidden items-stretch md:flex">
+          {HOME_LINKS.map((link) =>
+            isHome ? (
+              <button
+                key={link.section}
+                type="button"
+                onClick={() => handleSectionLink(link.section)}
+                className={cn(
+                  CELL,
+                  'hover:text-ink',
+                  activeSection === link.section
+                    ? 'text-accent-strong'
+                    : 'text-ink-muted',
+                )}
               >
-                <Settings size={20} />
+                <span aria-hidden="true" className="opacity-60">
+                  {link.index}
+                </span>
+                {t(link.labelKey)}
+              </button>
+            ) : (
+              <Link
+                key={link.section}
+                to="/"
+                onClick={() => handleSectionLink(link.section)}
+                className={cn(CELL, 'text-ink-muted hover:text-ink')}
+              >
+                <span aria-hidden="true" className="opacity-60">
+                  {link.index}
+                </span>
+                {t(link.labelKey)}
               </Link>
-            </RenderIf>
-            <Button
-              asMotion
-              onClick={() =>
-                window.open('https://wa.me/6281234567890', '_blank')
-              }
-              whileHover={{ scale: 1.05 }}
-              animate={{
-                boxShadow: [
-                  '0 0 0 0px rgba(37, 99, 235, 0)',
-                  '0 0 0 4px rgba(37, 99, 235, 0.1)',
-                  '0 0 0 0px rgba(37, 99, 235, 0)',
-                ],
-              }}
-              transition={{
-                boxShadow: {
-                  duration: 2,
-                  repeat: Infinity,
-                  repeatType: 'loop',
-                  ease: 'easeInOut',
-                  delay: 3,
-                },
-              }}
-            >
-              {t('nav.cta')}
-            </Button>
-          </div>
+            ),
+          )}
 
-          <button
-            className="md:hidden p-2 text-gray-600"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {routeLinks.map((link) => {
+            const isActive = pathname.startsWith(link.match)
+            return (
+              <Link
+                key={link.to}
+                to={link.to}
+                aria-current={isActive ? 'page' : undefined}
+                className={cn(
+                  CELL,
+                  isActive ? 'text-accent-strong' : 'text-ink-muted hover:text-ink',
+                )}
+              >
+                <span aria-hidden="true" className="opacity-60">
+                  {link.index}
+                </span>
+                {t(link.labelKey)}
+              </Link>
+            )
+          })}
         </div>
 
-        <RenderIf condition={isOpen}>
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background/5 backdrop-blur-md border-b border-border overflow-hidden"
+        <div className="ml-auto flex items-center gap-2 border-l border-line px-3 md:ml-0">
+          <CoordinateReadout className="hidden xl:inline" />
+          <ThemeToggle />
+          <LanguageToggle />
+          {isLoggedIn && (
+            <Link
+              to="/admin"
+              aria-label="Admin dashboard"
+              title="Admin dashboard"
+              className="hidden h-8 w-8 items-center justify-center border border-line text-ink-muted hover:border-accent hover:text-accent-strong sm:flex"
+            >
+              <Settings size={14} aria-hidden="true" />
+            </Link>
+          )}
+          <Link
+            to="/start"
+            className={cn(buttonClassName('primary', 'sm'), 'hidden lg:inline-flex')}
           >
-            <div className="px-6 py-4 flex flex-col gap-4">
-              {links.map((link, i) =>
-                link.hash ? (
-                  <motion.button
-                    initial={{ y: -20 }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 0.1 * i, delay: 0.015 * i }}
-                    key={link.labelKey}
-                    onClick={() => handleScroll(link.hash!)}
-                    className="text-base font-medium text-gray-600 hover:text-brand-primary text-left"
-                  >
-                    {t(link.labelKey)}
-                  </motion.button>
-                ) : (
-                  <motion.span
-                    initial={{ y: -20 }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 0.1 * i, delay: 0.015 * i }}
-                    key={link.labelKey}
-                  >
-                    <Link
-                      to={link.to}
-                      className="text-base font-medium text-gray-600 hover:text-brand-primary"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {t(link.labelKey)}
-                    </Link>
-                  </motion.span>
-                ),
-              )}
-              <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                <div className="flex gap-2">
-                  <ThemeToggle />
-                  <LanguageToggle />
-                  <RenderIf condition={isLoggedIn}>
-                    <Link
-                      to="/admin"
-                      className="p-2 rounded-md text-muted-foreground hover:text-brand-primary hover:bg-accent transition-colors"
-                      title="Admin Dashboard"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <Settings size={20} />
-                    </Link>
-                  </RenderIf>
-                </div>
-                <Button
-                  onClick={() =>
-                    window.open('https://wa.me/6281234567890', '_blank')
-                  }
-                >
-                  {t('nav.cta')}
-                </Button>
+            {t('nav.cta')}
+          </Link>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setIsOpen((open) => !open)}
+          aria-expanded={isOpen}
+          aria-controls="mobile-nav"
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          className="flex h-16 w-14 items-center justify-center border-l border-line text-ink-muted md:hidden"
+        >
+          {isOpen ? (
+            <X size={18} aria-hidden="true" />
+          ) : (
+            <Menu size={18} aria-hidden="true" />
+          )}
+        </button>
+      </div>
+
+      {isOpen && (
+        <div id="mobile-nav" className="border-t border-line bg-canvas md:hidden">
+          <div className="flex flex-col">
+            {HOME_LINKS.map((link) => (
+              <button
+                key={link.section}
+                type="button"
+                onClick={() => handleSectionLink(link.section)}
+                className="flex h-12 items-center gap-3 border-b border-line px-4 font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted"
+              >
+                <span aria-hidden="true" className="text-accent-strong">
+                  {link.index}
+                </span>
+                {t(link.labelKey)}
+              </button>
+            ))}
+            {routeLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setIsOpen(false)}
+                className="flex h-12 items-center gap-3 border-b border-line px-4 font-mono text-[10px] uppercase tracking-[0.06em] text-ink-muted"
+              >
+                <span aria-hidden="true" className="text-accent-strong">
+                  {link.index}
+                </span>
+                {t(link.labelKey)}
+              </Link>
+            ))}
+            <div className="flex items-center justify-between gap-2 px-4 py-3">
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
+                <LanguageToggle />
               </div>
+              <Link
+                to="/start"
+                onClick={() => setIsOpen(false)}
+                className={buttonClassName('primary', 'sm')}
+              >
+                {t('nav.cta')}
+              </Link>
             </div>
-          </motion.div>
-        </RenderIf>
-      </motion.div>
-    </motion.nav>
+          </div>
+        </div>
+      )}
+    </nav>
   )
 }
