@@ -2,10 +2,11 @@ import { create } from 'zustand'
 
 export type Section =
   | 'home'
-  | 'about'
-  | 'services'
-  | 'team'
-  | 'portfolio'
+  | 'profile'
+  | 'capabilities'
+  | 'method'
+  | 'personnel'
+  | 'work'
   | 'insights'
 
 interface NavigateStore {
