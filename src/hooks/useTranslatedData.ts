@@ -1,5 +1,23 @@
 import { useTranslation } from 'react-i18next'
-import type { Service, PortfolioItem, Article } from '../data'
+
+export interface Service {
+  id: string
+  title: string
+  description: string
+  icon: string
+  tech: string[]
+  details: string
+  /** Mono discipline label, e.g. `WEB / PLATFORM`. */
+  mode: string
+}
+
+export interface TeamMember {
+  id: string
+  profileImage?: string
+  name: string
+  role: string
+  bio: string
+}
 
 export function useServicesData(): Service[] {
   const { t } = useTranslation()
@@ -12,6 +30,7 @@ export function useServicesData(): Service[] {
       icon: 'Globe',
       tech: ['Next.js', 'React', 'TypeScript'],
       details: t('services.items.web.details'),
+      mode: 'WEB / PLATFORM',
     },
     {
       id: 'backend',
@@ -20,6 +39,7 @@ export function useServicesData(): Service[] {
       icon: 'Server',
       tech: ['Node.js', 'Go', 'Python'],
       details: t('services.items.backend.details'),
+      mode: 'API / INFRA',
     },
     {
       id: 'mobile',
@@ -28,6 +48,7 @@ export function useServicesData(): Service[] {
       icon: 'Smartphone',
       tech: ['Flutter', 'React Native'],
       details: t('services.items.mobile.details'),
+      mode: 'IOS / ANDROID',
     },
     {
       id: 'odoo',
@@ -36,6 +57,7 @@ export function useServicesData(): Service[] {
       icon: 'Database',
       tech: ['Odoo', 'Python', 'PostgreSQL'],
       details: t('services.items.odoo.details'),
+      mode: 'ERP / INTEGRATION',
     },
     {
       id: 'cms',
@@ -44,6 +66,7 @@ export function useServicesData(): Service[] {
       icon: 'Cloud',
       tech: ['WordPress', 'Sanity', 'Strapi'],
       details: t('services.items.cms.details'),
+      mode: 'CONTENT / OMNI',
     },
     {
       id: 'seo',
@@ -52,20 +75,9 @@ export function useServicesData(): Service[] {
       icon: 'LineChart',
       tech: ['Google Search Console', 'Lighthouse', 'Schema.org', 'SEMrush'],
       details: t('services.items.seo.details'),
+      mode: 'AUDIT / GROWTH',
     },
   ]
-}
-
-export interface TeamMember {
-  id: string
-  profileImage?: string
-  name: string
-  role: string
-  bio: string
-  github: string
-  linkedin: string
-  position: { top: string; left: string }
-  hotspotArea: { width: string; height: string }
 }
 
 export function useTeamData(): TeamMember[] {
@@ -78,10 +90,6 @@ export function useTeamData(): TeamMember[] {
       name: t('team.members.cto.name'),
       role: t('team.members.cto.role'),
       bio: t('team.members.cto.bio'),
-      github: 'https://github.com',
-      linkedin: 'https://linkedin.com',
-      position: { top: '55%', left: '18%' },
-      hotspotArea: { width: '12%', height: '55%' },
     },
     {
       id: 'lead-dev',
@@ -89,10 +97,6 @@ export function useTeamData(): TeamMember[] {
       name: t('team.members.lead-dev.name'),
       role: t('team.members.lead-dev.role'),
       bio: t('team.members.lead-dev.bio'),
-      github: 'https://github.com',
-      linkedin: 'https://linkedin.com',
-      position: { top: '50%', left: '30%' },
-      hotspotArea: { width: '12%', height: '60%' },
     },
     {
       id: 'ceo',
@@ -100,10 +104,6 @@ export function useTeamData(): TeamMember[] {
       name: t('team.members.ceo.name'),
       role: t('team.members.ceo.role'),
       bio: t('team.members.ceo.bio'),
-      github: 'https://github.com',
-      linkedin: 'https://linkedin.com',
-      position: { top: '45%', left: '44.5%' },
-      hotspotArea: { width: '12%', height: '50%' },
     },
     {
       id: 'bussiness',
@@ -111,10 +111,6 @@ export function useTeamData(): TeamMember[] {
       name: t('team.members.bussiness.name'),
       role: t('team.members.bussiness.role'),
       bio: t('team.members.bussiness.bio'),
-      github: 'https://github.com',
-      linkedin: 'https://linkedin.com',
-      position: { top: '50%', left: '60%' },
-      hotspotArea: { width: '12%', height: '55%' },
     },
     {
       id: 'pm',
@@ -122,20 +118,6 @@ export function useTeamData(): TeamMember[] {
       name: t('team.members.pm.name'),
       role: t('team.members.pm.role'),
       bio: t('team.members.pm.bio'),
-      github: 'https://github.com',
-      linkedin: 'https://linkedin.com',
-      position: { top: '55%', left: '72%' },
-      hotspotArea: { width: '12%', height: '50%' },
     },
   ]
-}
-
-export function usePortfolioData(): PortfolioItem[] {
-  const { portfolio } = require('../data')
-  return portfolio
-}
-
-export function useArticlesData(): Article[] {
-  const { articles } = require('../data')
-  return articles
 }

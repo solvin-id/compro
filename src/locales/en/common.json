@@ -10,7 +10,8 @@
     "team": "Team",
     "portfolio": "Portfolio",
     "insights": "Insights",
-    "cta": "Let's Talk"
+    "cta": "Let's Talk",
+    "method": "Method"
   },
   "hero": {
     "headline1": "Solve",
@@ -23,7 +24,12 @@
       "experience": "Years Experience",
       "projects": "Projects Delivered",
       "clients": "Happy Clients"
-    }
+    },
+    "kicker": "Digital systems studio",
+    "status": "Accepting projects",
+    "index": "Fig. 01 / system overview",
+    "location": "Jakarta, ID",
+    "scroll": "Scroll to inspect"
   },
   "about": {
     "heading": "We don't just write code;",
@@ -77,7 +83,7 @@
   },
   "team": {
     "title": "The Team",
-    "subtitle": "Meet the minds behind the machine. Hover over the team to learn more.",
+    "subtitle": "Five operators. One delivery standard.",
     "members": {
       "ceo": {
         "name": "M. Daffa Nazhirul Haq",
@@ -124,7 +130,17 @@
     "defaultOutcome": "Operational efficiency increased by significant margin.",
     "ctaTitle": "Ready to be our next success story?",
     "ctaSubtitle": "Let's build something that makes your competitors jealous.",
-    "startProject": "Start Your Project"
+    "startProject": "Start Your Project",
+    "searchPlaceholder": "Search artifacts…",
+    "filterCategory": "Category",
+    "filterStack": "Stack",
+    "filterYear": "Year",
+    "reset": "Reset",
+    "gridView": "Schematic grid",
+    "indexView": "Technical index",
+    "inspect": "Inspect",
+    "noResults": "No artifacts match this query.",
+    "backToCatalog": "Back to catalog"
   },
   "insights": {
     "title": "Insights",
@@ -140,7 +156,9 @@
     "keyTakeaway": "Key Takeaway",
     "enjoyedPerspective": "Enjoyed this perspective?",
     "discussStrategy": "Let's Discuss Your Strategy",
-    "articleNotFound": "Article Not Found"
+    "articleNotFound": "Article Not Found",
+    "noArticles": "No articles yet",
+    "noArticlesDesc": "Check back soon for new insights and updates."
   },
   "footer": {
     "tagline": "Solve with Innovation.",
@@ -159,7 +177,8 @@
     "terms": "Terms of Service",
     "subscribe": "Subscribe for Insights",
     "subscribePlaceholder": "Your email",
-    "subscribeButton": "Subscribe"
+    "subscribeButton": "Subscribe",
+    "subscribed": "Subscribed"
   },
   "notFound": {
     "title": "Oops! Page not found",
@@ -175,5 +194,36 @@
     "learnMore": "Learn More",
     "close": "Close",
     "loading": "Loading..."
+  },
+  "method": {
+    "title": "From signal to shipped system.",
+    "subtitle": "A fixed operating sequence. Every engagement runs through the same five gates.",
+    "steps": {
+      "discovery": {
+        "title": "Discovery",
+        "body": "Map the system, constraints, and success metrics. Audit what already exists.",
+        "output": "SCOPE + RISK MAP"
+      },
+      "architecture": {
+        "title": "Architecture",
+        "body": "Define boundaries, data contracts, and the deployment topology before code.",
+        "output": "SYSTEM BLUEPRINT"
+      },
+      "build": {
+        "title": "Build",
+        "body": "Ship in vertical slices. Every slice is reviewable, tested, and deployed.",
+        "output": "WORKING INCREMENT"
+      },
+      "harden": {
+        "title": "Harden",
+        "body": "Load, security, and failure-mode testing against the production contract.",
+        "output": "TEST + SECURITY REPORT"
+      },
+      "handover": {
+        "title": "Handover",
+        "body": "Documentation, runbooks, and a trained team. No black boxes.",
+        "output": "RUNBOOK + TRAINING"
+      }
+    }
   }
 }
