@@ -7,6 +7,7 @@ interface ImageFromStorageProps {
   objectKey: string | null | undefined
   alt: string
   className?: string
+  loading?: 'lazy' | 'eager'
   fallback?: React.ReactNode
 }
 
@@ -19,6 +20,7 @@ export function ImageFromStorage({
   objectKey,
   alt,
   className = '',
+  loading,
   fallback,
 }: ImageFromStorageProps) {
   // Check if it's already a full URL (legacy data) or data URL
@@ -57,5 +59,12 @@ export function ImageFromStorage({
     return fallback ? <>{fallback}</> : null
   }
 
-  return <img src={imageUrl} alt={alt} className={className} />
+  return (
+    <img
+      src={imageUrl}
+      alt={alt}
+      loading={loading}
+      className={className}
+    />
+  )
 }

@@ -1,11 +1,10 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { motion } from 'framer-motion'
-import { ArrowLeft, Clock, ArrowUpRight, FileText } from 'lucide-react'
+import { Clock } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { InteractiveBackground } from '../components/ui/InteractiveBackground'
-import { getPublishedArticlesFn } from '@/functions/articles'
+import { PageShell } from '@/components/layout/PageShell'
 import { ImageFromStorage } from '@/components/ImageFromStorage'
-import type { Article } from '@/db/schema'
+import { BoundingBoxFrame, SpecTable } from '@/components/ui/blueprint'
+import { getPublishedArticlesFn } from '@/functions/articles'
 
 export const Route = createFileRoute('/articles/')({
   loader: async () => {
@@ -29,123 +28,109 @@ function ArticlesPage() {
   const { articles } = Route.useLoaderData()
 
   return (
-    <div className="min-h-screen pt-24 pb-20 relative overflow-hidden bg-transparent">
-      <div className="absolute inset-0 z-0 opacity-10">
-        <InteractiveBackground />
-      </div>
+    <PageShell>
+      <header className="border-b border-line p-5 md:p-8 lg:p-12">
+        <span className="label-mono text-accent-strong">[INDEX / INSIGHTS]</span>
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <Link
-          to="/"
-          className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-brand-primary mb-8 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          {t('common.backToHome')}
-        </Link>
-
-        <header className="mb-20 max-w-3xl">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-bold tracking-tight text-foreground mb-6"
-          >
-            {t('insights.pageTitle')}{' '}
-            <span className="text-gradient">
-              {t('insights.pageTitleGradient')}
-            </span>
-            .
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-xl text-muted-foreground"
-          >
-            {t('insights.pageSubtitle')}
-          </motion.p>
-        </header>
-
-        {articles.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center py-20"
-          >
-            <FileText className="w-16 h-16 mx-auto text-muted-foreground/50 mb-6" />
-            <h2 className="text-2xl font-semibold text-foreground mb-2">
-              {t('insights.noArticles', 'No articles yet')}
-            </h2>
-            <p className="text-muted-foreground">
-              {t(
-                'insights.noArticlesDesc',
-                'Check back soon for new insights and updates.',
-              )}
+        <div className="mt-6 grid gap-8 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-8">
+            <h1 className="display-lg text-ink">
+              {t('insights.pageTitle')}{' '}
+              <span className="text-accent-strong">
+                {t('insights.pageTitleGradient')}
+              </span>
+              .
+            </h1>
+            <p className="mt-5 max-w-[60ch] text-base leading-relaxed text-ink-muted md:text-lg">
+              {t('insights.pageSubtitle')}
             </p>
-          </motion.div>
+          </div>
+
+          <div className="lg:col-span-4">
+            <SpecTable
+              rows={[
+                { label: 'ARTICLES', value: articles.length },
+                { label: 'STATUS', value: 'PUBLISHED' },
+              ]}
+            />
+          </div>
+        </div>
+      </header>
+
+      <div className="p-5 md:p-8 lg:p-12">
+        {articles.length === 0 ? (
+          <div className="border border-line p-8">
+            <p className="label-mono text-ink-muted">
+              {t('insights.noArticles')}
+            </p>
+            <p className="mt-2 text-sm text-ink-muted">
+              {t('insights.noArticlesDesc')}
+            </p>
+          </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articles.map((article: Article, i: number) => (
-              <Link
+          <div className="grid border-l border-t border-line md:grid-cols-2 lg:grid-cols-3">
+            {articles.map((article, index) => (
+              <BoundingBoxFrame
                 key={article.slug}
-                to="/articles/$slug"
-                params={{ slug: article.slug }}
-                className="group block"
+                as="article"
+                baseBorder={false}
+                label={`INS-${String(index + 1).padStart(2, '0')}`}
+                className="bbf--meta-inset border-r border-b border-line bg-surface"
               >
-                <motion.article
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="h-full bg-card/40 dark:bg-card/20 rounded-3xl border border-border overflow-hidden shadow-sm hover:shadow-xl hover:shadow-muted/50 transition-all duration-300 flex flex-col"
+                <Link
+                  to="/articles/$slug"
+                  params={{ slug: article.slug }}
+                  className="flex h-full flex-col"
                 >
-                  <div className="h-48 bg-muted relative overflow-hidden">
+                  <div className="aspect-video w-full overflow-hidden bg-surface-2">
                     {article.coverImage ? (
                       <ImageFromStorage
                         objectKey={article.coverImage}
                         alt={article.coverImageAlt || article.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                        className="h-full w-full object-cover"
+                        fallback={
+                          <span className="label-mono blueprint-grid flex h-full items-center justify-center text-ink-muted">
+                            [ARTICLE_IMAGE]
+                          </span>
+                        }
                       />
                     ) : (
-                      <>
-                        <div className="absolute inset-0 bg-linear-to-tr from-muted to-card group-hover:scale-105 transition-transform duration-500" />
-                        <div className="absolute inset-0 flex items-center justify-center text-muted-foreground font-mono text-xs">
-                          [ARTICLE_IMAGE]
-                        </div>
-                      </>
+                      <span className="label-mono blueprint-grid flex h-full items-center justify-center text-ink-muted">
+                        [ARTICLE_IMAGE]
+                      </span>
                     )}
                   </div>
 
-                  <div className="p-8 flex flex-col flex-grow">
-                    <div className="flex items-center gap-3 text-xs font-medium text-muted-foreground mb-4">
-                      <span className="text-brand-primary bg-brand-primary/10 px-2 py-1 rounded-md">
-                        {article.category}
-                      </span>
+                  <div className="flex flex-1 flex-col p-5 pb-7">
+                    <div className="label-mono flex flex-wrap items-center gap-x-3 gap-y-1 text-ink-muted">
+                      <span className="text-accent-strong">{article.category}</span>
                       <span>{formatDate(article.publishedAt)}</span>
                     </div>
 
-                    <h2 className="text-xl font-bold text-foreground mb-3 group-hover:text-brand-primary transition-colors leading-tight">
+                    <h2 className="mt-3 text-xl font-semibold tracking-[-0.02em] text-ink">
                       {article.title}
                     </h2>
-
-                    <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-grow">
+                    <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-muted">
                       {article.summary}
                     </p>
 
-                    <div className="flex items-center justify-between pt-6 border-t border-border mt-auto">
-                      <span className="text-xs text-muted-foreground flex items-center gap-1">
-                        <Clock size={12} /> {article.readTime || '5 min read'}
+                    <div className="mt-4 flex items-center justify-between border-t border-line pt-3">
+                      <span className="label-mono flex items-center gap-1 text-ink-muted">
+                        <Clock size={10} aria-hidden="true" />
+                        {article.readTime || '5 min read'}
                       </span>
-                      <span className="flex items-center gap-1 text-sm font-semibold text-foreground group-hover:translate-x-1 transition-transform">
-                        {t('insights.readArticle')} <ArrowUpRight size={14} />
+                      <span className="label-mono text-accent-strong">
+                        {t('insights.readArticle')} ↗
                       </span>
                     </div>
                   </div>
-                </motion.article>
-              </Link>
+                </Link>
+              </BoundingBoxFrame>
             ))}
           </div>
         )}
       </div>
-    </div>
+    </PageShell>
   )
 }

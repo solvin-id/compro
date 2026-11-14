@@ -1,12 +1,11 @@
 import { createFileRoute, Link, notFound } from '@tanstack/react-router'
-import { motion } from 'framer-motion'
-import { ArrowLeft, Clock, Calendar, Tag } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { InteractiveBackground } from '../components/ui/InteractiveBackground'
-import { Button } from '../components/ui/Button'
-import { getArticleBySlugFn } from '@/functions/articles'
+import { PageShell } from '@/components/layout/PageShell'
 import { ArticleRenderer } from '@/components/ArticleRenderer'
 import { ImageFromStorage } from '@/components/ImageFromStorage'
+import { buttonClassName } from '@/components/ui/Button'
+import { BoundingBoxFrame } from '@/components/ui/blueprint'
+import { getArticleBySlugFn } from '@/functions/articles'
 
 export const Route = createFileRoute('/articles/$slug')({
   loader: async ({ params }) => {
@@ -16,22 +15,8 @@ export const Route = createFileRoute('/articles/$slug')({
     }
     return { article }
   },
-  component: ArticleComponent,
-  notFoundComponent: () => {
-    const { t } = useTranslation()
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <p className="text-xl text-muted-foreground">
-          {t('insights.articleNotFound', 'Article not found')}
-        </p>
-        <Link to="/articles">
-          <Button variant="outline">
-            {t('insights.backToArticles', 'Back to Articles')}
-          </Button>
-        </Link>
-      </div>
-    )
-  },
+  component: ArticleDetail,
+  notFoundComponent: ArticleNotFound,
 })
 
 function formatDate(date: Date | null): string {
@@ -43,92 +28,87 @@ function formatDate(date: Date | null): string {
   })
 }
 
-function ArticleComponent() {
-  const { article } = Route.useLoaderData()
+function ArticleNotFound() {
   const { t } = useTranslation()
 
   return (
-    <div className="min-h-screen pt-24 pb-20 relative overflow-hidden">
-      <div className="absolute inset-0 z-0 opacity-20">
-        <InteractiveBackground />
+    <PageShell>
+      <div className="flex min-h-[60vh] flex-col items-start justify-center gap-6 p-5 md:p-8 lg:p-12">
+        <span className="label-mono text-accent-strong">[BOUNDARY / 404]</span>
+        <h1 className="display-lg text-ink">
+          {t('insights.articleNotFound', 'Article not found')}
+        </h1>
+        <Link to="/articles" className={buttonClassName('outline', 'md')}>
+          ← {t('insights.backToArticles', 'Back to Articles')}
+        </Link>
       </div>
+    </PageShell>
+  )
+}
 
-      <motion.article
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="max-w-3xl mx-auto px-6 relative z-10"
-      >
+function ArticleDetail() {
+  const { t } = useTranslation()
+  const { article } = Route.useLoaderData()
+
+  return (
+    <PageShell>
+      <div className="mx-auto max-w-4xl px-5 py-12 md:px-8 md:py-16">
         <Link
           to="/articles"
-          className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-brand-primary mb-12 transition-colors"
+          className="label-mono inline-flex items-center gap-1 text-ink-muted transition-colors duration-150 ease-cad hover:text-accent-strong"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          {t('common.backToInsights', 'Back to Insights')}
+          ← {t('common.backToInsights', 'Back to Insights')}
         </Link>
 
-        <header className="mb-12 space-y-6">
-          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-muted/50 border border-border text-brand-secondary font-medium">
-              <Tag className="w-3.5 h-3.5" />
-              {article.category}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Calendar className="w-4 h-4" />
-              {formatDate(article.publishedAt)}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4" />
-              {article.readTime || '5 min read'}
-            </span>
+        <header className="mt-8 border-b border-line pb-8">
+          <div className="label-mono flex flex-wrap items-center gap-x-4 gap-y-1 text-ink-muted">
+            <span className="text-accent-strong">{article.category}</span>
+            <span>{formatDate(article.publishedAt)}</span>
+            <span>{article.readTime || '5 min read'}</span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
-            {article.title}
-          </h1>
+          <h1 className="display-lg mt-4 text-ink">{article.title}</h1>
 
           {article.authorName && (
-            <div className="flex items-center gap-3 pt-4">
-              <div className="w-10 h-10 rounded-full bg-brand-primary/20 flex items-center justify-center text-brand-primary font-medium">
+            <div className="mt-6 flex items-center gap-3">
+              <span
+                aria-hidden="true"
+                className="flex h-8 w-8 items-center justify-center border border-line font-mono text-[11px] uppercase text-accent-strong"
+              >
                 {article.authorName.charAt(0).toUpperCase()}
-              </div>
-              <div>
-                <p className="font-medium text-foreground">
-                  {article.authorName}
-                </p>
-                <p className="text-xs text-muted-foreground">Author</p>
-              </div>
+              </span>
+              <span className="label-mono text-ink-muted">
+                {article.authorName} / AUTHOR
+              </span>
             </div>
           )}
         </header>
 
         {article.coverImage && (
-          <div className="mb-12 rounded-2xl overflow-hidden border border-border">
+          <BoundingBoxFrame className="mt-8 bg-surface">
             <ImageFromStorage
               objectKey={article.coverImage}
               alt={article.coverImageAlt || article.title}
-              className="w-full h-auto"
+              className="w-full"
             />
-          </div>
+          </BoundingBoxFrame>
         )}
 
-        <div className="prose prose-lg dark:prose-invert max-w-none">
-          <p className="text-xl leading-relaxed font-medium text-foreground mb-8">
-            {article.summary}
-          </p>
+        <p className="mt-8 text-lg leading-relaxed text-ink md:text-xl">
+          {article.summary}
+        </p>
 
-          <ArticleRenderer content={article.content} />
-        </div>
+        <ArticleRenderer content={article.content} />
 
-        <div className="mt-20 pt-10 border-t border-border text-center">
-          <p className="text-muted-foreground mb-6 font-medium">
+        <div className="mt-16 flex flex-col items-start gap-4 border border-line p-6 md:flex-row md:items-center md:justify-between">
+          <p className="text-ink-muted">
             {t('insights.enjoyedPerspective', 'Enjoyed this perspective?')}
           </p>
-          <Button size="lg" className="rounded-full">
+          <Link to="/start" className={buttonClassName('primary', 'md')}>
             {t('insights.discussStrategy', "Let's Discuss Your Strategy")}
-          </Button>
+          </Link>
         </div>
-      </motion.article>
-    </div>
+      </div>
+    </PageShell>
   )
 }
